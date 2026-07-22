@@ -1,0 +1,122 @@
+{
+  "versao": 0,
+  "nomeLoja": "",
+  "mostrarNomeComLogo": true,
+  "mostrarCarrinho": true,
+  "assinatura": "",
+  "slogan": "",
+  "layout": "classic",
+  "cores": {
+    "primaria": "#000000",
+    "secundaria": "#111111",
+    "fundo": "#FFFFFF",
+    "fundoNeutro": "#F5F5F5",
+    "borda": "#E5E5E5"
+  },
+  "logo": {
+    "id": "050ba9b8-5650-4a9a-bcc2-88ac6ecae94e",
+    "path": "imagens/site/050ba9b8-5650-4a9a-bcc2-88ac6ecae94e.jpg",
+    "alt": "PÉ QUENTE"
+  },
+  "whatsapp": {
+    "telefone": "17976008088",
+    "mensagemPadrao": "Olá! Vim pelo site e gostaria de saber mais.",
+    "mensagemProduto": "*Tenho interesse no produto:*\n- {nome}:\n- - {resumo}\n- - {url}\n\nSegue disponível???",
+    "mensagemProdutoIncluirReferencia": true,
+    "mostrar": true,
+    "mensagemCarrinhoFormatoItens": "produto",
+    "mensagemCarrinho": "Gostaria de pedir os itens abaixo:\n\n{itens}\n\nPodem me confirmar disponibilidade e valores?",
+    "mensagemCarrinhoItemCompacto": "• {nome} — {resumo} (x{quantidade})"
+  },
+  "instagram": {
+    "handle": "pequentebarretos",
+    "url": "https://instagram.com/pequentebarretos",
+    "mostrar": true
+  },
+  "endereco": {
+    "cep": "",
+    "logradouro": "",
+    "numero": "",
+    "complemento": "",
+    "bairro": "",
+    "cidade": "Barretos",
+    "uf": "SP",
+    "texto": "Barretos-SP",
+    "mostrar": true
+  },
+  "telefones": {
+    "fixo": "",
+    "celular": "",
+    "usarWhatsappComoCelular": true,
+    "mostrarFixo": false,
+    "mostrarCelular": true
+  },
+  "horarios": "Seg–Sex 9h–18h · Sáb 9h–13h",
+  "textos": {
+    "sobre": "Há mais de 30 anos no ramo de calçados, proporcionando as melhores marcas do mercado, com preços imbatíveis!!! ",
+    "trocas": "Consulte nossa equipe pelo WhatsApp para trocas e devoluções."
+  },
+  "navegacao": {
+    "topbar": {
+      "mostrarEndereco": true,
+      "mostrarTelefone": true
+    },
+    "header": {
+      "itens": [
+        {
+          "id": "header-link-catalogo",
+          "visivel": true,
+          "tipo": "link",
+          "chave": "catalogo"
+        },
+        {
+          "id": "header-categorias",
+          "visivel": true,
+          "tipo": "categorias",
+          "categoriaIds": null,
+          "maxRaizes": 4,
+          "incluirFilhos": true
+        },
+        {
+          "id": "header-link-sobre",
+          "visivel": true,
+          "tipo": "link",
+          "chave": "sobre"
+        }
+      ],
+      "mostrarBusca": true
+    },
+    "drawer": {
+      "itens": [
+        {
+          "id": "drawer-link-catalogo",
+          "visivel": true,
+          "tipo": "link",
+          "chave": "catalogo"
+        },
+        {
+          "id": "drawer-categorias",
+          "visivel": true,
+          "tipo": "categorias",
+          "categoriaIds": null,
+          "maxRaizes": null,
+          "incluirFilhos": true
+        },
+        {
+          "id": "drawer-link-sobre",
+          "visivel": true,
+          "tipo": "link",
+          "chave": "sobre"
+        }
+      ],
+      "mostrarBusca": false,
+      "extras": {
+        "mostrarTitulo": true,
+        "mostrarAssinatura": true,
+        "mostrarWhatsapp": true,
+        "mostrarInstagram": true
+      }
+    }
+  },
+  "atualizadoEm": "2026-07-22T00:46:43.312Z"
+}
