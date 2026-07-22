@@ -25,7 +25,7 @@
   min-width: 11rem;
   padding: 0.4rem 0;
   background: #fff;
-  border: 1px solid var(--pq-gray-border, #e5e5e5);
+  border: 1px solid var(--vn-border, #e5e5e5);
   border-radius: 10px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
   opacity: 0;
@@ -59,7 +59,7 @@
 .submenuItem > a {
   display: block;
   padding: 0.55rem 0.95rem;
-  color: var(--pq-black, #111);
+  color: var(--vn-secondary, #111);
   text-decoration: none;
   font-size: 0.88rem;
   font-weight: 600;
@@ -68,8 +68,8 @@
 
 .submenuItem > a:hover,
 .submenuItem > a:focus-visible {
-  background: color-mix(in srgb, var(--pq-red, #c41e3a) 8%, #fff);
-  color: var(--pq-red, #c41e3a);
+  background: color-mix(in srgb, var(--vn-primary, #c41e3a) 8%, #fff);
+  color: var(--vn-primary, #c41e3a);
 }
 
 .submenuItem > .submenuList {
@@ -80,7 +80,7 @@
   margin-left: 0.15rem;
   padding: 0.4rem 0;
   background: #fff;
-  border: 1px solid var(--pq-gray-border, #e5e5e5);
+  border: 1px solid var(--vn-border, #e5e5e5);
   border-radius: 10px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
   opacity: 0;
@@ -121,13 +121,13 @@
   text-transform: inherit;
   text-align: left;
   width: 100%;
-  min-height: var(--pq-touch, 44px);
+  min-height: var(--vn-touch, 44px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
   padding: 0.7rem 0.95rem;
-  border-radius: var(--pq-menu-radius, 10px);
+  border-radius: var(--vn-menu-radius, 10px);
   cursor: pointer;
 }
 
@@ -152,9 +152,9 @@
   text-decoration: none;
   display: flex;
   align-items: center;
-  min-height: var(--pq-touch, 44px);
+  min-height: var(--vn-touch, 44px);
   padding: 0.7rem 0.95rem;
-  border-radius: var(--pq-menu-radius, 10px);
+  border-radius: var(--vn-menu-radius, 10px);
   width: 100%;
   box-sizing: border-box;
 }

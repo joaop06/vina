@@ -18,7 +18,7 @@ function initials(nome: string): string {
       .filter(Boolean)
       .slice(0, 2)
       .map((w) => w[0]?.toUpperCase() ?? "")
-      .join("") || "PQ"
+      .join("") || "VN"
   );
 }
 

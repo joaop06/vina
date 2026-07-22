@@ -1,4 +1,4 @@
-export const SESSION_COOKIE = "pq_session";
+export const SESSION_COOKIE = "vn_session";
 
 export type AdminClaims = {
   sub: string;

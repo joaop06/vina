@@ -150,14 +150,14 @@ function BrandMark({
     .join("");
   return (
     <span className="admin-sidebar__mark" aria-hidden>
-      {initials || "PQ"}
+      {initials || "VN"}
     </span>
   );
 }
 
 export function AdminSidebar({
   logoutAction,
-  storeName = "Pé Quente",
+  storeName = "Minha loja",
   logoUrl = null,
 }: {
   logoutAction: () => Promise<void>;

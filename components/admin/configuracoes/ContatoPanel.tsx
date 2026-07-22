@@ -74,7 +74,7 @@ export function ContatoPanel({
               <span className="admin-field-label">Nome de usuário @</span>
               <input
                 className="input"
-                placeholder="pequentebarretos"
+                placeholder="minhaloja"
                 disabled={disabled}
                 value={config.instagram.handle}
                 onChange={(e) =>

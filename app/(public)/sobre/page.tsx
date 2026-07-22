@@ -15,7 +15,7 @@ export default async function SobrePage() {
 
   return (
     <div className="container sobre-page">
-      <h1 className="pq-section-title sobre-page__title">Sobre a {site.nomeLoja}</h1>
+      <h1 className="vn-section-title sobre-page__title">Sobre a {site.nomeLoja}</h1>
       <p className="sobre-page__lead">{site.textos.sobre}</p>
 
       <div className="sobre-page__list">

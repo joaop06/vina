@@ -1,5 +1,5 @@
 {
-  "name": "catalogo",
+  "name": "vina",
   "version": "1.0.0",
   "private": true,
   "engines": {
@@ -13,12 +13,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "tsx --test src/lib/br/endereco.test.ts src/lib/api/client-error.test.ts src/lib/wa.test.ts src/lib/wa-template-validation.test.ts src/lib/front/client-filter.test.ts src/lib/front/catalog-facets.test.ts src/lib/dashboard-aggregates.test.ts src/lib/observability/read-metrics.test.ts src/lib/pagination.test.ts src/lib/indices/product-index-core.test.ts src/lib/indices/product-index-consistency.test.ts src/lib/indices/order-index-core.test.ts src/lib/indices/client-index-core.test.ts src/lib/indices/phase6-anti-patterns.test.ts src/lib/data/fs-commit.test.ts src/lib/cache/storefront-isr.test.ts src/schemas/dashboard-catalog-index.test.ts",
+    "test": "tsx --test src/lib/br/endereco.test.ts src/lib/api/client-error.test.ts src/lib/wa.test.ts src/lib/wa-template-validation.test.ts src/lib/front/client-filter.test.ts src/lib/front/catalog-facets.test.ts src/lib/dashboard-aggregates.test.ts src/lib/observability/read-metrics.test.ts src/lib/pagination.test.ts src/lib/indices/product-index-core.test.ts src/lib/indices/product-index-consistency.test.ts src/lib/indices/order-index-core.test.ts src/lib/indices/client-index-core.test.ts src/lib/indices/phase6-anti-patterns.test.ts src/lib/data/fs-commit.test.ts src/lib/cache/storefront-isr.test.ts src/schemas/dashboard-catalog-index.test.ts src/services/site-config-seed.test.ts",
     "baseline:read": "tsx scripts/baseline-read-perf.ts",
     "phase6:verify": "tsx scripts/phase6-verify-read-scale.ts",
     "indices:rebuild": "tsx scripts/rebuild-product-indices.ts",
     "indices:repair": "tsx scripts/rebuild-product-indices.ts --repair",
-    "indices:validate": "tsx scripts/rebuild-product-indices.ts --validate"
+    "indices:validate": "tsx scripts/rebuild-product-indices.ts --validate",
+    "seed:validate": "tsx scripts/validate-seed-data.ts"
   },
   "dependencies": {
     "@octokit/rest": "^22.0.0",

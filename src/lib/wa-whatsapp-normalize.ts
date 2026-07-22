@@ -97,13 +97,11 @@ export function normalizeWhatsappTemplates<T extends WhatsappRaw>(
     mensagemProdutoItemCompactoParts,
   );
 
-  const {
-    mensagemProduto: _mp,
-    mensagemCarrinho: _mc,
-    mensagemCarrinhoItemCompacto: _mci,
-    mostrarCarrinho: _legacyMostrarCarrinho,
-    ...rest
-  } = whatsapp;
+  const rest = { ...whatsapp };
+  delete rest.mensagemProduto;
+  delete rest.mensagemCarrinho;
+  delete rest.mensagemCarrinhoItemCompacto;
+  delete rest.mostrarCarrinho;
 
   return {
     ...rest,

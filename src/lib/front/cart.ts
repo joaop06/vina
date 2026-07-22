@@ -14,8 +14,8 @@ export type CartState = {
   lines: CartLine[];
 };
 
-export const CART_STORAGE_KEY = "pq-cart-v1";
-export const CART_BROADCAST_CHANNEL = "pq-cart";
+export const CART_STORAGE_KEY = "vn-cart-v1";
+export const CART_BROADCAST_CHANNEL = "vn-cart";
 
 export function cartLineKey(line: Pick<CartLine, "productId" | "variantId">): string {
   return `${line.productId}:${line.variantId ?? "_"}`;

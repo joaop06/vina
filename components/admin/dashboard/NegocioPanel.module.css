@@ -13,7 +13,7 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--pq-space-6, 1.5rem);
+  gap: var(--vn-space-6, 1.5rem);
 }
 
 .root>* {
@@ -57,7 +57,7 @@
 .section {
   display: flex;
   flex-direction: column;
-  gap: var(--pq-space-4, 1rem);
+  gap: var(--vn-space-4, 1rem);
 }
 
 .sectionHead {
@@ -65,7 +65,7 @@
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--pq-space-3, 0.75rem);
+  gap: var(--vn-space-3, 0.75rem);
 }
 
 .sectionIntro {
@@ -74,7 +74,7 @@
 
 .sectionTitle {
   margin: 0;
-  font-size: var(--pq-text-lg, 1.0625rem);
+  font-size: var(--vn-text-lg, 1.0625rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: #111;
@@ -82,7 +82,7 @@
 
 .sectionDesc {
   margin: 0.35rem 0 0;
-  font-size: var(--pq-text-sm, 0.8125rem);
+  font-size: var(--vn-text-sm, 0.8125rem);
   line-height: 1.45;
   color: #666;
 }
@@ -91,7 +91,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--pq-space-3, 0.75rem);
+  gap: var(--vn-space-3, 0.75rem);
 }
 
 .exportBtn {
@@ -103,11 +103,11 @@
 .heroBand {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--pq-space-3, 0.75rem);
-  padding: var(--pq-space-4, 1rem);
-  background: linear-gradient(180deg, #fff 0%, var(--pq-gray-50, #f5f5f5) 100%);
-  border: 1px solid var(--pq-gray-border, #e5e5e5);
-  border-radius: var(--pq-radius, 8px);
+  gap: var(--vn-space-3, 0.75rem);
+  padding: var(--vn-space-4, 1rem);
+  background: linear-gradient(180deg, #fff 0%, var(--vn-muted, #f5f5f5) 100%);
+  border: 1px solid var(--vn-border, #e5e5e5);
+  border-radius: var(--vn-radius, 8px);
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
 }
 
@@ -120,17 +120,17 @@
 .compactGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: var(--pq-space-3, 0.75rem);
+  gap: var(--vn-space-3, 0.75rem);
 }
 
 .kpi {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  padding: var(--pq-space-4, 1rem);
+  padding: var(--vn-space-4, 1rem);
   background: #fff;
-  border: 1px solid var(--pq-gray-border, #e5e5e5);
-  border-radius: var(--pq-radius, 8px);
+  border: 1px solid var(--vn-border, #e5e5e5);
+  border-radius: var(--vn-radius, 8px);
   text-decoration: none;
   color: inherit;
   transition:
@@ -163,7 +163,7 @@
 }
 
 .kpiHero .kpiValue {
-  font-size: var(--pq-text-2xl, 1.5rem);
+  font-size: var(--vn-text-2xl, 1.5rem);
 }
 
 .kpiCompact {
@@ -187,22 +187,22 @@
 }
 
 .kpiIconCaution {
-  color: var(--pq-red, #ed1c24);
+  color: var(--vn-primary, #111111);
 }
 
 .kpiIconHero {
-  color: var(--pq-black, #111);
+  color: var(--vn-secondary, #111);
 }
 
 .kpiLabel {
-  font-size: var(--pq-text-xs, 0.75rem);
+  font-size: var(--vn-text-xs, 0.75rem);
   font-weight: 600;
   color: #666;
   line-height: 1.3;
 }
 
 .kpiValue {
-  font-size: var(--pq-text-xl, 1.25rem);
+  font-size: var(--vn-text-xl, 1.25rem);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
@@ -230,11 +230,11 @@
 
 .meta {
   display: flex;
-  gap: var(--pq-space-3, 0.75rem);
-  padding: var(--pq-space-4, 1rem);
+  gap: var(--vn-space-3, 0.75rem);
+  padding: var(--vn-space-4, 1rem);
   background: #fafafa;
-  border: 1px solid var(--pq-gray-border, #e5e5e5);
-  border-radius: var(--pq-radius, 8px);
+  border: 1px solid var(--vn-border, #e5e5e5);
+  border-radius: var(--vn-radius, 8px);
 }
 
 .metaActive {
@@ -243,7 +243,7 @@
 
 .metaIcon {
   flex-shrink: 0;
-  color: var(--pq-red, #ed1c24);
+  color: var(--vn-primary, #111111);
   margin-top: 0.1rem;
 }
 
@@ -262,13 +262,13 @@
 }
 
 .metaTitle {
-  font-size: var(--pq-text-sm, 0.8125rem);
+  font-size: var(--vn-text-sm, 0.8125rem);
   font-weight: 650;
   color: #333;
 }
 
 .metaLink {
-  font-size: var(--pq-text-sm, 0.8125rem);
+  font-size: var(--vn-text-sm, 0.8125rem);
 }
 
 .metaBar {
@@ -280,13 +280,13 @@
 
 .metaFill {
   height: 100%;
-  background: var(--pq-black, #111);
+  background: var(--vn-secondary, #111);
   border-radius: 999px;
   transition: width 0.5s ease;
 }
 
 .metaFillOver {
-  background: var(--pq-red, #ed1c24);
+  background: var(--vn-primary, #111111);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -297,13 +297,13 @@
 
 .metaDetail {
   margin: 0.5rem 0 0;
-  font-size: var(--pq-text-sm, 0.8125rem);
+  font-size: var(--vn-text-sm, 0.8125rem);
   color: #555;
 }
 
 .metaEmptyText {
   margin: 0;
-  font-size: var(--pq-text-sm, 0.8125rem);
+  font-size: var(--vn-text-sm, 0.8125rem);
   color: #555;
   line-height: 1.45;
 }
@@ -311,7 +311,7 @@
 .canalGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--pq-space-3, 0.75rem);
+  gap: var(--vn-space-3, 0.75rem);
 }
 
 @media (max-width: 767px) {
@@ -321,40 +321,40 @@
 }
 
 .canal {
-  padding: var(--pq-space-4, 1rem);
+  padding: var(--vn-space-4, 1rem);
   background: #fff;
-  border: 1px solid var(--pq-gray-border, #e5e5e5);
-  border-radius: var(--pq-radius, 8px);
+  border: 1px solid var(--vn-border, #e5e5e5);
+  border-radius: var(--vn-radius, 8px);
   border-left-width: 4px;
 }
 
 .canalWhatsapp {
-  border-left-color: var(--pq-whatsapp, #25d366);
+  border-left-color: var(--vn-whatsapp, #25d366);
 }
 
 .canalLoja {
-  border-left-color: var(--pq-black, #111);
+  border-left-color: var(--vn-secondary, #111);
 }
 
 .canalHead {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: var(--pq-space-3, 0.75rem);
+  margin-bottom: var(--vn-space-3, 0.75rem);
 }
 
 .canalTitle {
   margin: 0;
-  font-size: var(--pq-text-md, 0.9375rem);
+  font-size: var(--vn-text-md, 0.9375rem);
   font-weight: 700;
 }
 
 .canalIconWa {
-  color: var(--pq-whatsapp, #25d366);
+  color: var(--vn-whatsapp, #25d366);
 }
 
 .canalIconLoja {
-  color: var(--pq-black, #111);
+  color: var(--vn-secondary, #111);
 }
 
 .canalDl {
@@ -380,10 +380,10 @@
 }
 
 .funnelPanel {
-  padding: var(--pq-space-4, 1rem);
+  padding: var(--vn-space-4, 1rem);
   background: #fff;
-  border: 1px solid var(--pq-gray-border, #e5e5e5);
-  border-radius: var(--pq-radius, 8px);
+  border: 1px solid var(--vn-border, #e5e5e5);
+  border-radius: var(--vn-radius, 8px);
 }
 
 .funnelStrip {
@@ -398,7 +398,7 @@
   min-width: 110px;
   padding: 0.65rem 0.75rem;
   background: #fafafa;
-  border-radius: calc(var(--pq-radius, 8px) - 2px);
+  border-radius: calc(var(--vn-radius, 8px) - 2px);
   border: 1px solid #eee;
 }
 
@@ -417,7 +417,7 @@
 }
 
 .funnelStepValue {
-  font-size: var(--pq-text-lg, 1.0625rem);
+  font-size: var(--vn-text-lg, 1.0625rem);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -439,19 +439,19 @@
 .chartGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: var(--pq-space-3, 0.75rem);
+  gap: var(--vn-space-3, 0.75rem);
 }
 
 .panel {
   background: #fff;
-  border: 1px solid var(--pq-gray-border, #e5e5e5);
-  border-radius: var(--pq-radius, 8px);
-  padding: var(--pq-space-4, 1rem);
+  border: 1px solid var(--vn-border, #e5e5e5);
+  border-radius: var(--vn-radius, 8px);
+  padding: var(--vn-space-4, 1rem);
 }
 
 .panelTitle {
   margin: 0 0 0.75rem;
-  font-size: var(--pq-text-sm, 0.8125rem);
+  font-size: var(--vn-text-sm, 0.8125rem);
   font-weight: 650;
   color: #333;
 }
@@ -545,7 +545,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  padding: var(--pq-space-6, 1.5rem) var(--pq-space-4, 1rem);
+  padding: var(--vn-space-6, 1.5rem) var(--vn-space-4, 1rem);
   text-align: center;
   color: #777;
 }
@@ -556,30 +556,30 @@
 
 .emptyTitle {
   margin: 0;
-  font-size: var(--pq-text-sm, 0.8125rem);
+  font-size: var(--vn-text-sm, 0.8125rem);
   font-weight: 650;
   color: #555;
 }
 
 .emptyText {
   margin: 0;
-  font-size: var(--pq-text-xs, 0.75rem);
+  font-size: var(--vn-text-xs, 0.75rem);
   max-width: 28ch;
 }
 
 .spark {
-  color: var(--pq-red, #ed1c24);
+  color: var(--vn-primary, #111111);
   opacity: 0.85;
 }
 
 /* Chart polish scoped to negócio tab */
 .root :global(.dash-chart__bar) {
   transition: height 0.45s ease;
-  background: var(--pq-black, #111);
+  background: var(--vn-secondary, #111);
 }
 
 .root :global(.dash-chart__bar--wa) {
-  background: var(--pq-whatsapp, #25d366);
+  background: var(--vn-whatsapp, #25d366);
 }
 
 .root :global(.dash-chart__bar--loja) {
@@ -587,7 +587,7 @@
 }
 
 .root :global(.dash-chart__legend) {
-  font-size: var(--pq-text-xs, 0.75rem);
+  font-size: var(--vn-text-xs, 0.75rem);
 }
 
 .root :global(.dash-hbar-list__track) {
@@ -595,7 +595,7 @@
 }
 
 .root :global(.dash-hbar-list__fill) {
-  background: var(--pq-black, #111);
+  background: var(--vn-secondary, #111);
   transition: width 0.45s ease;
 }
 

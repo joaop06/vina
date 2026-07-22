@@ -23,9 +23,9 @@
   flex-direction: column;
   gap: 0.65rem;
   padding: 1rem 1.1rem;
-  background: color-mix(in srgb, var(--pq-black) 3%, #fff);
-  border: 1px solid var(--pq-gray-border);
-  border-radius: var(--pq-radius);
+  background: color-mix(in srgb, var(--vn-secondary) 3%, #fff);
+  border: 1px solid var(--vn-border);
+  border-radius: var(--vn-radius);
 }
 
 @media (min-width: 720px) {
@@ -40,9 +40,9 @@
 
 .previewMobile {
   display: block;
-  border: 1px solid var(--pq-gray-border);
-  border-radius: var(--pq-radius);
-  background: color-mix(in srgb, var(--pq-black) 3%, #fff);
+  border: 1px solid var(--vn-border);
+  border-radius: var(--vn-radius);
+  background: color-mix(in srgb, var(--vn-secondary) 3%, #fff);
   overflow: hidden;
 }
 
@@ -58,7 +58,7 @@
   font-weight: 650;
   cursor: pointer;
   list-style: none;
-  color: color-mix(in srgb, var(--pq-black) 72%, transparent);
+  color: color-mix(in srgb, var(--vn-secondary) 72%, transparent);
 }
 
 .previewMobileSummary::-webkit-details-marker {
@@ -90,7 +90,7 @@
   font-size: 0.78rem;
   line-height: 1.4;
   font-weight: 500;
-  color: color-mix(in srgb, var(--pq-black) 45%, transparent);
+  color: color-mix(in srgb, var(--vn-secondary) 45%, transparent);
 }
 
 .waFieldsStack {

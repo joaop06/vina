@@ -91,7 +91,7 @@ export async function CatalogPageView({ query }: { query: CatalogViewQuery }) {
   return (
     <div className="container catalog-page">
       <header className="catalog-page__head">
-        <h1 className="pq-section-title catalog-page__title">Catálogo</h1>
+        <h1 className="vn-section-title catalog-page__title">Catálogo</h1>
         <p className="catalog-page__count" aria-live="polite">
           {result.total} produto{result.total === 1 ? "" : "s"}
         </p>

@@ -175,7 +175,7 @@ export function CartPageClient({ site }: { site: SiteConfig }) {
       className={`container cart-page${cart.lines.length === 0 ? " cart-page--empty" : ""}`}
     >
       <header className="cart-page__head">
-        <h1 className="pq-section-title cart-page__title">Carrinho</h1>
+        <h1 className="vn-section-title cart-page__title">Carrinho</h1>
         {cart.lines.length > 0 ? (
           <button
             type="button"

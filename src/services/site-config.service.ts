@@ -7,9 +7,7 @@ import { CACHE_TAGS } from "@/src/lib/cache-tags";
 import { revalidateStorefront } from "@/src/lib/admin/revalidate-storefront";
 import { syncEnderecoTexto } from "@/src/lib/br/endereco";
 import { normalizeWaDigits } from "@/src/lib/wa";
-import { DEFAULT_COMPACT_CART_ITEM_PARTS } from "@/src/lib/wa-compact-template";
-import { DEFAULT_CART_WA_TEMPLATE_PARTS } from "@/src/lib/wa-cart-template";
-import { DEFAULT_PRODUCT_WA_TEMPLATE_PARTS } from "@/src/lib/wa-product-template";
+import { DEFAULT_SITE_CONFIG } from "@/src/config/default-site-config";
 import {
   siteConfigSchema,
   siteLogoSchema,
@@ -27,69 +25,7 @@ import type { z } from "zod";
 
 const PATH = "configuracoes/site.json";
 
-export const DEFAULT_SITE_CONFIG: SiteConfig = {
-  versao: 1,
-  nomeLoja: "PÉ QUENTE",
-  mostrarNomeComLogo: false,
-  mostrarCarrinho: true,
-  assinatura: "CALÇADOS · BOLSAS · ACESSÓRIOS",
-  slogan:
-    "Conforto & qualidade — caminham lado a lado e aqui você encontra o seu calçado ideal!",
-  layout: "classic",
-  cores: {
-    primaria: "#ED1C24",
-    secundaria: "#111111",
-    fundo: "#FFFFFF",
-    fundoNeutro: "#F5F5F5",
-    borda: "#E5E5E5",
-  },
-  logo: null,
-  whatsapp: {
-    telefone: "16993791185",
-    mensagemPadrao: "Olá! Vim pelo site da Pé Quente e gostaria de saber mais.",
-    mensagemProdutoParts: DEFAULT_PRODUCT_WA_TEMPLATE_PARTS,
-    mensagemProdutoIncluirReferencia: false,
-    mensagemProdutoFormatoItens: "produto",
-    mensagemProdutoItemCompactoParts: DEFAULT_COMPACT_CART_ITEM_PARTS,
-    mostrar: true,
-    mensagemCarrinhoFormatoItens: "produto",
-    mensagemCarrinhoParts: DEFAULT_CART_WA_TEMPLATE_PARTS,
-    mensagemCarrinhoItemCompactoParts: DEFAULT_COMPACT_CART_ITEM_PARTS,
-  },
-  instagram: {
-    handle: "pequentebarretos",
-    url: "https://instagram.com/pequentebarretos",
-    mostrar: true,
-  },
-  endereco: {
-    cep: "",
-    logradouro: "",
-    numero: "",
-    complemento: "",
-    bairro: "",
-    cidade: "Barretos",
-    uf: "SP",
-    texto: "Barretos-SP",
-    mostrar: true,
-  },
-  telefones: {
-    fixo: "",
-    celular: "",
-    usarWhatsappComoCelular: true,
-    mostrarFixo: false,
-    mostrarCelular: true,
-  },
-  horarios: "Seg–Sex 9h–18h · Sáb 9h–13h",
-  textos: {
-    sobre:
-      "A PÉ QUENTE é uma loja de calçados, bolsas e acessórios em Barretos-SP. Conforto e qualidade caminham lado a lado.",
-    trocas:
-      "Consulte nossa equipe pelo WhatsApp para trocas e devoluções.",
-  },
-  navegacao: DEFAULT_NAVEGACAO,
-  painel: { metaReceitaMensal: null },
-  atualizadoEm: new Date().toISOString(),
-};
+export { DEFAULT_SITE_CONFIG };
 
 type LogoInput = z.infer<typeof siteLogoInputSchema>;
 

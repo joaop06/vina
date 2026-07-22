@@ -39,7 +39,7 @@
 }
 
 .body {
-  padding-top: var(--pq-space-4, 1rem);
+  padding-top: var(--vn-space-4, 1rem);
 }
 
 @media (prefers-reduced-motion: reduce) {

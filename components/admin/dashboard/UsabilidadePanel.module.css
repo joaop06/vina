@@ -7,7 +7,7 @@
 .mixGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--pq-space-3, 0.75rem);
+  gap: var(--vn-space-3, 0.75rem);
 }
 
 @media (max-width: 767px) {
@@ -64,7 +64,7 @@
 }
 
 .mixWa {
-  background: var(--pq-whatsapp, #25d366);
+  background: var(--vn-whatsapp, #25d366);
 }
 
 .mixLegend {
@@ -74,7 +74,7 @@
   margin: 0.85rem 0 0;
   padding: 0;
   list-style: none;
-  font-size: var(--pq-text-sm, 0.8125rem);
+  font-size: var(--vn-text-sm, 0.8125rem);
   color: #444;
 }
 
@@ -100,7 +100,7 @@
 .chartsGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--pq-space-3, 0.75rem);
+  gap: var(--vn-space-3, 0.75rem);
 }
 
 @media (max-width: 767px) {
@@ -112,7 +112,7 @@
 .rankMeta {
   margin: 0 0 0.75rem;
   color: #888;
-  font-size: var(--pq-text-sm, 0.8125rem);
+  font-size: var(--vn-text-sm, 0.8125rem);
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }

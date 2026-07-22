@@ -22,9 +22,9 @@
   flex-direction: column;
   gap: 0.65rem;
   padding: 1rem 1.1rem;
-  background: color-mix(in srgb, var(--pq-black) 3%, #fff);
-  border: 1px solid var(--pq-gray-border);
-  border-radius: var(--pq-radius);
+  background: color-mix(in srgb, var(--vn-secondary) 3%, #fff);
+  border: 1px solid var(--vn-border);
+  border-radius: var(--vn-radius);
 }
 
 .previewLabel {
@@ -33,7 +33,7 @@
   font-weight: 650;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--pq-black) 48%, transparent);
+  color: color-mix(in srgb, var(--vn-secondary) 48%, transparent);
 }
 
 .previewEmpty {
@@ -41,7 +41,7 @@
   font-size: 0.85rem;
   line-height: 1.45;
   font-weight: 500;
-  color: color-mix(in srgb, var(--pq-black) 55%, transparent);
+  color: color-mix(in srgb, var(--vn-secondary) 55%, transparent);
 }
 
 .previewCard {
@@ -49,8 +49,8 @@
   gap: 0.75rem;
   padding: 0.85rem 1rem;
   background: #fff;
-  border: 1px solid var(--pq-gray-border);
-  border-radius: calc(var(--pq-radius) - 2px);
+  border: 1px solid var(--vn-border);
+  border-radius: calc(var(--vn-radius) - 2px);
 }
 
 .previewIcon {
@@ -58,7 +58,7 @@
   width: 1.25rem;
   height: 1.25rem;
   margin-top: 0.05rem;
-  color: var(--pq-red);
+  color: var(--vn-primary);
 }
 
 .previewBody {
@@ -71,19 +71,19 @@
   font-size: 0.8125rem;
   font-weight: 650;
   line-height: 1.35;
-  color: color-mix(in srgb, var(--pq-black) 82%, transparent);
+  color: color-mix(in srgb, var(--vn-secondary) 82%, transparent);
 }
 
 .previewBar {
   height: 10px;
-  background: color-mix(in srgb, var(--pq-black) 8%, #fff);
+  background: color-mix(in srgb, var(--vn-secondary) 8%, #fff);
   border-radius: 999px;
   overflow: hidden;
 }
 
 .previewFill {
   height: 100%;
-  background: var(--pq-black);
+  background: var(--vn-secondary);
   border-radius: 999px;
 }
 
@@ -92,12 +92,12 @@
   font-size: 0.8125rem;
   line-height: 1.4;
   font-weight: 500;
-  color: color-mix(in srgb, var(--pq-black) 58%, transparent);
+  color: color-mix(in srgb, var(--vn-secondary) 58%, transparent);
 }
 
 .previewDetail strong {
   font-weight: 700;
-  color: var(--pq-black);
+  color: var(--vn-secondary);
 }
 
 .previewNote {
@@ -105,5 +105,5 @@
   font-size: 0.78rem;
   line-height: 1.4;
   font-weight: 500;
-  color: color-mix(in srgb, var(--pq-black) 45%, transparent);
+  color: color-mix(in srgb, var(--vn-secondary) 45%, transparent);
 }

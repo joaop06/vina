@@ -72,7 +72,7 @@ export function ClassicHome({
 
       {destaques.length > 0 ? (
         <section className={`container ${styles.section}`}>
-          <h2 className={`pq-section-title ${styles.sectionTitle}`}>Destaques</h2>
+          <h2 className={`vn-section-title ${styles.sectionTitle}`}>Destaques</h2>
           <div className="grid-products">
             {destaques.map((p) => (
               <ProductCard key={p.id} product={p} cartEnabled={site.mostrarCarrinho} />
@@ -83,7 +83,7 @@ export function ClassicHome({
 
       {showFallback ? (
         <section className={`container ${styles.section}`}>
-          <h2 className={`pq-section-title ${styles.sectionTitle}`}>
+          <h2 className={`vn-section-title ${styles.sectionTitle}`}>
             Nossos produtos
           </h2>
           <div className="grid-products">
@@ -102,7 +102,7 @@ export function ClassicHome({
 
       {novos.length > 0 ? (
         <section className={`container ${styles.sectionTight}`}>
-          <h2 className={`pq-section-title ${styles.sectionTitle}`}>
+          <h2 className={`vn-section-title ${styles.sectionTitle}`}>
             Lançamentos
           </h2>
           <div className="grid-products">

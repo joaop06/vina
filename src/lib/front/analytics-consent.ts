@@ -1,5 +1,5 @@
-const CONSENT_KEY = "pq_consent";
-const SESSION_KEY = "pq_sid";
+const CONSENT_KEY = "vn_consent";
+const SESSION_KEY = "vn_sid";
 const YEAR_SECONDS = 60 * 60 * 24 * 365;
 
 export type ConsentStatus = "unknown" | "accepted" | "declined";

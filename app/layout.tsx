@@ -53,11 +53,11 @@ export default async function RootLayout({
       data-layout={site.layout}
       style={
         {
-          "--pq-red": site.cores.primaria,
-          "--pq-black": site.cores.secundaria,
-          "--pq-white": site.cores.fundo,
-          "--pq-gray-50": site.cores.fundoNeutro,
-          "--pq-gray-border": site.cores.borda,
+          "--vn-primary": site.cores.primaria,
+          "--vn-secondary": site.cores.secundaria,
+          "--vn-surface": site.cores.fundo,
+          "--vn-muted": site.cores.fundoNeutro,
+          "--vn-border": site.cores.borda,
         } as React.CSSProperties
       }
     >

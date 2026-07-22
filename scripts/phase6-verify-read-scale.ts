@@ -190,8 +190,8 @@ async function login(
     const body = await res.text();
     throw new Error(`Login falhou (${res.status}): ${body.slice(0, 300)}`);
   }
-  if (!jar.has("pq_session")) {
-    throw new Error("Login OK mas cookie pq_session ausente");
+  if (!jar.has("vn_session")) {
+    throw new Error("Login OK mas cookie vn_session ausente");
   }
   return jar;
 }

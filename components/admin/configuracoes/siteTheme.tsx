@@ -10,7 +10,7 @@ export function normalizeHexForPicker(value: string): string {
     const [, a, b, c] = v;
     return `#${a}${a}${b}${b}${c}${c}`.toLowerCase();
   }
-  return "#ed1c24";
+  return "#111111";
 }
 
 export function expandHexIfComplete(raw: string): string | null {
@@ -27,11 +27,11 @@ export function expandHexIfComplete(raw: string): string | null {
 export function applySiteTheme(config: Pick<SiteConfig, "cores" | "layout">) {
   const { cores, layout } = config;
   const root = document.documentElement;
-  root.style.setProperty("--pq-red", cores.primaria);
-  root.style.setProperty("--pq-black", cores.secundaria);
-  root.style.setProperty("--pq-white", cores.fundo);
-  root.style.setProperty("--pq-gray-50", cores.fundoNeutro);
-  root.style.setProperty("--pq-gray-border", cores.borda);
+  root.style.setProperty("--vn-primary", cores.primaria);
+  root.style.setProperty("--vn-secondary", cores.secundaria);
+  root.style.setProperty("--vn-surface", cores.fundo);
+  root.style.setProperty("--vn-muted", cores.fundoNeutro);
+  root.style.setProperty("--vn-border", cores.borda);
   const thumbByLayout: Record<string, [string, string]> = {
     classic: [
       `color-mix(in srgb, ${cores.primaria} 45%, transparent)`,
@@ -48,8 +48,8 @@ export function applySiteTheme(config: Pick<SiteConfig, "cores" | "layout">) {
   };
   const [thumb, thumbHover] =
     thumbByLayout[layout ?? "classic"] ?? thumbByLayout.classic!;
-  root.style.setProperty("--pq-scrollbar-thumb", thumb);
-  root.style.setProperty("--pq-scrollbar-thumb-hover", thumbHover);
+  root.style.setProperty("--vn-scrollbar-thumb", thumb);
+  root.style.setProperty("--vn-scrollbar-thumb-hover", thumbHover);
   if (layout) {
     root.dataset.layout = layout;
     document.body.dataset.layout = layout;

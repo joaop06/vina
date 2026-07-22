@@ -1,6 +1,6 @@
 import { normalizeWaDigits } from "@/src/lib/wa";
 
-export const CLIENT_LEAD_KEY = "pq_cliente";
+export const CLIENT_LEAD_KEY = "vn_cliente";
 
 export type ClientLead = {
   id?: string;

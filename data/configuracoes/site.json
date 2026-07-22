@@ -1,37 +1,55 @@
 {
-  "versao": 0,
-  "nomeLoja": "",
-  "mostrarNomeComLogo": true,
+  "versao": 1,
+  "nomeLoja": "Minha loja",
+  "mostrarNomeComLogo": false,
   "mostrarCarrinho": true,
-  "assinatura": "",
-  "slogan": "",
+  "assinatura": "Catálogo online",
+  "slogan": "Configure sua vitrine no painel admin e comece a vender pelo WhatsApp.",
   "layout": "classic",
   "cores": {
-    "primaria": "#000000",
+    "primaria": "#111111",
     "secundaria": "#111111",
     "fundo": "#FFFFFF",
     "fundoNeutro": "#F5F5F5",
     "borda": "#E5E5E5"
   },
-  "logo": {
-    "id": "050ba9b8-5650-4a9a-bcc2-88ac6ecae94e",
-    "path": "imagens/site/050ba9b8-5650-4a9a-bcc2-88ac6ecae94e.jpg",
-    "alt": "PÉ QUENTE"
-  },
+  "logo": null,
   "whatsapp": {
-    "telefone": "17976008088",
+    "telefone": "11999999999",
     "mensagemPadrao": "Olá! Vim pelo site e gostaria de saber mais.",
-    "mensagemProduto": "*Tenho interesse no produto:*\n- {nome}:\n- - {resumo}\n- - {url}\n\nSegue disponível???",
-    "mensagemProdutoIncluirReferencia": true,
+    "mensagemProdutoParts": {
+      "intro": "Tenho interesse no produto",
+      "includeVariantDetails": true,
+      "includeUrl": true,
+      "outro": "Segue disponível???"
+    },
+    "mensagemProdutoIncluirReferencia": false,
+    "mensagemProdutoFormatoItens": "produto",
+    "mensagemProdutoItemCompactoParts": {
+      "bullet": "•",
+      "showResumo": true,
+      "showQuantidade": true,
+      "showUrl": false,
+      "showReferenciaSeparada": false
+    },
     "mostrar": true,
     "mensagemCarrinhoFormatoItens": "produto",
-    "mensagemCarrinho": "Gostaria de pedir os itens abaixo:\n\n{itens}\n\nPodem me confirmar disponibilidade e valores?",
-    "mensagemCarrinhoItemCompacto": "• {nome} — {resumo} (x{quantidade})"
+    "mensagemCarrinhoParts": {
+      "beforeItens": "Gostaria de pedir os itens abaixo:",
+      "outro": "Podem me confirmar disponibilidade e valores?"
+    },
+    "mensagemCarrinhoItemCompactoParts": {
+      "bullet": "•",
+      "showResumo": true,
+      "showQuantidade": true,
+      "showUrl": false,
+      "showReferenciaSeparada": false
+    }
   },
   "instagram": {
-    "handle": "pequentebarretos",
-    "url": "https://instagram.com/pequentebarretos",
-    "mostrar": true
+    "handle": "",
+    "url": "",
+    "mostrar": false
   },
   "endereco": {
     "cep": "",
@@ -39,10 +57,10 @@
     "numero": "",
     "complemento": "",
     "bairro": "",
-    "cidade": "Barretos",
-    "uf": "SP",
-    "texto": "Barretos-SP",
-    "mostrar": true
+    "cidade": "",
+    "uf": "",
+    "texto": "",
+    "mostrar": false
   },
   "telefones": {
     "fixo": "",
@@ -53,7 +71,7 @@
   },
   "horarios": "Seg–Sex 9h–18h · Sáb 9h–13h",
   "textos": {
-    "sobre": "Há mais de 30 anos no ramo de calçados, proporcionando as melhores marcas do mercado, com preços imbatíveis!!! ",
+    "sobre": "Apresente sua loja aqui. Edite este texto em Admin → Personalização → Identidade.",
     "trocas": "Consulte nossa equipe pelo WhatsApp para trocas e devoluções."
   },
   "navegacao": {
@@ -62,61 +80,64 @@
       "mostrarTelefone": true
     },
     "header": {
+      "mostrarBusca": true,
       "itens": [
         {
           "id": "header-link-catalogo",
-          "visivel": true,
           "tipo": "link",
-          "chave": "catalogo"
+          "chave": "catalogo",
+          "visivel": true
         },
         {
           "id": "header-categorias",
-          "visivel": true,
           "tipo": "categorias",
+          "visivel": true,
           "categoriaIds": null,
           "maxRaizes": 4,
           "incluirFilhos": true
         },
         {
           "id": "header-link-sobre",
-          "visivel": true,
           "tipo": "link",
-          "chave": "sobre"
+          "chave": "sobre",
+          "visivel": true
         }
-      ],
-      "mostrarBusca": true
+      ]
     },
     "drawer": {
-      "itens": [
-        {
-          "id": "drawer-link-catalogo",
-          "visivel": true,
-          "tipo": "link",
-          "chave": "catalogo"
-        },
-        {
-          "id": "drawer-categorias",
-          "visivel": true,
-          "tipo": "categorias",
-          "categoriaIds": null,
-          "maxRaizes": null,
-          "incluirFilhos": true
-        },
-        {
-          "id": "drawer-link-sobre",
-          "visivel": true,
-          "tipo": "link",
-          "chave": "sobre"
-        }
-      ],
       "mostrarBusca": false,
       "extras": {
         "mostrarTitulo": true,
         "mostrarAssinatura": true,
         "mostrarWhatsapp": true,
         "mostrarInstagram": true
-      }
+      },
+      "itens": [
+        {
+          "id": "drawer-link-catalogo",
+          "tipo": "link",
+          "chave": "catalogo",
+          "visivel": true
+        },
+        {
+          "id": "drawer-categorias",
+          "tipo": "categorias",
+          "visivel": true,
+          "categoriaIds": null,
+          "maxRaizes": null,
+          "incluirFilhos": true
+        },
+        {
+          "id": "drawer-link-sobre",
+          "tipo": "link",
+          "chave": "sobre",
+          "visivel": true
+        }
+      ]
     }
   },
-  "atualizadoEm": "2026-07-22T00:46:43.312Z"
+  "painel": {
+    "metaReceitaMensal": null
+  },
+  "atualizadoEm": "2026-01-01T00:00:00.000Z"
 }
