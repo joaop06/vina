@@ -1,0 +1,14 @@
+name: Sync upstream
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Diário 09:00 UTC (~06:00 BRT)
+    - cron: "0 9 * * *"
+
+jobs:
+  sync:
+    if: github.event.repository.fork == true
+    uses: ./.github/workflows/sync-fork-reusable.yml
+    secrets:
+      UPSTREAM_SYNC_TOKEN: ${{ secrets.UPSTREAM_SYNC_TOKEN }}

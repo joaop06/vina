@@ -111,6 +111,10 @@ npm test
 
 Há scripts opcionais de medição de leitura (`baseline:read`, `phase6:verify`) documentados nos comentários do `.env.example`, voltados a evolução de performance do projeto.
 
+### Lojas (fork do repositório base)
+
+Se você usa um **fork** deste projeto como catálogo da sua loja, configure a sincronização automática com o upstream para receber correções e novidades sem usar **Sync fork** manual no GitHub. Guia completo: **[docs/sync-fork.md](docs/sync-fork.md)** (secret `UPSTREAM_SYNC_TOKEN`, ativar Actions, sync diário ou manual).
+
 ---
 
 **Vina** — vitrine na web, conversa no WhatsApp.
