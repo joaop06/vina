@@ -48,6 +48,9 @@ jobs:
   sync:
     needs: needs_sync
     if: needs.needs_sync.outputs.run_sync == 'true'
+    permissions:
+      contents: write
+      pull-requests: write
     uses: ./.github/workflows/sync-fork-reusable.yml
     secrets:
       SYNC_COMMIT_NAME: ${{ secrets.SYNC_COMMIT_NAME }}
