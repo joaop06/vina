@@ -12,6 +12,11 @@ const COMMIT_MSG =
   process.env.SYNC_COMMIT_MESSAGE ??
   "chore(sync): atualizar base a partir do upstream";
 
+/** Infra compartilhada: forks não devem divergir (ex. actions/checkout desatualizado). */
+function isUpstreamWorkflowPath(path) {
+  return path.startsWith(".github/workflows/");
+}
+
 function git(args, opts = {}) {
   return execFileSync("git", args, {
     encoding: "utf8",
@@ -84,14 +89,14 @@ function main() {
 
   const conflicts = [];
   for (const path of upstreamChanges.keys()) {
-    if (forkChanges.has(path)) {
+    if (forkChanges.has(path) && !isUpstreamWorkflowPath(path)) {
       conflicts.push(path);
     }
   }
 
   const upstreamOnly = [];
   for (const [path, status] of upstreamChanges) {
-    if (!forkChanges.has(path)) {
+    if (!forkChanges.has(path) || isUpstreamWorkflowPath(path)) {
       upstreamOnly.push({ path, status });
     }
   }
@@ -120,6 +125,13 @@ function main() {
         throw e;
       }
     }
+  }
+
+  try {
+    git(["checkout", UPSTREAM_REF, "--", ".github/workflows"]);
+    console.log("Workflows alinhados ao upstream (.github/workflows/).");
+  } catch {
+    /* upstream sem pasta de workflows */
   }
 
   let staged = false;

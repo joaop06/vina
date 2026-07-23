@@ -84,10 +84,10 @@ Variáveis de ambiente (Production):
 
 Fluxo típico após um push na `main` de [joaop06/vina](https://github.com/joaop06/vina):
 
-1. **Sync upstream** (no fork): a cada **30 minutos** o workflow compara o fork com o base; se houver commits novos no base, faz merge inteligente e push na `main` (autor `SYNC_COMMIT_*`) → **1º deploy** na Vercel.
+1. **Sync upstream** (no fork): a cada **10 minutos** o workflow compara o fork com o base; se houver commits novos no base, faz merge inteligente e push na `main` (autor `SYNC_COMMIT_*`) → **1º deploy** na Vercel.
 2. **Data indices** (no fork): o push acima altera `data/`; se os índices estiverem inconsistentes, repara `data/indices/` e commita de novo → **2º deploy** (se houve repair).
 
-- **Automático:** poll a cada 30 min (`schedule` em **Sync upstream**). Execuções em que o fork já contém o upstream são encerradas sem `npm ci` nem merge.
+- **Automático:** poll a cada 10 min (`schedule` em **Sync upstream**). Execuções em que o fork já contém o upstream são encerradas sem `npm ci` nem merge.
 - **Manual:** **Actions → Sync upstream → Run workflow** (sempre tenta sync, mesmo se o poll recente não viu mudanças).
 
 O repositório **base** não precisa listar forks nem guardar secrets das lojas — cada fork puxa sozinho do upstream público.
