@@ -2,7 +2,7 @@
 
 Este guia é para **donos de fork** — lojas que copiaram o repositório base e publicam o site a partir do próprio GitHub (por exemplo na Vercel).
 
-A pipeline **Sync upstream** traz novidades do projeto base (correções, funcionalidades, dependências) para a branch `main` do seu repositório. Quando o push em `main` acontece, o deploy conectado a essa branch roda automaticamente.
+A pipeline **Sync upstream** traz novidades do projeto base para a branch `main` do seu repositório. Commits de sync usam o autor definido em `SYNC_COMMIT_NAME` / `SYNC_COMMIT_EMAIL` (conta GitHub ligada à Vercel) para o deploy automático funcionar, inclusive no plano Hobby.
 
 ## O que você precisa fazer (uma vez)
 
@@ -14,32 +14,35 @@ A pipeline **Sync upstream** traz novidades do projeto base (correções, funcio
 
 Em forks, o GitHub pode pedir confirmação antes de rodar workflows agendados.
 
-### 2. Criar o secret `UPSTREAM_SYNC_TOKEN`
+### 2. Secrets no fork (Actions)
 
-O repositório base é **privado**. A pipeline precisa de um token só de **leitura** para baixar as atualizações.
+| Secret | Descrição |
+|--------|-----------|
+| `UPSTREAM_SYNC_TOKEN` | PAT de **leitura** no upstream privado (`joaop06/catalogo`), fornecido pelo mantenedor |
+| `SYNC_COMMIT_NAME` | Nome da conta GitHub **dona do projeto na Vercel** |
+| `SYNC_COMMIT_EMAIL` | E-mail primário dessa conta no GitHub (o mesmo que a Vercel associa ao deploy) |
 
-1. Peça ao mantenedor do catálogo base um **Personal Access Token** (PAT) ou token fine-grained com permissão de **leitura** no repositório upstream (`joaop06/catalogo`).
-2. No **seu** fork: **Settings → Secrets and variables → Actions → New repository secret**.
-3. Nome: `UPSTREAM_SYNC_TOKEN`
-4. Valor: cole o token fornecido.
+**Settings → Secrets and variables → Actions → New repository secret** para cada um.
 
-Não compartilhe esse token publicamente. Se vazar, peça um token novo ao mantenedor.
+Para sync imediato após cada release no base, adicione a conta do dispatch (bot/maintenedor) como colaborador **Maintain** no fork — [sync-upstream-maintainer.md](sync-upstream-maintainer.md).
 
 ### 3. Conferir deploy na `main`
 
-Na Vercel (ou outro host), o projeto deve estar ligado ao **seu** repositório e fazer deploy da branch `main`. A sync não altera variáveis de ambiente (`.env` / secrets da Vercel).
+Na Vercel, o projeto deve estar ligado ao **seu** fork, branch **`main`**, com a **mesma conta GitHub** dos secrets `SYNC_COMMIT_*`. A sync não altera variáveis de ambiente da Vercel.
 
 ## Como funciona no dia a dia
 
 | Situação | O que a pipeline faz |
 |----------|----------------------|
-| Só o upstream mudou arquivos que você **não** alterou | Commit em `main` + push → **deploy automático** |
+| Só o upstream mudou arquivos que você **não** alterou | Commit em `main` (autor Vercel) + push → **deploy automático** |
 | Você alterou arquivos diferentes dos que o upstream mudou | Mesmo comportamento: seu catálogo/código local é preservado nos arquivos que só você mexeu |
 | **Mesmo arquivo** alterado no upstream **e** no seu fork | Abre um **Pull Request** com o que dá para aplicar sem conflito; arquivos em conflito precisam de revisão manual |
+| Upstream já estava aplicado no fork | Sync termina sem commit novo → **sem** push → **sem** deploy desnecessário |
 
 ### Disparos
 
-- **Agendado:** todo dia por volta das 06:00 (horário de Brasília), conforme cron do workflow.
+- **Após push na `main` do base:** `repository_dispatch` → sync no fork (requer colaborador dispatch no fork).
+- **Agendado:** todo dia ~06:00 BRT (fallback).
 - **Manual:** **Actions → Sync upstream → Run workflow**.
 
 ## Se aparecer um Pull Request de sync
@@ -47,7 +50,7 @@ Na Vercel (ou outro host), o projeto deve estar ligado ao **seu** repositório e
 1. Leia a descrição do PR e a mensagem do commit (lista arquivos em conflito).
 2. Em **Files changed**, revise o que será mesclado.
 3. Para arquivos em conflito, incorpore manualmente as mudanças do upstream que fizerem sentido (ou peça ajuda ao mantenedor).
-4. Quando estiver ok, **Merge** do PR na `main` → deploy dispara.
+4. Quando estiver ok, **Merge** do PR na `main` → deploy dispara (autor = você, na merge).
 
 Não é necessário usar **Sync fork** na interface do GitHub se esta pipeline estiver configurada.
 
@@ -59,25 +62,29 @@ O catálogo em `data/` segue a mesma lógica: seu conteúdo permanece quando só
 
 ## Validação (mantenedor / fork de teste)
 
-Checklist após publicar os workflows no upstream e configurar um fork de teste:
-
-1. **Upstream:** rodar **Sync upstream** no repo base → job deve ser **skipped** (`fork == false`).
-2. **Fork com secret:** `workflow_dispatch` → se o upstream só mudou código que o fork não tocou, `main` avança e o deploy roda.
+1. **Upstream:** push na `main` → **Notify forks to sync**; job **Sync upstream** no base continua **skipped** (`fork == false`).
+2. **Fork:** após dispatch ou `workflow_dispatch`, se upstream mudou só arquivos que o fork não tocou → `main` avança, autor = `SYNC_COMMIT_*`, deploy Vercel.
 3. **Fork só com mudanças em `data/`:** upstream muda `src/` → push direto em `main` no fork.
-4. **Conflito:** fork e upstream alteram o **mesmo** arquivo → PR criada, **sem** push em `main` até merge manual.
-5. Confirmar que push em `main` dispara deploy na Vercel do fork.
+4. **Conflito:** mesmo arquivo nos dois lados → PR, **sem** push em `main` até merge manual.
+5. Upstream já sincronizado → workflow ok, sem commit, sem deploy.
 
 ## Problemas comuns
 
 | Sintoma | Possível causa |
 |---------|----------------|
 | Workflow não aparece | Actions desabilitadas no fork |
-| Falha no fetch upstream | Secret ausente, expirado ou sem leitura no repo base |
-| Falha em `npm run build` | Upstream introduziu mudança que quebra build; corrigir localmente ou aguardar fix no base antes de novo sync |
-| PR toda semana com conflitos | Mesmos arquivos editados no fork e no upstream — alinhar com mantenedor ou reduzir customizações nos arquivos core |
+| Falha no fetch upstream | `UPSTREAM_SYNC_TOKEN` ausente, expirado ou sem leitura no base |
+| Sync ok, Vercel não deploya | `SYNC_COMMIT_*` não correspondem à conta dona do projeto na Vercel |
+| Base publicou, fork não syncou na hora | Conta do `FORK_DISPATCH_TOKEN` sem acesso Maintain no fork; aguardar cron ou rodar manual |
+| Falha em `npm run build` | Upstream quebrou build; corrigir localmente ou aguardar fix no base |
+| PR toda semana com conflitos | Mesmos arquivos editados no fork e no upstream |
 
 ## Arquivos da pipeline (referência)
 
-- [`.github/workflows/sync-upstream.yml`](../.github/workflows/sync-upstream.yml) — entrada (schedule + manual)
-- [`.github/workflows/sync-fork-reusable.yml`](../.github/workflows/sync-fork-reusable.yml) — lógica de fetch, merge e PR
+- [`.github/workflows/sync-notify-forks.yml`](../.github/workflows/sync-notify-forks.yml) — base: dispara forks após push na `main`
+- [`.github/workflows/sync-upstream.yml`](../.github/workflows/sync-upstream.yml) — fork: entrada (dispatch, schedule, manual)
+- [`.github/workflows/sync-fork-reusable.yml`](../.github/workflows/sync-fork-reusable.yml) — fetch, merge, autor Vercel, PR
+- [`scripts/dispatch-fork-sync.mjs`](../scripts/dispatch-fork-sync.mjs) — lista forks e envia dispatch
 - [`scripts/sync-upstream-merge.mjs`](../scripts/sync-upstream-merge.mjs) — merge inteligente por merge-base
+
+Mantenedor do base: [sync-upstream-maintainer.md](sync-upstream-maintainer.md).

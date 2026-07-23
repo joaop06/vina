@@ -115,7 +115,9 @@ Há scripts opcionais de medição de leitura (`baseline:read`, `phase6:verify`)
 
 Checklist do zero (acesso ao base, fork, tokens, Vercel): **[docs/setup-nova-loja.md](docs/setup-nova-loja.md)**.
 
-Sincronização automática com o upstream (secret `UPSTREAM_SYNC_TOKEN`, Actions, sync diário ou manual): **[docs/sync-fork.md](docs/sync-fork.md)**.
+Sincronização automática (dispatch após push no base, cron, autor de commit para Vercel): **[docs/sync-fork.md](docs/sync-fork.md)**.
+
+Mantenedor do repositório base (secret `FORK_DISPATCH_TOKEN`, disparo nos forks): **[docs/sync-upstream-maintainer.md](docs/sync-upstream-maintainer.md)**.
 
 ---
 

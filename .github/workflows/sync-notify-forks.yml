@@ -1,0 +1,18 @@
+name: Notify forks to sync
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    if: github.event.repository.fork == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Disparar sync nos forks
+        env:
+          GH_TOKEN: ${{ secrets.FORK_DISPATCH_TOKEN }}
+        run: node scripts/dispatch-fork-sync.mjs
