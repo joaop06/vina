@@ -85,9 +85,17 @@ jobs:
 
       - name: Validar build
         if: steps.merge.outputs.exit_code == '0' && steps.merge.outputs.new_commit == 'true'
+        env:
+          ADMIN_USERNAME: admin
+          ADMIN_PASSWORD: admin123
+          JWT_SECRET: ci-secret-change-me-min-32-chars-long!!
+          DATA_BACKEND: fs
+          NEXT_PUBLIC_SITE_URL: https://example.com
         run: |
           npm ci
           npm run lint
+          npm test
+          npm run indices:validate -- --data=data
           npm run build
 
       - name: Push main

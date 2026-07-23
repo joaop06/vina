@@ -423,8 +423,8 @@ async function main() {
     requests: { cacheMs: cacheDiag.totalMs, ioMs: ioDiag.totalMs },
   };
 
-  let httpCold: HttpTiming[] = [];
-  let httpWarm: HttpTiming[] = [];
+  const httpCold: HttpTiming[] = [];
+  const httpWarm: HttpTiming[] = [];
   let apiTiming: HttpTiming | undefined;
 
   if (!args.skipHttp) {
