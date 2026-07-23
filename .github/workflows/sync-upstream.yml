@@ -1,0 +1,55 @@
+name: Sync upstream
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/10 * * * *"
+
+concurrency:
+  group: sync-upstream-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  needs_sync:
+    if: github.event.repository.fork == true
+    runs-on: ubuntu-latest
+    outputs:
+      run_sync: ${{ steps.check.outputs.run_sync }}
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Verificar se upstream tem commits novos
+        id: check
+        env:
+          UPSTREAM_REPO: joaop06/vina
+          UPSTREAM_BRANCH: main
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Dispatch manual — executando sync."
+            echo "run_sync=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git remote add upstream "https://github.com/${UPSTREAM_REPO}.git"
+          git fetch upstream "${UPSTREAM_BRANCH}"
+          upstream_head=$(git rev-parse "upstream/${UPSTREAM_BRANCH}")
+          merge_base=$(git merge-base HEAD "upstream/${UPSTREAM_BRANCH}")
+          if [ "$merge_base" = "$upstream_head" ]; then
+            echo "Fork já contém todos os commits do upstream (${upstream_head:0:7})."
+            echo "run_sync=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Upstream à frente (base=${merge_base:0:7}, head=${upstream_head:0:7}). Sync necessário."
+            echo "run_sync=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  sync:
+    needs: needs_sync
+    if: needs.needs_sync.outputs.run_sync == 'true'
+    uses: ./.github/workflows/sync-fork-reusable.yml
+    secrets:
+      SYNC_COMMIT_NAME: ${{ secrets.SYNC_COMMIT_NAME }}
+      SYNC_COMMIT_EMAIL: ${{ secrets.SYNC_COMMIT_EMAIL }}
+      SYNC_COMMIT_TOKEN: ${{ secrets.SYNC_COMMIT_TOKEN }}

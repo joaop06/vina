@@ -91,7 +91,7 @@ Se produtos existirem mas listagens falharem, rode `npm run indices:rebuild -- -
 
 Em PRs e pushes na `main`, o workflow **CI** (`.github/workflows/ci.yml`) roda lint, testes, `indices:validate` em `data/` e `next build` — PR com produto sem índice coerente falha antes do merge.
 
-Na `main`, o workflow **Data indices** (`.github/workflows/data-indices.yml`) repara e faz push de `data/indices/` se a validação falhar após alterações em `data/` (por exemplo produto criado só em `data/produtos/` no GitHub). No fork, mantenha Actions ativas; use os secrets `SYNC_COMMIT_*` se quiser o mesmo autor dos commits de sync/repair (deploy na Vercel Hobby).
+Na `main`, o workflow **Data indices** (`.github/workflows/data-indices.yml`) repara e faz push de `data/indices/` se a validação falhar após alterações em `data/`. Nos **forks**, o **Sync upstream** faz poll a cada 30 min da `main` de `joaop06/vina`; configure secrets `SYNC_COMMIT_*` (e opcionalmente `SYNC_COMMIT_TOKEN`) para deploy na Vercel Hobby — ver [docs/configurar-fork-loja.md](docs/configurar-fork-loja.md).
 
 ### Produção
 
