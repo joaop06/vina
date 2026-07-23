@@ -3,9 +3,6 @@ name: Sync fork (reusable)
 on:
   workflow_call:
     secrets:
-      UPSTREAM_SYNC_TOKEN:
-        required: true
-        description: PAT com leitura do repositório upstream (privado)
       SYNC_COMMIT_NAME:
         required: true
         description: Nome do autor do commit (conta GitHub ligada à Vercel)
@@ -14,10 +11,10 @@ on:
         description: E-mail do autor do commit (mesma conta GitHub da Vercel)
     inputs:
       upstream_repo:
-        description: "owner/repo do upstream (default joaop06/catalogo)"
+        description: "owner/repo do upstream público (default joaop06/vina)"
         required: false
         type: string
-        default: joaop06/catalogo
+        default: joaop06/vina
       upstream_branch:
         description: Branch do upstream a sincronizar
         required: false
@@ -57,11 +54,10 @@ jobs:
 
       - name: Fetch upstream
         env:
-          UPSTREAM_TOKEN: ${{ secrets.UPSTREAM_SYNC_TOKEN }}
           UPSTREAM_REPO: ${{ inputs.upstream_repo }}
           UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
         run: |
-          git remote add upstream "https://x-access-token:${UPSTREAM_TOKEN}@github.com/${UPSTREAM_REPO}.git"
+          git remote add upstream "https://github.com/${UPSTREAM_REPO}.git"
           git fetch upstream "${UPSTREAM_BRANCH}"
           git branch -f upstream-sync-ref "upstream/${UPSTREAM_BRANCH}"
 

@@ -113,11 +113,7 @@ Há scripts opcionais de medição de leitura (`baseline:read`, `phase6:verify`)
 
 ### Lojas (fork do repositório base)
 
-Checklist do zero (acesso ao base, fork, tokens, Vercel): **[docs/setup-nova-loja.md](docs/setup-nova-loja.md)**.
-
-Sincronização automática (dispatch após push no base, cron, autor de commit para Vercel): **[docs/sync-fork.md](docs/sync-fork.md)**.
-
-Mantenedor do repositório base (secret `FORK_DISPATCH_TOKEN`, disparo nos forks): **[docs/sync-upstream-maintainer.md](docs/sync-upstream-maintainer.md)**.
+Passo a passo (fork, Actions, Vercel, sync com o base público): **[docs/configurar-fork-loja.md](docs/configurar-fork-loja.md)**.
 
 ---
 
