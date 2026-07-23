@@ -72,7 +72,7 @@ function slugify(text: string): string {
 }
 
 function uniqueSlug(base: string, used: Set<string>): string {
-  let slug = slugify(base) || "item";
+  const slug = slugify(base) || "item";
   if (!used.has(slug)) {
     used.add(slug);
     return slug;

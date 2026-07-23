@@ -568,8 +568,8 @@ async function main() {
   const cacheJson = cacheDiag.json as Record<string, unknown>;
   const listing = listingJson.listing as Record<string, unknown> | undefined;
 
-  let httpCold: HttpTiming[] = [];
-  let httpWarm: HttpTiming[] = [];
+  const httpCold: HttpTiming[] = [];
+  const httpWarm: HttpTiming[] = [];
   let apiTiming: HttpTiming | undefined;
 
   if (!args.skipHttp) {

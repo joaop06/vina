@@ -11,16 +11,6 @@ on:
       - "src/schemas/order-index.ts"
       - "src/schemas/client-index.ts"
       - "src/schemas/dashboard-catalog-index.ts"
-  pull_request:
-    paths:
-      - "data/**"
-      - "scripts/rebuild-product-indices.ts"
-      - "src/lib/indices/**"
-      - "src/schemas/product-index.ts"
-      - "src/schemas/order-index.ts"
-      - "src/schemas/client-index.ts"
-      - "src/schemas/dashboard-catalog-index.ts"
-
 concurrency:
   group: data-indices-${{ github.repository }}-${{ github.ref }}
   cancel-in-progress: true
