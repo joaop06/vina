@@ -6,6 +6,12 @@ on:
       UPSTREAM_SYNC_TOKEN:
         required: true
         description: PAT com leitura do repositório upstream (privado)
+      SYNC_COMMIT_NAME:
+        required: true
+        description: Nome do autor do commit (conta GitHub ligada à Vercel)
+      SYNC_COMMIT_EMAIL:
+        required: true
+        description: E-mail do autor do commit (mesma conta GitHub da Vercel)
     inputs:
       upstream_repo:
         description: "owner/repo do upstream (default joaop06/catalogo)"
@@ -37,10 +43,17 @@ jobs:
           ref: ${{ inputs.target_branch }}
           fetch-depth: 0
 
-      - name: Configurar Git
+      - name: Configurar Git (autor reconhecido pela Vercel)
+        env:
+          SYNC_COMMIT_NAME: ${{ secrets.SYNC_COMMIT_NAME }}
+          SYNC_COMMIT_EMAIL: ${{ secrets.SYNC_COMMIT_EMAIL }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -z "$SYNC_COMMIT_NAME" ] || [ -z "$SYNC_COMMIT_EMAIL" ]; then
+            echo "Defina os secrets SYNC_COMMIT_NAME e SYNC_COMMIT_EMAIL no fork (conta GitHub do projeto na Vercel)."
+            exit 1
+          fi
+          git config user.name "$SYNC_COMMIT_NAME"
+          git config user.email "$SYNC_COMMIT_EMAIL"
 
       - name: Fetch upstream
         env:
@@ -58,11 +71,16 @@ jobs:
           UPSTREAM_REF: upstream-sync-ref
           SYNC_CONFLICT_BRANCH: sync/upstream-${{ github.run_id }}
         run: |
+          before=$(git rev-parse HEAD)
           set +e
           node scripts/sync-upstream-merge.mjs
           code=$?
           set -e
+          after=$(git rev-parse HEAD)
           echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          if [ "$before" != "$after" ]; then
+            echo "new_commit=true" >> "$GITHUB_OUTPUT"
+          fi
           if [ "$code" -eq 1 ]; then
             echo "partial_or_conflict=true" >> "$GITHUB_OUTPUT"
           elif [ "$code" -ne 0 ]; then
@@ -70,14 +88,14 @@ jobs:
           fi
 
       - name: Validar build
-        if: steps.merge.outputs.exit_code == '0'
+        if: steps.merge.outputs.exit_code == '0' && steps.merge.outputs.new_commit == 'true'
         run: |
           npm ci
           npm run lint
           npm run build
 
       - name: Push main
-        if: steps.merge.outputs.exit_code == '0'
+        if: steps.merge.outputs.exit_code == '0' && steps.merge.outputs.new_commit == 'true'
         run: git push origin "HEAD:${{ inputs.target_branch }}"
 
       - name: Push branch de sync parcial

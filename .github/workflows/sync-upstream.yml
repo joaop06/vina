@@ -2,9 +2,15 @@ name: Sync upstream
 
 on:
   workflow_dispatch:
+  repository_dispatch:
+    types: [upstream-sync]
   schedule:
-    # Diário 09:00 UTC (~06:00 BRT)
+    # Diário 09:00 UTC (~06:00 BRT) — fallback se o dispatch falhar
     - cron: "0 9 * * *"
+
+concurrency:
+  group: sync-upstream-${{ github.repository }}
+  cancel-in-progress: false
 
 jobs:
   sync:
@@ -12,3 +18,5 @@ jobs:
     uses: ./.github/workflows/sync-fork-reusable.yml
     secrets:
       UPSTREAM_SYNC_TOKEN: ${{ secrets.UPSTREAM_SYNC_TOKEN }}
+      SYNC_COMMIT_NAME: ${{ secrets.SYNC_COMMIT_NAME }}
+      SYNC_COMMIT_EMAIL: ${{ secrets.SYNC_COMMIT_EMAIL }}

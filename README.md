@@ -113,7 +113,11 @@ Há scripts opcionais de medição de leitura (`baseline:read`, `phase6:verify`)
 
 ### Lojas (fork do repositório base)
 
-Se você usa um **fork** deste projeto como catálogo da sua loja, configure a sincronização automática com o upstream para receber correções e novidades sem usar **Sync fork** manual no GitHub. Guia completo: **[docs/sync-fork.md](docs/sync-fork.md)** (secret `UPSTREAM_SYNC_TOKEN`, ativar Actions, sync diário ou manual).
+Checklist do zero (acesso ao base, fork, tokens, Vercel): **[docs/setup-nova-loja.md](docs/setup-nova-loja.md)**.
+
+Sincronização automática (dispatch após push no base, cron, autor de commit para Vercel): **[docs/sync-fork.md](docs/sync-fork.md)**.
+
+Mantenedor do repositório base (secret `FORK_DISPATCH_TOKEN`, disparo nos forks): **[docs/sync-upstream-maintainer.md](docs/sync-upstream-maintainer.md)**.
 
 ---
 
