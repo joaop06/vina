@@ -97,8 +97,22 @@ O que a pipeline faz:
 | Vercel não deploya após sync | `SYNC_COMMIT_NAME` / `SYNC_COMMIT_EMAIL` batem com a conta do projeto na Vercel |
 | Falha em `npm run build` no workflow | Erro no código vindo do base ou conflito não resolvido — corrija localmente ou no PR |
 | PR de sync toda semana | Você editou os mesmos arquivos de app que o base (`src/`, `app/`, etc.) |
+| Produto no GitHub mas não aparece na loja | Só alterou `data/produtos/*.json` sem atualizar `data/indices/` — rode `npm run indices:repair` localmente ou deixe o workflow **Data indices** corrigir na `main` |
+| Deploy não dispara após repair automático de índices | Use os mesmos `SYNC_COMMIT_NAME` / `SYNC_COMMIT_EMAIL` do sync (conta GitHub da Vercel) |
 
-Referência técnica: [`.github/workflows/sync-upstream.yml`](../.github/workflows/sync-upstream.yml), [`.github/workflows/sync-fork-reusable.yml`](../.github/workflows/sync-fork-reusable.yml).
+### Índices ao editar `data/` no GitHub
+
+Listagens (admin e catálogo) leem **`data/indices/`**, não varrem `produtos/` a cada request. Edições manuais no repositório devem manter índices alinhados.
+
+| Momento | O que acontece |
+|---------|----------------|
+| **Pull request** que mexe em `data/` | Workflow **Data indices** roda `indices:validate`; PR falha se entidade e índice divergirem |
+| **Push na `main`** com índices inconsistentes | Mesmo workflow tenta `indices:repair` em disco, commit em `data/indices/` e push (autor = secrets `SYNC_COMMIT_*` se existirem) |
+| **Painel admin** | Cria/atualiza produto e índices no mesmo commit (via API GitHub na Vercel) |
+
+Localmente: `npm run indices:validate -- --data=data` e `npm run indices:repair -- --data=data`.
+
+Referência técnica: [`.github/workflows/sync-upstream.yml`](../.github/workflows/sync-upstream.yml), [`.github/workflows/sync-fork-reusable.yml`](../.github/workflows/sync-fork-reusable.yml), [`.github/workflows/data-indices.yml`](../.github/workflows/data-indices.yml).
 
 ---
 
