@@ -10,6 +10,16 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # O cron existe no mesmo arquivo que os forks herdam; no repositório base
+  # (não-fork) os jobs de sync são ignorados — sem este job o run agendado
+  # termina como "Startup failure" / "No jobs were run".
+  upstream_schedule_noop:
+    if: github.event.repository.fork != true && github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync upstream só em forks
+        run: echo "Poll agendado ignorado no catálogo base; cada loja roda no próprio fork."
+
   needs_sync:
     if: github.event.repository.fork == true
     runs-on: ubuntu-latest

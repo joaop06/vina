@@ -19,8 +19,10 @@ Evite alterar `src/` ou `app/` sem necessidade — isso aumenta conflitos quando
 
 ## 2. GitHub Actions no fork
 
-1. No **seu fork**: **Settings → Actions → General** → permita workflows (e confirme workflows agendados, se o GitHub pedir).
-2. **Settings → Secrets and variables → Actions** → crie secrets (copie do seu perfil GitHub):
+1. No **seu fork**: **Settings → Actions → General** → permita workflows.
+2. Aba **Actions** do fork: se aparecer aviso sobre workflows desabilitados, clique em **I understand my workflows, go ahead and enable them** (forks novos **não rodam cron por padrão**).
+3. Na lista de workflows à esquerda, abra **Sync upstream**. Se o botão **Enable workflow** aparecer (estado `disabled_fork`), clique para reativar o agendamento a cada 10 minutos. O **Run workflow** manual funciona mesmo com o cron desligado — por isso só ver execução manual no histórico é comum até estes passos.
+4. **Settings → Secrets and variables → Actions** → crie secrets (copie do seu perfil GitHub):
 
 | Secret | Obrigatório | Valor |
 |--------|-------------|--------|
@@ -30,9 +32,9 @@ Evite alterar `src/` ou `app/` sem necessidade — isso aumenta conflitos quando
 
 `SYNC_COMMIT_NAME` e `SYNC_COMMIT_EMAIL` definem o **autor** dos commits de sincronização e do workflow **Data indices** (reparo de `data/indices/`). Na Vercel (plano Hobby), o deploy automático costuma exigir que o push seja reconhecido como a conta dona do projeto; o PAT opcional faz o **push** em nome dessa conta, não só o metadado de autor.
 
-3. O workflow **CI** roda em todo PR e push na `main` (lint, testes, validação de índices em `data/`, build). PR com catálogo inconsistente **não passa** — corrija com `npm run indices:repair -- --data=data` antes do merge.
+5. O workflow **CI** roda em todo PR e push na `main` (lint, testes, validação de índices em `data/`, build). PR com catálogo inconsistente **não passa** — corrija com `npm run indices:repair -- --data=data` antes do merge.
 
-4. O workflow **Data indices** roda em **push na `main`** quando `data/` (ou código de índice) muda: se a validação falhar, repara `data/indices/`, commita e dá push (útil se você editou só `data/produtos/*.json` direto no GitHub).
+6. O workflow **Data indices** roda em **push na `main`** quando `data/` (ou código de índice) muda: se a validação falhar, repara `data/indices/`, commita e dá push (útil se você editou só `data/produtos/*.json` direto no GitHub).
 
 Prefira criar produtos pelo admin (índices atualizados no mesmo commit) ou rode `npm run indices:repair -- --data=data` localmente antes do push.
 
@@ -108,6 +110,7 @@ O que a pipeline faz:
 | Sintoma | O que verificar |
 |---------|------------------|
 | Workflow **Sync upstream** não aparece | Actions desabilitadas no fork; faça pull da `main` do base se o fork for antigo |
+| Cron a cada 10 min não roda (só manual) | No fork: habilitar Actions + banner de workflows; em **Sync upstream**, **Enable workflow** se estiver `disabled_fork` |
 | Vercel não deploya após sync | `SYNC_COMMIT_NAME` / `SYNC_COMMIT_EMAIL` batem com a conta do projeto; se ainda falhar, adicione `SYNC_COMMIT_TOKEN` (PAT do owner no fork) |
 | Falha em `npm run build` no workflow | Erro no código vindo do base ou conflito não resolvido — corrija localmente ou no PR |
 | PR de sync toda semana | Você editou os mesmos arquivos de app que o base (`src/`, `app/`, etc.) |
@@ -118,4 +121,4 @@ Referência técnica: [`.github/workflows/sync-upstream.yml`](../.github/workflo
 
 ## Mantenedor do catálogo base
 
-Repositório **público** na conta pessoal (`joaop06/vina`). Publicar na **`main`**; cada loja sincroniza pelo próprio fork (cron ou manual). **Não** é necessário convidar lojas como colaboradoras, nem configurar secrets no base por causa dos forks.
+Repositório **público** na conta pessoal (`joaop06/vina`). Publicar na **`main`**; cada loja sincroniza pelo próprio fork (cron ou manual). No **base**, o cron só registra um job leve (sync real é só em fork). **Não** é necessário convidar lojas como colaboradoras, nem configurar secrets no base por causa dos forks.
