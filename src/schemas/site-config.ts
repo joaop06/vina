@@ -14,6 +14,15 @@ import {
   compactCartItemPartsSchema,
   productWaTemplatePartsSchema,
 } from "@/src/lib/wa-template-validation";
+import {
+  migrateSitePersonalizationInput,
+  siteComportamentoSchema,
+  siteRotulosSchema,
+  siteSeoSchema,
+  siteTextosExtendedSchema,
+  siteTemaSchema,
+  siteVitrineSchema,
+} from "@/src/schemas/site-personalization";
 
 export {
   productWaTemplatePartsSchema,
@@ -91,9 +100,9 @@ export const siteLogoInputSchema = z
   });
 
 /** Lift legacy `whatsapp.mostrarCarrinho` to root before parse. */
-function migrateSiteConfigInput(raw: unknown): unknown {
+export function migrateSiteConfigInput(raw: unknown): unknown {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return raw;
-  const o = { ...(raw as Record<string, unknown>) };
+  let o = { ...(raw as Record<string, unknown>) };
   const wa = o.whatsapp;
   if (wa && typeof wa === "object" && !Array.isArray(wa)) {
     const waRecord = { ...(wa as Record<string, unknown>) };
@@ -103,6 +112,7 @@ function migrateSiteConfigInput(raw: unknown): unknown {
     delete waRecord.mostrarCarrinho;
     o.whatsapp = waRecord;
   }
+  o = migrateSitePersonalizationInput(o) as Record<string, unknown>;
   return o;
 }
 
@@ -182,10 +192,12 @@ const siteConfigCoreSchema = z.object({
       mostrarCelular: true,
     }),
   horarios: z.string(),
-  textos: z.object({
-    sobre: z.string(),
-    trocas: z.string(),
-  }),
+  textos: siteTextosExtendedSchema,
+  rotulos: siteRotulosSchema,
+  vitrine: siteVitrineSchema,
+  comportamento: siteComportamentoSchema,
+  tema: siteTemaSchema,
+  seo: siteSeoSchema,
   /** Independent header vs drawer chrome + ordered nav items. */
   navegacao: siteNavegacaoSchema.default(DEFAULT_NAVEGACAO),
   painel: z

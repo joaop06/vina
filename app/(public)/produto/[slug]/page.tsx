@@ -46,6 +46,9 @@ export default async function ProductPage({ params }: Props) {
     <Suspense fallback={<ProductLoading />}>
       <ProductDetailClient
         product={product}
+        productCopy={site.textos.produto}
+        dimensoes={site.rotulos.dimensoes}
+        whatsappCurto={site.textos.home.whatsappCurto}
         waPhone={site.whatsapp.telefone}
         waProductParts={site.whatsapp.mensagemProdutoParts}
         waIncluirReferencia={Boolean(

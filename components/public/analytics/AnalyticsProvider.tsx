@@ -21,6 +21,7 @@ import {
 } from "@/src/lib/front/analytics-consent";
 import { getClientLead } from "@/src/lib/front/client-lead";
 import type { AnalyticsEvent, WaSource } from "@/src/schemas/analytics";
+import type { SiteTextosExtended } from "@/src/schemas/site-personalization";
 import { ConsentBanner } from "./ConsentBanner";
 
 type AnalyticsContextValue = {
@@ -62,7 +63,13 @@ function sendBatch(sessionId: string, events: AnalyticsEvent[]) {
   });
 }
 
-export function AnalyticsProvider({ children }: { children: ReactNode }) {
+export function AnalyticsProvider({
+  children,
+  cookiesCopy,
+}: {
+  children: ReactNode;
+  cookiesCopy: SiteTextosExtended["cookies"];
+}) {
   const pathname = usePathname();
   const [consent, setConsent] = useState<ConsentStatus>("unknown");
   const queueRef = useRef<AnalyticsEvent[]>([]);
@@ -190,7 +197,11 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
     <AnalyticsContext.Provider value={value}>
       {children}
       {consent === "unknown" ? (
-        <ConsentBanner onAccept={onAccept} onDecline={onDecline} />
+        <ConsentBanner
+          copy={cookiesCopy}
+          onAccept={onAccept}
+          onDecline={onDecline}
+        />
       ) : null}
     </AnalyticsContext.Provider>
   );

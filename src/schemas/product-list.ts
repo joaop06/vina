@@ -2,6 +2,7 @@ import { z } from "zod";
 import { productFromPrice } from "@/src/lib/front/pricing";
 import { coverImage } from "@/src/lib/front/media";
 import {
+  buildVariantFacets,
   productStatusSchema,
   type Product,
 } from "@/src/schemas/product";
@@ -35,9 +36,11 @@ export const productListItemSchema = z.object({
   precoExibicao: z.number(),
   /** True when card should show "A partir de". */
   mostrarAPartirDe: z.boolean(),
-  /** Unique sizes — enough for catalog facets without shipping variantes. */
+  /** Unique attribute values per dimension id (catalog facets). */
+  facetas: z.record(z.array(z.string())),
+  /** @deprecated Derived from facetas.tamanho — kept for index compat. */
   tamanhos: z.array(z.string()),
-  /** Unique colors — enough for catalog facets without shipping variantes. */
+  /** @deprecated Derived from facetas.cor — kept for index compat. */
   cores: z.array(z.string()),
 });
 
@@ -48,10 +51,9 @@ export type ProductListCover = z.infer<typeof productListCoverSchema>;
 export function toProductListItem(product: Product): ProductListItem {
   const cover = coverImage(product);
   const fromPrice = productFromPrice(product);
-  const tamanhos = Array.from(
-    new Set(product.variantes.map((v) => v.tamanho)),
-  );
-  const cores = Array.from(new Set(product.variantes.map((v) => v.cor)));
+  const facetas = buildVariantFacets(product.variantes);
+  const tamanhos = facetas.tamanho ?? [];
+  const cores = facetas.cor ?? [];
 
   return {
     id: product.id,
@@ -71,6 +73,7 @@ export function toProductListItem(product: Product): ProductListItem {
     variantesCount: product.variantes.length,
     precoExibicao: fromPrice.sell,
     mostrarAPartirDe: fromPrice.showFrom,
+    facetas,
     tamanhos,
     cores,
   };

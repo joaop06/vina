@@ -29,7 +29,7 @@ export type NotFoundProps = {
 export type SiteLayoutModule = {
   id: SiteLayoutId;
   Header: (props: ChromeProps) => ReactNode;
-  Footer: (props: { site: SiteConfig }) => ReactNode;
+  Footer: (props: ChromeProps) => ReactNode;
   Home: (props: HomeProps) => ReactNode;
   NotFound: (props: NotFoundProps) => ReactNode;
 };

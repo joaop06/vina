@@ -25,6 +25,8 @@ export function ClassicHome({
   const showWa = site.whatsapp.mostrar;
   const showIg = site.instagram.mostrar;
   const showContactStrip = showWa;
+  const home = site.textos.home;
+  const produtoCopy = site.textos.produto;
 
   return (
     <>
@@ -51,7 +53,7 @@ export function ClassicHome({
             <p className={styles.heroCopy}>{site.slogan}</p>
             <div className={styles.heroCtas}>
               <Link className={`btn ${styles.heroBtnPrimary}`} href="/catalogo">
-                Ver coleção
+                {home.verColecao}
               </Link>
               {showWa ? (
                 <WhatsAppButton
@@ -59,7 +61,7 @@ export function ClassicHome({
                   waSource="home"
                   className="btn btn-whatsapp"
                 >
-                  WhatsApp
+                  {home.whatsappCurto}
                 </WhatsAppButton>
               ) : null}
               {showIg ? (
@@ -72,10 +74,17 @@ export function ClassicHome({
 
       {destaques.length > 0 ? (
         <section className={`container ${styles.section}`}>
-          <h2 className={`vn-section-title ${styles.sectionTitle}`}>Destaques</h2>
+          <h2 className={`vn-section-title ${styles.sectionTitle}`}>
+            {home.destaquesTitulo}
+          </h2>
           <div className="grid-products">
             {destaques.map((p) => (
-              <ProductCard key={p.id} product={p} cartEnabled={site.mostrarCarrinho} />
+              <ProductCard
+                key={p.id}
+                product={p}
+                cartEnabled={site.mostrarCarrinho}
+                copy={produtoCopy}
+              />
             ))}
           </div>
         </section>
@@ -84,11 +93,16 @@ export function ClassicHome({
       {showFallback ? (
         <section className={`container ${styles.section}`}>
           <h2 className={`vn-section-title ${styles.sectionTitle}`}>
-            Nossos produtos
+            {home.fallbackTitulo}
           </h2>
           <div className="grid-products">
             {vitrineFallback.map((p) => (
-              <ProductCard key={p.id} product={p} cartEnabled={site.mostrarCarrinho} />
+              <ProductCard
+                key={p.id}
+                product={p}
+                cartEnabled={site.mostrarCarrinho}
+                copy={produtoCopy}
+              />
             ))}
           </div>
         </section>
@@ -103,11 +117,16 @@ export function ClassicHome({
       {novos.length > 0 ? (
         <section className={`container ${styles.sectionTight}`}>
           <h2 className={`vn-section-title ${styles.sectionTitle}`}>
-            Lançamentos
+            {home.lancamentosTitulo}
           </h2>
           <div className="grid-products">
             {novos.map((p) => (
-              <ProductCard key={p.id} product={p} cartEnabled={site.mostrarCarrinho} />
+              <ProductCard
+                key={p.id}
+                product={p}
+                cartEnabled={site.mostrarCarrinho}
+                copy={produtoCopy}
+              />
             ))}
           </div>
         </section>
@@ -125,12 +144,12 @@ export function ClassicHome({
         <section className={`container ${styles.sectionTight}`}>
           <div className={styles.waStrip}>
             <div>
-              <h2>Dúvidas?</h2>
-              <p>Fale com a loja pelo WhatsApp.</p>
+              <h2>{home.duvidasTitulo}</h2>
+              <p>{home.duvidasTexto}</p>
             </div>
             <div className="contact-actions">
               <WhatsAppButton href={wa} waSource="home_strip">
-                Chamar no WhatsApp
+                {home.whatsappChamar}
               </WhatsAppButton>
             </div>
           </div>

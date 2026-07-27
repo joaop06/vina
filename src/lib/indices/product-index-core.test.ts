@@ -38,8 +38,7 @@ function makeProduct(overrides: Partial<Product> & Pick<Product, "id" | "slug">)
     variantes: overrides.variantes ?? [
       {
         id: "22222222-2222-4222-8222-222222222222",
-        tamanho: "M",
-        cor: "Preto",
+        atributos: { tamanho: "M", cor: "Preto" },
         estoque: 3,
         sku: undefined,
         preco: null,

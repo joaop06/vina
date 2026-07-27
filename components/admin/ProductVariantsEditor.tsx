@@ -4,6 +4,9 @@ import { useState, type KeyboardEvent } from "react";
 import { FieldHint } from "@/components/admin/FieldHint";
 import { formatBrl, maskBrlInput, parseBrlInput } from "@/src/lib/front/format";
 import type { Product } from "@/src/schemas/product";
+import { variantAttr } from "@/src/schemas/product";
+import type { SiteDimensao } from "@/src/schemas/site-personalization";
+import { DEFAULT_DIMENSOES } from "@/src/config/store-copy-defaults";
 
 export type ProductVariantDraft = Product["variantes"][number];
 
@@ -24,6 +27,7 @@ const SIZE_SUGGESTIONS = [
 type Props = {
   variantes: ProductVariantDraft[];
   onChange: (variantes: ProductVariantDraft[]) => void;
+  dimensoes?: SiteDimensao[];
   /** Estoque persistido — usado para destacar reduções em edição. */
   baselineVariantes?: { id: string; estoque: number }[];
   disabled?: boolean;
@@ -31,10 +35,6 @@ type Props = {
 
 function normalizeToken(value: string) {
   return value.trim().replace(/\s+/g, " ");
-}
-
-function variantKey(tamanho: string, cor: string) {
-  return `${tamanho.trim().toLowerCase()}::${cor.trim().toLowerCase()}`;
 }
 
 function uniqueSorted(values: string[]) {
@@ -65,28 +65,35 @@ function sortColors(values: string[]) {
   return [...values].sort((a, b) => a.localeCompare(b, "pt-BR"));
 }
 
+function variantKeyFromAttrs(atributos: Record<string, string>, dimIds: string[]) {
+  return dimIds
+    .map((id) => `${id}:${(atributos[id] ?? "").trim().toLowerCase()}`)
+    .join("::");
+}
+
 function syncVariantes(
-  sizes: string[],
-  colors: string[],
+  dimIds: [string, string],
+  dim0Values: string[],
+  dim1Values: string[],
   previous: ProductVariantDraft[],
 ): ProductVariantDraft[] {
-  const sizeList = uniqueSorted(sizes);
-  const colorList = uniqueSorted(colors);
-  if (!sizeList.length || !colorList.length) return [];
+  const v0 = uniqueSorted(dim0Values);
+  const v1 = uniqueSorted(dim1Values);
+  if (!v0.length || !v1.length) return [];
 
   const byKey = new Map(
-    previous.map((v) => [variantKey(v.tamanho, v.cor), v]),
+    previous.map((v) => [variantKeyFromAttrs(v.atributos, dimIds), v]),
   );
   const next: ProductVariantDraft[] = [];
 
-  for (const tamanho of sortSizes(sizeList)) {
-    for (const cor of sortColors(colorList)) {
-      const existing = byKey.get(variantKey(tamanho, cor));
+  for (const val0 of sortSizes(v0)) {
+    for (const val1 of sortColors(v1)) {
+      const atributos = { [dimIds[0]]: val0, [dimIds[1]]: val1 };
+      const existing = byKey.get(variantKeyFromAttrs(atributos, dimIds));
       if (existing) {
         next.push({
           ...existing,
-          tamanho,
-          cor,
+          atributos,
           estoque: Math.max(0, Number(existing.estoque) || 0),
           preco:
             existing.preco != null &&
@@ -98,8 +105,7 @@ function syncVariantes(
       } else {
         next.push({
           id: crypto.randomUUID(),
-          tamanho,
-          cor,
+          atributos,
           estoque: 0,
           preco: null,
         });
@@ -222,27 +228,45 @@ function ChipInput({
   );
 }
 
-function seedFromVariantes(variantes: ProductVariantDraft[]) {
+function seedFromVariantes(
+  variantes: ProductVariantDraft[],
+  dimIds: [string, string],
+) {
   return {
-    tamanhos: uniqueSorted(variantes.map((v) => v.tamanho)),
-    cores: uniqueSorted(variantes.map((v) => v.cor)),
+    dim0: uniqueSorted(
+      variantes
+        .map((v) => variantAttr(v, dimIds[0]))
+        .filter((v): v is string => Boolean(v?.trim())),
+    ),
+    dim1: uniqueSorted(
+      variantes
+        .map((v) => variantAttr(v, dimIds[1]))
+        .filter((v): v is string => Boolean(v?.trim())),
+    ),
   };
 }
 
 export function ProductVariantsEditor({
   variantes,
   onChange,
+  dimensoes = [...DEFAULT_DIMENSOES],
   baselineVariantes,
   disabled,
 }: Props) {
-  const seeded = seedFromVariantes(variantes);
-  const [tamanhos, setTamanhos] = useState(seeded.tamanhos);
-  const [cores, setCores] = useState(seeded.cores);
+  const dimIds: [string, string] = [
+    dimensoes[0]?.id ?? "tamanho",
+    dimensoes[1]?.id ?? "cor",
+  ];
+  const dim0Label = dimensoes[0]?.rotulo ?? "Tamanho";
+  const dim1Label = dimensoes[1]?.rotulo ?? "Cor";
+  const seeded = seedFromVariantes(variantes, dimIds);
+  const [dim0Values, setDim0Values] = useState(seeded.dim0);
+  const [dim1Values, setDim1Values] = useState(seeded.dim1);
 
-  const matrixSizes = sortSizes(tamanhos);
-  const matrixColors = sortColors(cores);
+  const matrixSizes = sortSizes(dim0Values);
+  const matrixColors = sortColors(dim1Values);
   const variantByKey = new Map(
-    variantes.map((v) => [variantKey(v.tamanho, v.cor), v]),
+    variantes.map((v) => [variantKeyFromAttrs(v.atributos, dimIds), v]),
   );
   const baselineStockById = new Map(
     (baselineVariantes ?? []).map((v) => [v.id, v.estoque]),
@@ -260,10 +284,10 @@ export function ProductVariantsEditor({
     return (Number(v.estoque) || 0) < baseline;
   });
 
-  function applySelection(nextTamanhos: string[], nextCores: string[]) {
-    setTamanhos(nextTamanhos);
-    setCores(nextCores);
-    onChange(syncVariantes(nextTamanhos, nextCores, variantes));
+  function applySelection(nextDim0: string[], nextDim1: string[]) {
+    setDim0Values(nextDim0);
+    setDim1Values(nextDim1);
+    onChange(syncVariantes(dimIds, nextDim0, nextDim1, variantes));
   }
 
   function updateEstoque(id: string, estoque: number) {
@@ -291,26 +315,26 @@ export function ProductVariantsEditor({
   return (
     <div className="admin-variants">
       <p className="admin-form__section-desc">
-        Selecione tamanhos e cores — as combinações abaixo atualizam
-        automaticamente. Depois informe estoque e, se precisar, um preço
-        específico de cada combinação.
+        Selecione {dim0Label.toLowerCase()} e {dim1Label.toLowerCase()} — as
+        combinações abaixo atualizam automaticamente. Depois informe estoque e,
+        se precisar, um preço específico de cada combinação.
       </p>
 
       <div className="admin-variants__generator">
         <ChipInput
-          label="Tamanhos"
-          hint="Digite e pressione Enter, ou toque nos números abaixo. Remover um tamanho tira todas as combinações desse tamanho."
-          values={tamanhos}
-          onChange={(next) => applySelection(next, cores)}
+          label={dim0Label}
+          hint={`Digite e pressione Enter. Remover um valor tira todas as combinações associadas.`}
+          values={dim0Values}
+          onChange={(next) => applySelection(next, dim1Values)}
           placeholder="Ex.: 39"
           disabled={disabled}
-          suggestions={SIZE_SUGGESTIONS}
+          suggestions={dimIds[0] === "tamanho" ? SIZE_SUGGESTIONS : undefined}
         />
         <ChipInput
-          label="Cores"
-          hint="Digite cada cor e pressione Enter (ex.: Preto, Branco). Remover uma cor tira todas as combinações dessa cor."
-          values={cores}
-          onChange={(next) => applySelection(tamanhos, next)}
+          label={dim1Label}
+          hint="Digite cada valor e pressione Enter. Remover um valor tira todas as combinações associadas."
+          values={dim1Values}
+          onChange={(next) => applySelection(dim0Values, next)}
           placeholder="Ex.: Preto"
           disabled={disabled}
         />
@@ -320,8 +344,8 @@ export function ProductVariantsEditor({
         <div>
           <strong>Combinações</strong>
           <p className="admin-variants__list-hint">
-            Cores nas colunas, tamanhos nas linhas. Estoque e preço são
-            editáveis.
+            {dim1Label} nas colunas, {dim0Label.toLowerCase()} nas linhas.
+            Estoque e preço são editáveis.
           </p>
         </div>
         <span className="admin-variants__count">
@@ -360,7 +384,8 @@ export function ProductVariantsEditor({
 
       {variantes.length === 0 ? (
         <p className="admin-variants__empty">
-          Selecione pelo menos um tamanho e uma cor para montar as combinações.
+          Selecione pelo menos um {dim0Label.toLowerCase()} e um{" "}
+          {dim1Label.toLowerCase()} para montar as combinações.
         </p>
       ) : (
         <div className="admin-variants__matrix-wrap">
@@ -368,7 +393,7 @@ export function ProductVariantsEditor({
             <thead>
               <tr>
                 <th scope="col" className="admin-variants__matrix-corner">
-                  Tamanho
+                  {dim0Label}
                 </th>
                 {matrixColors.map((cor) => (
                   <th
@@ -389,7 +414,10 @@ export function ProductVariantsEditor({
                   </th>
                   {matrixColors.map((cor) => {
                     const variant = variantByKey.get(
-                      variantKey(tamanho, cor),
+                      variantKeyFromAttrs(
+                        { [dimIds[0]]: tamanho, [dimIds[1]]: cor },
+                        dimIds,
+                      ),
                     );
                     const stock = Number(variant?.estoque) || 0;
                     const inactive = !variant || stock === 0;

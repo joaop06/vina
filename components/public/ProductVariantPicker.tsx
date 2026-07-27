@@ -1,21 +1,28 @@
 "use client";
 
 import type { ProductVariant } from "@/src/schemas/product";
+import { variantAttr } from "@/src/schemas/product";
 import {
   combinationExists,
   findVariant,
   isCorAvailable,
   isTamanhoAvailable,
-  uniqueCores,
-  uniqueTamanhos,
+  uniqueDimensionValues,
 } from "@/src/lib/front/variants";
+import { formatEstoqueVarios } from "@/src/lib/front/store-copy";
+import type { SiteDimensao } from "@/src/schemas/site-personalization";
+import type { SiteTextosExtended } from "@/src/schemas/site-personalization";
 import { ProductQuantityStepper } from "@/components/public/ProductQuantityStepper";
+import { DEFAULT_DIMENSOES } from "@/src/config/store-copy-defaults";
 
 type Props = {
   variantes: ProductVariant[];
   tamanho: string | null;
   cor: string | null;
   quantidade: number;
+  dimensoes?: SiteDimensao[];
+  copy: SiteTextosExtended["produto"];
+  selecioneVariante: string;
   onChange: (next: {
     tamanho: string | null;
     cor: string | null;
@@ -29,65 +36,77 @@ export function ProductVariantPicker({
   tamanho,
   cor,
   quantidade,
+  dimensoes = [...DEFAULT_DIMENSOES],
+  copy,
+  selecioneVariante,
   onChange,
   onQuantidadeChange,
 }: Props) {
   if (variantes.length === 0) return null;
 
-  const tamanhos = uniqueTamanhos(variantes);
-  const cores = uniqueCores(variantes);
+  const dim0 = dimensoes[0]?.id ?? "tamanho";
+  const dim1 = dimensoes[1]?.id ?? "cor";
+  const label0 = dimensoes[0]?.rotulo ?? "Tamanho";
+  const label1 = dimensoes[1]?.rotulo ?? "Cor";
+
+  const values0 = uniqueDimensionValues(variantes, dim0);
+  const values1 = uniqueDimensionValues(variantes, dim1);
   const selected = findVariant(variantes, tamanho, cor);
   const stockMax = selected?.estoque ?? 0;
   const qtyEnabled = Boolean(selected) && stockMax > 0;
 
-  function selectTamanho(next: string) {
-    const nextTamanho = tamanho === next ? null : next;
-    const nextCor =
-      nextTamanho && cor && !combinationExists(variantes, nextTamanho, cor)
-        ? null
-        : cor;
+  function selectDim0(next: string) {
+    const next0 = tamanho === next ? null : next;
+    const next1 =
+      next0 && cor && !combinationExists(variantes, next0, cor) ? null : cor;
     onChange({
-      tamanho: nextTamanho,
-      cor: nextCor,
-      variant: findVariant(variantes, nextTamanho, nextCor),
+      tamanho: next0,
+      cor: next1,
+      variant: findVariant(variantes, next0, next1),
     });
   }
 
-  function selectCor(next: string) {
-    const nextCor = cor === next ? null : next;
-    const nextTamanho =
-      nextCor && tamanho && !combinationExists(variantes, tamanho, nextCor)
+  function selectDim1(next: string) {
+    const next1 = cor === next ? null : next;
+    const next0 =
+      next1 && tamanho && !combinationExists(variantes, tamanho, next1)
         ? null
         : tamanho;
     onChange({
-      tamanho: nextTamanho,
-      cor: nextCor,
-      variant: findVariant(variantes, nextTamanho, nextCor),
+      tamanho: next0,
+      cor: next1,
+      variant: findVariant(variantes, next0, next1),
     });
   }
 
-  let stockLabel = "Selecione tamanho e cor";
+  let stockLabel = selecioneVariante;
   if (tamanho && cor) {
     if (!selected) {
-      stockLabel = "Combinação indisponível";
+      stockLabel = copy.estoqueIndisponivel;
     } else if (selected.estoque <= 0) {
-      stockLabel = "Esgotado";
+      stockLabel = copy.badgeEsgotado;
     } else if (selected.estoque === 1) {
-      stockLabel = "1 disponível";
+      stockLabel = copy.estoqueUm;
     } else {
-      stockLabel = `${selected.estoque} disponíveis`;
+      stockLabel = formatEstoqueVarios(copy.estoqueVarios, selected.estoque);
     }
   }
 
   return (
     <div className="product-variants">
       <div className="product-variants__group">
-        <p className="product-variants__label">Tamanho</p>
-        <div className="product-variants__chips" role="group" aria-label="Tamanhos">
-          {tamanhos.map((t) => {
+        <p className="product-variants__label">{label0}</p>
+        <div
+          className="product-variants__chips"
+          role="group"
+          aria-label={label0}
+        >
+          {values0.map((t) => {
             const available = isTamanhoAvailable(variantes, t, cor);
             const existsAlone = variantes.some(
-              (v) => v.tamanho.trim().toLowerCase() === t.trim().toLowerCase(),
+              (v) =>
+                variantAttr(v, dim0)?.trim().toLowerCase() ===
+                t.trim().toLowerCase(),
             );
             const isActive = tamanho === t;
             const soldOut = existsAlone && !available;
@@ -104,9 +123,11 @@ export function ProductVariantPicker({
                   .join(" ")}
                 aria-pressed={isActive}
                 aria-label={
-                  soldOut ? `Tamanho ${t}, esgotado` : `Tamanho ${t}`
+                  soldOut
+                    ? `${label0} ${t}, ${copy.badgeEsgotado.toLowerCase()}`
+                    : `${label0} ${t}`
                 }
-                onClick={() => selectTamanho(t)}
+                onClick={() => selectDim0(t)}
               >
                 {t}
               </button>
@@ -116,12 +137,18 @@ export function ProductVariantPicker({
       </div>
 
       <div className="product-variants__group">
-        <p className="product-variants__label">Cor</p>
-        <div className="product-variants__chips" role="group" aria-label="Cores">
-          {cores.map((c) => {
+        <p className="product-variants__label">{label1}</p>
+        <div
+          className="product-variants__chips"
+          role="group"
+          aria-label={label1}
+        >
+          {values1.map((c) => {
             const available = isCorAvailable(variantes, c, tamanho);
             const existsAlone = variantes.some(
-              (v) => v.cor.trim().toLowerCase() === c.trim().toLowerCase(),
+              (v) =>
+                variantAttr(v, dim1)?.trim().toLowerCase() ===
+                c.trim().toLowerCase(),
             );
             const isActive = cor === c;
             const soldOut = existsAlone && !available;
@@ -137,8 +164,12 @@ export function ProductVariantPicker({
                   .filter(Boolean)
                   .join(" ")}
                 aria-pressed={isActive}
-                aria-label={soldOut ? `Cor ${c}, esgotada` : `Cor ${c}`}
-                onClick={() => selectCor(c)}
+                aria-label={
+                  soldOut
+                    ? `${label1} ${c}, ${copy.badgeEsgotado.toLowerCase()}`
+                    : `${label1} ${c}`
+                }
+                onClick={() => selectDim1(c)}
               >
                 {c}
               </button>

@@ -17,7 +17,7 @@ import { clientSchema } from "@/src/schemas/client";
 import { dailyAnalyticsSchema } from "@/src/schemas/analytics";
 import type { DailyAnalytics } from "@/src/schemas/analytics";
 import { orderSchema, type Order, type OrderItem } from "@/src/schemas/order";
-import { productSchema, type Product, type ProductVariant } from "@/src/schemas/product";
+import { productSchema, variantAttr, type Product, type ProductVariant } from "@/src/schemas/product";
 import { categorySchema } from "@/src/schemas/category";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -335,8 +335,7 @@ function generateProducts(
         if (rng() < 0.15 && tamanho !== "38" && tamanho !== "39") continue;
         variantes.push({
           id: crypto.randomUUID(),
-          tamanho,
-          cor,
+          atributos: { tamanho, cor },
           estoque: status === "esgotado" ? 0 : 5 + Math.floor(rng() * 26),
           preco: null,
         });
@@ -345,8 +344,7 @@ function generateProducts(
     if (variantes.length === 0) {
       variantes.push({
         id: crypto.randomUUID(),
-        tamanho: "38",
-        cor: pick(rng, COLORS),
+        atributos: { tamanho: "38", cor: pick(rng, COLORS) },
         estoque: 10,
         preco: null,
       });
@@ -432,8 +430,8 @@ function buildOrderItem(product: Product, variant: ProductVariant): OrderItem {
     produtoId: product.id,
     varianteId: variant.id,
     nomeProduto: product.nome,
-    tamanho: variant.tamanho,
-    cor: variant.cor,
+    tamanho: variantAttr(variant, "tamanho") ?? "",
+    cor: variantAttr(variant, "cor") ?? "",
     referenciaProduto: product.referencia || undefined,
     quantidade: 1,
     precoUnitario: variantSellPrice(product, variant),

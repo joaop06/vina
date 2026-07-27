@@ -6,6 +6,7 @@ import type { DataAdapter, DeleteOpts, FileChange, WriteOpts } from "./types";
 
 export {
   assertDataPath,
+  getDataRoot,
   InvalidPathError,
   DATA_DIR_NAME,
   DATA_ROOT,

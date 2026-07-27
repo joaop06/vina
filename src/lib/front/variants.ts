@@ -1,4 +1,5 @@
 import type { ProductVariant } from "@/src/schemas/product";
+import { variantAttr } from "@/src/schemas/product";
 
 function uniquePreserveOrder(values: string[]): string[] {
   const seen = new Set<string>();
@@ -12,12 +13,52 @@ function uniquePreserveOrder(values: string[]): string[] {
   return out;
 }
 
-export function uniqueTamanhos(variantes: ProductVariant[]): string[] {
-  return uniquePreserveOrder(variantes.map((v) => v.tamanho));
+export function uniqueDimensionValues(
+  variantes: ProductVariant[],
+  dimensionId: string,
+): string[] {
+  return uniquePreserveOrder(
+    variantes
+      .map((v) => variantAttr(v, dimensionId))
+      .filter((v): v is string => Boolean(v?.trim())),
+  );
 }
 
+/** @deprecated Prefer uniqueDimensionValues(variantes, "tamanho") */
+export function uniqueTamanhos(variantes: ProductVariant[]): string[] {
+  return uniqueDimensionValues(variantes, "tamanho");
+}
+
+/** @deprecated Prefer uniqueDimensionValues(variantes, "cor") */
 export function uniqueCores(variantes: ProductVariant[]): string[] {
-  return uniquePreserveOrder(variantes.map((v) => v.cor));
+  return uniqueDimensionValues(variantes, "cor");
+}
+
+export type VariantSelection = Record<string, string | null>;
+
+export function selectionComplete(
+  dimensionIds: string[],
+  selection: VariantSelection,
+): boolean {
+  return dimensionIds.every((id) => Boolean(selection[id]?.trim()));
+}
+
+export function findVariantBySelection(
+  variantes: ProductVariant[],
+  selection: VariantSelection,
+): ProductVariant | null {
+  const entries = Object.entries(selection).filter(
+    ([, v]) => v != null && v.trim() !== "",
+  ) as Array<[string, string]>;
+  if (entries.length === 0) return null;
+  return (
+    variantes.find((variant) =>
+      entries.every(([dimId, val]) => {
+        const attr = variantAttr(variant, dimId);
+        return attr?.trim().toLowerCase() === val.trim().toLowerCase();
+      }),
+    ) ?? null
+  );
 }
 
 export function findVariant(
@@ -25,54 +66,59 @@ export function findVariant(
   tamanho: string | null,
   cor: string | null,
 ): ProductVariant | null {
-  if (!tamanho || !cor) return null;
-  const t = tamanho.trim().toLowerCase();
-  const c = cor.trim().toLowerCase();
-  return (
-    variantes.find(
-      (v) =>
-        v.tamanho.trim().toLowerCase() === t &&
-        v.cor.trim().toLowerCase() === c,
-    ) ?? null
-  );
+  return findVariantBySelection(variantes, {
+    tamanho,
+    cor,
+  });
 }
 
-/** True if there is at least one in-stock variant for this size (optionally filtered by color). */
+export function isDimensionValueAvailable(
+  variantes: ProductVariant[],
+  dimensionId: string,
+  value: string,
+  otherSelection: VariantSelection,
+): boolean {
+  const valNorm = value.trim().toLowerCase();
+  return variantes.some((v) => {
+    const attr = variantAttr(v, dimensionId);
+    if (attr?.trim().toLowerCase() !== valNorm) return false;
+    for (const [otherId, otherVal] of Object.entries(otherSelection)) {
+      if (otherId === dimensionId || !otherVal?.trim()) continue;
+      const o = variantAttr(v, otherId);
+      if (o?.trim().toLowerCase() !== otherVal.trim().toLowerCase()) {
+        return false;
+      }
+    }
+    return v.estoque > 0;
+  });
+}
+
+/** @deprecated */
 export function isTamanhoAvailable(
   variantes: ProductVariant[],
   tamanho: string,
   cor: string | null,
 ): boolean {
-  const t = tamanho.trim().toLowerCase();
-  return variantes.some((v) => {
-    if (v.tamanho.trim().toLowerCase() !== t) return false;
-    if (cor && v.cor.trim().toLowerCase() !== cor.trim().toLowerCase()) {
-      return false;
-    }
-    return v.estoque > 0;
-  });
+  return isDimensionValueAvailable(variantes, "tamanho", tamanho, { cor });
 }
 
-/** True if there is at least one in-stock variant for this color (optionally filtered by size). */
+/** @deprecated */
 export function isCorAvailable(
   variantes: ProductVariant[],
   cor: string,
   tamanho: string | null,
 ): boolean {
-  const c = cor.trim().toLowerCase();
-  return variantes.some((v) => {
-    if (v.cor.trim().toLowerCase() !== c) return false;
-    if (
-      tamanho &&
-      v.tamanho.trim().toLowerCase() !== tamanho.trim().toLowerCase()
-    ) {
-      return false;
-    }
-    return v.estoque > 0;
-  });
+  return isDimensionValueAvailable(variantes, "cor", cor, { tamanho });
 }
 
-/** Combination exists in the product matrix (regardless of stock). */
+export function combinationExistsForSelection(
+  variantes: ProductVariant[],
+  selection: VariantSelection,
+): boolean {
+  return findVariantBySelection(variantes, selection) != null;
+}
+
+/** @deprecated */
 export function combinationExists(
   variantes: ProductVariant[],
   tamanho: string,

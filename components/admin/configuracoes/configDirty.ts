@@ -115,6 +115,11 @@ export function configFingerprint(
     },
     horarios: config.horarios,
     textos: config.textos,
+    rotulos: config.rotulos,
+    vitrine: config.vitrine,
+    comportamento: config.comportamento,
+    tema: config.tema,
+    seo: config.seo,
     navegacao: config.navegacao ?? DEFAULT_NAVEGACAO,
     painel: {
       metaReceitaMensal: config.painel?.metaReceitaMensal ?? null,

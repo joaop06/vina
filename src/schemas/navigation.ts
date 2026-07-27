@@ -190,10 +190,14 @@ export function createCustomNavItem(
   };
 }
 
-export function navItemLabel(item: NavItem): string {
+export function navItemLabel(
+  item: NavItem,
+  opts?: { categoriasLabel?: string },
+): string {
+  const categoriasLabel = opts?.categoriasLabel ?? "Categorias";
   if (item.tipo === "link") {
     return item.rotulo?.trim() || NAV_BUILTIN_LABELS[item.chave];
   }
   if (item.tipo === "custom") return item.rotulo;
-  return "Categorias";
+  return categoriasLabel;
 }

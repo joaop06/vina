@@ -37,8 +37,7 @@ function makeProduct(
     variantes: overrides.variantes ?? [
       {
         id: "22222222-2222-4222-8222-222222222222",
-        tamanho: "M",
-        cor: "Preto",
+        atributos: { tamanho: "M", cor: "Preto" },
         estoque: 3,
         sku: undefined,
         preco: null,
@@ -79,8 +78,7 @@ describe("product-index CRUD consistency (Fase 5)", () => {
       variantes: [
         {
           id: "22222222-2222-4222-8222-222222222222",
-          tamanho: "GG",
-          cor: "Preto",
+          atributos: { tamanho: "GG", cor: "Preto" },
           estoque: 8,
           sku: undefined,
           preco: null,

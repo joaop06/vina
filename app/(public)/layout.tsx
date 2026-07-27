@@ -22,15 +22,18 @@ export default async function PublicLayout({
   const { Header, Footer } = getLayout(site.layout);
 
   return (
-    <AnalyticsProvider>
-      <WhatsAppGateProvider>
+    <AnalyticsProvider cookiesCopy={site.textos.cookies}>
+      <WhatsAppGateProvider
+        coletarLead={site.comportamento.whatsappColetarLead}
+        leadCopy={site.textos.leadModal}
+      >
         <CartProvider cartEnabled={Boolean(site.mostrarCarrinho)}>
           <a className="skip-link" href="#conteudo">
             Ir para o conteúdo
           </a>
           <Header site={site} categories={categories} />
           <main id="conteudo">{children}</main>
-          <Footer site={site} />
+          <Footer site={site} categories={categories} />
         </CartProvider>
       </WhatsAppGateProvider>
     </AnalyticsProvider>

@@ -27,6 +27,7 @@ export function SplitHeader({ site, categories }: ChromeProps) {
   // Split chrome always offered search; keep it on unless admin turns both off.
   const headerSearch = showHeaderSearch;
   const drawerSearch = showDrawerSearch || showHeaderSearch;
+  const buscaPlaceholder = site.textos.catalogo.buscaPlaceholder;
   const showTopbar = headerTopbarVisible(site);
 
   return (
@@ -57,7 +58,10 @@ export function SplitHeader({ site, categories }: ChromeProps) {
             />
           </Link>
           {headerSearch ? (
-            <HeaderSearchForm className={styles.search} />
+            <HeaderSearchForm
+              className={styles.search}
+              placeholder={buscaPlaceholder}
+            />
           ) : null}
           {headerEntries.length > 0 ? (
             <nav className={styles.nav} aria-label="Principal">
@@ -83,14 +87,21 @@ export function SplitHeader({ site, categories }: ChromeProps) {
             }}
             title={drawerTitle}
             subtitle={drawerSubtitle}
-            beforeNav={drawerSearch ? <HeaderSearchForm /> : undefined}
+            beforeNav={
+              drawerSearch ? (
+                <HeaderSearchForm placeholder={buscaPlaceholder} />
+              ) : undefined
+            }
             footer={mobileFooter}
           >
             <HeaderDrawerNav entries={drawerEntries} />
           </PublicMobileNav>
           </div>
           {headerSearch ? (
-            <HeaderSearchForm className={styles.searchMobile} />
+            <HeaderSearchForm
+              className={styles.searchMobile}
+              placeholder={buscaPlaceholder}
+            />
           ) : null}
         </div>
       </div>
