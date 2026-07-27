@@ -14,6 +14,7 @@ import {
 } from "@/src/lib/categories-tree";
 import { ProductCard } from "@/components/public/ProductCard";
 import { CatalogFilters } from "@/components/public/CatalogFilters";
+import { catalogoContagemLabel } from "@/src/lib/front/store-copy";
 import { PaginationNav } from "@/components/ui/PaginationNav";
 import {
   buildPageSizeSelectOptions,
@@ -79,6 +80,10 @@ export async function CatalogPageView({ query }: { query: CatalogViewQuery }) {
     parentId: c.parentId,
   }));
 
+  const paginas = site.textos.paginas;
+  const catalogo = site.textos.catalogo;
+  const produtoCopy = site.textos.produto;
+
   const filterBase = {
     pageSize,
     q,
@@ -91,9 +96,11 @@ export async function CatalogPageView({ query }: { query: CatalogViewQuery }) {
   return (
     <div className="container catalog-page">
       <header className="catalog-page__head">
-        <h1 className="vn-section-title catalog-page__title">Catálogo</h1>
+        <h1 className="vn-section-title catalog-page__title">
+          {paginas.catalogoTitulo}
+        </h1>
         <p className="catalog-page__count" aria-live="polite">
-          {result.total} produto{result.total === 1 ? "" : "s"}
+          {catalogoContagemLabel(site, result.total)}
         </p>
       </header>
 
@@ -109,14 +116,17 @@ export async function CatalogPageView({ query }: { query: CatalogViewQuery }) {
         categoria={categoria}
         tamanho={tamanho}
         cor={cor}
+        labelCategoria={site.textos.catalogo.labelCategoria}
+        buscaPlaceholder={site.textos.catalogo.buscaPlaceholder}
+        dimensoes={site.rotulos.dimensoes}
       />
 
       {result.total === 0 ? (
         <div className="catalog-page__empty">
-          <p>Nenhum produto encontrado.</p>
+          <p>{catalogo.empty}</p>
           {hasFilters ? (
             <Link className="btn btn-primary" href="/catalogo">
-              Limpar filtros
+              {catalogo.limparFiltros}
             </Link>
           ) : null}
         </div>
@@ -128,6 +138,7 @@ export async function CatalogPageView({ query }: { query: CatalogViewQuery }) {
                 key={p.id}
                 product={p}
                 cartEnabled={site.mostrarCarrinho}
+                copy={produtoCopy}
               />
             ))}
           </div>
@@ -135,7 +146,7 @@ export async function CatalogPageView({ query }: { query: CatalogViewQuery }) {
             page={result.page}
             pageSize={result.pageSize}
             total={result.total}
-            label="Catálogo"
+            label={paginas.catalogoTitulo}
             className="catalog-page__pagination"
             hrefForPage={(p) => buildCatalogHref({ ...filterBase, page: p })}
             pageSizeOptions={buildPageSizeSelectOptions(

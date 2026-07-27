@@ -65,28 +65,27 @@ export function FooterContactBlock({
   };
 }) {
   const { address, hours, phones } = getFooterContact(site);
+  const rodape = site.textos.rodape;
   if (!address && !hours && phones.length === 0) return null;
 
   return (
     <div className={classNames.section}>
-      <p className={classNames.title}>Contato</p>
+      <p className={classNames.title}>{rodape.tituloContato}</p>
       {address ? (
         <p className={classNames.item}>
-          <span className={classNames.label}>Endereço</span>
+          <span className={classNames.label}>{rodape.labelEndereco}</span>
           <span className={classNames.muted}>{address}</span>
         </p>
       ) : null}
       {hours ? (
         <p className={classNames.item}>
-          <span className={classNames.label}>Horários</span>
+          <span className={classNames.label}>{rodape.labelHorarios}</span>
           <span className={classNames.muted}>{hours}</span>
         </p>
       ) : null}
       {phones.length > 0 ? (
         <p className={classNames.item}>
-          <span className={classNames.label}>
-            {phones.length > 1 ? "Telefones" : "Telefone"}
-          </span>
+          <span className={classNames.label}>{rodape.labelTelefone}</span>
           <span className={classNames.muted}>
             {phones.map((phone, i) => (
               <span key={phone.id}>

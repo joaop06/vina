@@ -20,6 +20,8 @@ import { WhatsAppPanel } from "@/components/admin/configuracoes/WhatsAppPanel";
 import { IdentidadePanel } from "@/components/admin/configuracoes/IdentidadePanel";
 import { VitrinePanel } from "@/components/admin/configuracoes/VitrinePanel";
 import { NavegacaoPanel } from "@/components/admin/configuracoes/NavegacaoPanel";
+import { TextosVitrinePanel } from "@/components/admin/configuracoes/TextosVitrinePanel";
+import { TemaAvancadoPanel } from "@/components/admin/configuracoes/TemaAvancadoPanel";
 import { PainelPanel } from "@/components/admin/configuracoes/PainelPanel";
 import {
   configFingerprint,
@@ -75,6 +77,8 @@ export function PersonalizacaoClient({
   const whatsappFormId = useId();
   const vitrineFormId = useId();
   const navegacaoFormId = useId();
+  const textosFormId = useId();
+  const temaFormId = useId();
   const painelFormId = useId();
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const allowLeaveRef = useRef(false);
@@ -115,6 +119,10 @@ export function PersonalizacaoClient({
           ? vitrineFormId
           : tab === "navegacao"
             ? navegacaoFormId
+            : tab === "textos"
+              ? textosFormId
+              : tab === "tema"
+                ? temaFormId
             : tab === "painel"
               ? painelFormId
               : identidadeFormId;
@@ -522,6 +530,38 @@ export function PersonalizacaoClient({
             formId={navegacaoFormId}
             config={config}
             initialCategories={initialCategories}
+            disabled={saving}
+            onSubmit={save}
+            onConfigChange={onConfigChange}
+          />
+        </div>
+
+        <div
+          className="dash-tabs__panel"
+          role="tabpanel"
+          id={`${tabsId}-panel-textos`}
+          aria-labelledby={`${tabsId}-tab-textos`}
+          hidden={tab !== "textos"}
+        >
+          <TextosVitrinePanel
+            formId={textosFormId}
+            config={config}
+            disabled={saving}
+            onSubmit={save}
+            onConfigChange={onConfigChange}
+          />
+        </div>
+
+        <div
+          className="dash-tabs__panel"
+          role="tabpanel"
+          id={`${tabsId}-panel-tema`}
+          aria-labelledby={`${tabsId}-tab-tema`}
+          hidden={tab !== "tema"}
+        >
+          <TemaAvancadoPanel
+            formId={temaFormId}
+            config={config}
             disabled={saving}
             onSubmit={save}
             onConfigChange={onConfigChange}

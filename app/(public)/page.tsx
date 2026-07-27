@@ -11,31 +11,36 @@ import { waLink } from "@/src/lib/wa";
 export const revalidate = 120; // keep in sync with STOREFRONT_REVALIDATE_SECONDS
 
 export default async function HomePage() {
-  const [site, categories, banners, destaques, lancamentos, recentes] =
+  const site = await getCachedSiteConfig();
+  const vitrine = site.vitrine;
+
+  const [categories, banners, destaques, lancamentos, recentes] =
     await Promise.all([
-      getCachedSiteConfig(),
       getCachedActiveCategories(),
       getCachedActiveBanners(),
       listCachedProductListItems({
         publicOnly: true,
         destaque: true,
-        pageSize: 8,
+        pageSize: vitrine.homeDestaquesLimit,
       }),
       listCachedProductListItems({
         publicOnly: true,
         lancamento: true,
-        pageSize: 16,
+        pageSize: vitrine.homeLancamentosFetchLimit,
       }),
-      listCachedProductListItems({ publicOnly: true, pageSize: 8 }),
+      listCachedProductListItems({
+        publicOnly: true,
+        pageSize: vitrine.homeFallbackLimit,
+      }),
     ]);
 
   // Produtos com ambas as flags ficam só em Destaques.
   const novos = lancamentos.items
     .filter((p) => p.lancamento && !p.destaque)
-    .slice(0, 8);
+    .slice(0, vitrine.homeLancamentosLimit);
   const vitrineFallback =
     destaques.items.length === 0 && novos.length === 0
-      ? recentes.items.slice(0, 8)
+      ? recentes.items.slice(0, vitrine.homeFallbackLimit)
       : [];
   const wa = waLink(site.whatsapp.telefone, site.whatsapp.mensagemPadrao);
   const { Home } = getLayout(site.layout);

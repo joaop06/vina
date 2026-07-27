@@ -49,14 +49,20 @@ export function HeaderTopbarMeta({
   );
 }
 
-export function HeaderSearchForm({ className }: { className?: string }) {
+export function HeaderSearchForm({
+  className,
+  placeholder,
+}: {
+  className?: string;
+  placeholder: string;
+}) {
   return (
     <form className={className} action="/catalogo" method="get" role="search">
       <input
         type="search"
         name="q"
-        placeholder="Buscar produtos…"
-        aria-label="Buscar produtos"
+        placeholder={placeholder}
+        aria-label={placeholder}
         enterKeyHint="search"
       />
       <button type="submit" aria-label="Buscar">

@@ -1,8 +1,8 @@
 import "server-only";
-import { promises as fs } from "node:fs";
-import path from "node:path";
+import { promises as fs } from "fs";
+import path from "path";
 import { recordReadOp } from "@/src/lib/observability/read-metrics";
-import { assertDataPath, DATA_ROOT, toPosixRelative } from "./paths";
+import { assertDataPath, getDataRoot, toPosixRelative } from "./paths";
 import { withPathLock, withPathLocks } from "./lock";
 import {
   applyCommitFilesTransactional,
@@ -219,6 +219,6 @@ export async function ensureDataDirs() {
     "indices",
   ];
   for (const d of dirs) {
-    await fs.mkdir(path.join(DATA_ROOT, d), { recursive: true });
+    await fs.mkdir(path.join(getDataRoot(), d), { recursive: true });
   }
 }

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Banner } from "@/src/schemas/banner";
+import { DEFAULT_BANNER_CTA } from "@/src/config/store-copy-defaults";
 import { mediaUrl } from "@/src/lib/front/format";
 import { IMAGE_SIZES } from "@/src/lib/front/media-image";
 import { pickBanner } from "@/src/lib/front/media";
@@ -47,6 +48,7 @@ export function BannerPromo({
   const src = mediaUrl(banner?.imagem.path);
   if (!banner || !src) return null;
   const href = banner.href || "/catalogo";
+  const ctaLabel = banner.ctaTexto?.trim() || DEFAULT_BANNER_CTA;
 
   return (
     <section className={className} aria-label={storeName}>
@@ -61,7 +63,7 @@ export function BannerPromo({
       </div>
       <div className="banner-promo__body">
         <Link className="btn btn-dark" href={href}>
-          Ver oferta
+          {ctaLabel}
         </Link>
       </div>
     </section>

@@ -99,6 +99,30 @@ export function WhatsAppPanel({
                 />
               </div>
 
+              <label
+                className="admin-switch admin-form__span"
+                data-disabled={disabled ? "true" : undefined}
+              >
+                <span>Pedir nome antes de abrir o WhatsApp</span>
+                <input
+                  type="checkbox"
+                  role="switch"
+                  checked={Boolean(config.comportamento.whatsappColetarLead)}
+                  disabled={disabled}
+                  aria-label="Coletar lead antes do WhatsApp"
+                  onChange={(e) =>
+                    onConfigChange({
+                      ...config,
+                      comportamento: {
+                        ...config.comportamento,
+                        whatsappColetarLead: e.target.checked,
+                      },
+                    })
+                  }
+                />
+                <span className="admin-switch__track" aria-hidden="true" />
+              </label>
+
               <label className="admin-form__field">
                 <span className="wa-settings__field-title">
                   Quando clicam no WhatsApp do site
@@ -122,6 +146,29 @@ export function WhatsAppPanel({
                     })
                   }
                 />
+              </label>
+              <label
+                className="admin-switch admin-form__span"
+                data-disabled={disabled ? "true" : undefined}
+              >
+                <span>Pedir nome antes de abrir o WhatsApp</span>
+                <input
+                  type="checkbox"
+                  role="switch"
+                  checked={Boolean(config.comportamento.whatsappColetarLead)}
+                  disabled={disabled}
+                  aria-label="Coletar lead antes do WhatsApp"
+                  onChange={(e) =>
+                    onConfigChange({
+                      ...config,
+                      comportamento: {
+                        ...config.comportamento,
+                        whatsappColetarLead: e.target.checked,
+                      },
+                    })
+                  }
+                />
+                <span className="admin-switch__track" aria-hidden="true" />
               </label>
             </div>
           </WhatsAppSectionSplit>

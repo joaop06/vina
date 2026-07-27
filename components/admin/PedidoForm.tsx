@@ -19,7 +19,8 @@ import { formatBrl } from "@/src/lib/front/format";
 import { variantSellPrice } from "@/src/lib/front/pricing";
 import type { Client } from "@/src/schemas/client";
 import type { Order, OrderCanal } from "@/src/schemas/order";
-import type { Product } from "@/src/schemas/product";
+import type { Product, ProductVariant } from "@/src/schemas/product";
+import { variantAttr } from "@/src/schemas/product";
 
 type DraftLine = {
   key: string;
@@ -166,16 +167,14 @@ export function PedidoForm({
     return variant.estoque + (reservedByOrder.get(key) ?? 0);
   }
 
-  function variantStockLabel(
-    produtoId: string,
-    variante: { id: string; tamanho: string; cor: string; estoque: number },
-  ) {
-    // View: real disk stock. Edit: capacity including this order's reservation.
+  function variantStockLabel(produtoId: string, variante: ProductVariant) {
     const stock = fieldsLocked
       ? variante.estoque
       : variante.estoque +
         (reservedByOrder.get(`${produtoId}:${variante.id}`) ?? 0);
-    return `${variante.tamanho} / ${variante.cor} (${stock} un.)`;
+    const t = variantAttr(variante, "tamanho") ?? "—";
+    const c = variantAttr(variante, "cor") ?? "—";
+    return `${t} / ${c} (${stock} un.)`;
   }
 
   function resetFromOrder(next: Order) {

@@ -1,11 +1,20 @@
 import "server-only";
-import path from "node:path";
+import path from "path";
 
 /** `data-dev` em development; `data` em production (seed versionado). */
 export const DATA_DIR_NAME =
   process.env.NODE_ENV === "development" ? "data-dev" : "data";
 
-export const DATA_ROOT = path.join(process.cwd(), DATA_DIR_NAME);
+/** Root absoluto dos JSON da loja (respeita `VINA_DATA_ROOT` em CLI/testes). */
+export function getDataRoot(): string {
+  if (process.env.VINA_DATA_ROOT) {
+    return path.resolve(process.env.VINA_DATA_ROOT);
+  }
+  return path.join(process.cwd(), DATA_DIR_NAME);
+}
+
+/** @deprecated Prefer `getDataRoot()` — valor fixo no primeiro import do módulo. */
+export const DATA_ROOT = getDataRoot();
 
 export class InvalidPathError extends Error {
   code = "INVALID_PATH" as const;
@@ -28,8 +37,9 @@ export function assertDataPath(relativePath: string): string {
   if (path.isAbsolute(relativePath)) {
     throw new InvalidPathError();
   }
-  const absolute = path.resolve(DATA_ROOT, normalized);
-  const rootResolved = path.resolve(DATA_ROOT);
+  const dataRoot = getDataRoot();
+  const absolute = path.resolve(dataRoot, normalized);
+  const rootResolved = path.resolve(dataRoot);
   if (
     absolute !== rootResolved &&
     !absolute.startsWith(rootResolved + path.sep)

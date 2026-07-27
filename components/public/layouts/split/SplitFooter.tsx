@@ -1,12 +1,13 @@
 import { PublicFooterSections } from "@/components/public/PublicFooterSections";
-import type { SiteConfig } from "@/src/schemas/site-config";
+import type { ChromeProps } from "../types";
 import styles from "./split.module.css";
 
-export function SplitFooter({ site }: { site: SiteConfig }) {
+export function SplitFooter({ site, categories }: ChromeProps) {
   return (
     <footer className={styles.footer}>
       <PublicFooterSections
         site={site}
+        categories={categories}
         classNames={{
           footerInner: styles.footerInner,
           footerBrand: styles.footerBrand,

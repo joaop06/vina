@@ -1,12 +1,13 @@
 import { PublicFooterSections } from "@/components/public/PublicFooterSections";
-import type { SiteConfig } from "@/src/schemas/site-config";
+import type { ChromeProps } from "../types";
 import styles from "./gallery.module.css";
 
-export function GalleryFooter({ site }: { site: SiteConfig }) {
+export function GalleryFooter({ site, categories }: ChromeProps) {
   return (
     <footer className={styles.footer}>
       <PublicFooterSections
         site={site}
+        categories={categories}
         showSlogan
         classNames={{
           footerInner: styles.footerInner,

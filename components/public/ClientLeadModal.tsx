@@ -8,13 +8,15 @@ import {
 } from "@/src/lib/front/client-lead";
 import { formatBrWhatsApp, normalizeWaDigits } from "@/src/lib/wa";
 import { WhatsAppIcon } from "@/components/public/icons/StorefrontIcons";
+import type { SiteTextosExtended } from "@/src/schemas/site-personalization";
 
 type Props = {
+  copy: SiteTextosExtended["leadModal"];
   onClose: () => void;
   onComplete: (lead: ClientLead) => void;
 };
 
-export function ClientLeadModal({ onClose, onComplete }: Props) {
+export function ClientLeadModal({ copy, onClose, onComplete }: Props) {
   const titleId = useId();
   const descId = useId();
   const nomeRef = useRef<HTMLInputElement>(null);
@@ -101,18 +103,18 @@ export function ClientLeadModal({ onClose, onComplete }: Props) {
         </button>
 
         <div className="client-lead-modal__head">
-          <p className="client-lead-modal__eyebrow">WhatsApp</p>
+          <p className="client-lead-modal__eyebrow">{copy.eyebrow}</p>
           <h2 id={titleId} className="client-lead-modal__title">
-            Quase lá
+            {copy.titulo}
           </h2>
           <p id={descId} className="client-lead-modal__desc">
-            Só seu nome e um contato — leva segundos.
+            {copy.descricao}
           </p>
         </div>
 
         <form className="client-lead-modal__form" onSubmit={submit} noValidate>
           <label className="client-lead-modal__field">
-            <span>Nome</span>
+            <span>{copy.labelNome}</span>
             <input
               ref={nomeRef}
               className="client-lead-modal__input"
@@ -121,7 +123,7 @@ export function ClientLeadModal({ onClose, onComplete }: Props) {
               enterKeyHint="next"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
-              placeholder="Seu nome"
+              placeholder={copy.placeholderNome}
               aria-invalid={Boolean(errors.nome)}
             />
             {errors.nome ? (
@@ -130,7 +132,7 @@ export function ClientLeadModal({ onClose, onComplete }: Props) {
           </label>
 
           <label className="client-lead-modal__field">
-            <span>Celular</span>
+            <span>{copy.labelCelular}</span>
             <input
               className="client-lead-modal__input"
               name="celular"
@@ -142,7 +144,7 @@ export function ClientLeadModal({ onClose, onComplete }: Props) {
               onChange={(e) =>
                 setCelular(formatBrWhatsApp(normalizeWaDigits(e.target.value)))
               }
-              placeholder="(16) 9XXXX-XXXX"
+              placeholder={copy.placeholderCelular}
               aria-invalid={Boolean(errors.celular)}
             />
             {errors.celular ? (
@@ -151,7 +153,7 @@ export function ClientLeadModal({ onClose, onComplete }: Props) {
           </label>
 
           <label className="client-lead-modal__field">
-            <span>E-mail</span>
+            <span>{copy.labelEmail}</span>
             <input
               className="client-lead-modal__input"
               name="email"
@@ -161,7 +163,7 @@ export function ClientLeadModal({ onClose, onComplete }: Props) {
               enterKeyHint="go"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="opcional se informar o celular"
+              placeholder={copy.placeholderEmail}
               aria-invalid={Boolean(errors.email)}
             />
             {errors.email ? (
@@ -181,7 +183,7 @@ export function ClientLeadModal({ onClose, onComplete }: Props) {
             disabled={submitting}
           >
             <WhatsAppIcon size={18} className="btn__icon" />
-            Continuar no WhatsApp
+            {copy.submit}
           </button>
         </form>
       </div>

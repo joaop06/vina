@@ -68,8 +68,8 @@
 
 .submenuItem > a:hover,
 .submenuItem > a:focus-visible {
-  background: color-mix(in srgb, var(--vn-primary, #c41e3a) 8%, #fff);
-  color: var(--vn-primary, #c41e3a);
+  background: color-mix(in srgb, var(--vn-primary) 8%, var(--vn-surface));
+  color: var(--vn-primary);
 }
 
 .submenuItem > .submenuList {

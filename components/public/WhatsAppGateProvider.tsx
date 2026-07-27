@@ -16,6 +16,7 @@ import {
 } from "@/src/lib/front/client-lead";
 import { ClientLeadModal } from "@/components/public/ClientLeadModal";
 import { useAnalyticsOptional } from "@/components/public/analytics/AnalyticsProvider";
+import type { SiteTextosExtended } from "@/src/schemas/site-personalization";
 
 type WhatsAppGateContextValue = {
   requestWhatsApp: (href: string) => void;
@@ -29,18 +30,33 @@ function openWhatsApp(href: string) {
   window.open(href, "_blank", "noopener,noreferrer");
 }
 
-export function WhatsAppGateProvider({ children }: { children: ReactNode }) {
+export function WhatsAppGateProvider({
+  children,
+  coletarLead = true,
+  leadCopy,
+}: {
+  children: ReactNode;
+  coletarLead?: boolean;
+  leadCopy: SiteTextosExtended["leadModal"];
+}) {
   const [pendingHref, setPendingHref] = useState<string | null>(null);
   const analytics = useAnalyticsOptional();
 
-  const requestWhatsApp = useCallback((href: string) => {
-    const lead = getClientLead();
-    if (lead) {
-      openWhatsApp(withClientGreeting(href, lead.nome));
-      return;
-    }
-    setPendingHref(href);
-  }, []);
+  const requestWhatsApp = useCallback(
+    (href: string) => {
+      if (!coletarLead) {
+        openWhatsApp(href);
+        return;
+      }
+      const lead = getClientLead();
+      if (lead) {
+        openWhatsApp(withClientGreeting(href, lead.nome));
+        return;
+      }
+      setPendingHref(href);
+    },
+    [coletarLead],
+  );
 
   const close = useCallback(() => setPendingHref(null), []);
 
@@ -93,7 +109,7 @@ export function WhatsAppGateProvider({ children }: { children: ReactNode }) {
     <WhatsAppGateContext.Provider value={value}>
       {children}
       {pendingHref ? (
-        <ClientLeadModal onClose={close} onComplete={complete} />
+        <ClientLeadModal copy={leadCopy} onClose={close} onComplete={complete} />
       ) : null}
     </WhatsAppGateContext.Provider>
   );
