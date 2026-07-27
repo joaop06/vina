@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-07-22T00:19:43.132Z",
+  "updatedAt": "2026-07-27T17:57:38.273Z",
   "total": 4,
   "sharded": false,
   "entries": [
@@ -24,6 +24,19 @@
       "variantesCount": 6,
       "precoExibicao": 99.9,
       "mostrarAPartirDe": false,
+      "facetas": {
+        "tamanho": [
+          "38",
+          "39",
+          "40",
+          "41",
+          "42",
+          "44"
+        ],
+        "cor": [
+          "Cinza Verde"
+        ]
+      },
       "tamanhos": [
         "38",
         "39",
@@ -58,6 +71,24 @@
       "variantesCount": 11,
       "precoExibicao": 79.9,
       "mostrarAPartirDe": false,
+      "facetas": {
+        "tamanho": [
+          "34",
+          "35",
+          "36",
+          "37",
+          "38",
+          "39",
+          "40",
+          "41",
+          "42",
+          "43",
+          "44"
+        ],
+        "cor": [
+          "Preto Dourado"
+        ]
+      },
       "tamanhos": [
         "34",
         "35",
@@ -97,6 +128,24 @@
       "variantesCount": 11,
       "precoExibicao": 79.9,
       "mostrarAPartirDe": false,
+      "facetas": {
+        "tamanho": [
+          "34",
+          "35",
+          "36",
+          "37",
+          "38",
+          "39",
+          "40",
+          "41",
+          "42",
+          "43",
+          "44"
+        ],
+        "cor": [
+          "Preto"
+        ]
+      },
       "tamanhos": [
         "34",
         "35",
@@ -136,6 +185,24 @@
       "variantesCount": 11,
       "precoExibicao": 79.9,
       "mostrarAPartirDe": false,
+      "facetas": {
+        "tamanho": [
+          "34",
+          "35",
+          "36",
+          "37",
+          "38",
+          "39",
+          "40",
+          "41",
+          "42",
+          "43",
+          "44"
+        ],
+        "cor": [
+          "Preto Branco"
+        ]
+      },
       "tamanhos": [
         "34",
         "35",

@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 1,
-  "updatedAt": "2026-07-22T00:19:43.132Z",
+  "schemaVersion": 2,
+  "updatedAt": "2026-07-27T17:57:38.273Z",
   "produtos": 4,
   "ativos": 4,
   "ocultos": 0,
@@ -8,5 +8,7 @@
   "unidadesEstoque": 34,
   "produtosEstoqueZero": 0,
   "destaques": 1,
-  "lancamentos": 0
+  "lancamentos": 0,
+  "comPromocao": 4,
+  "semCapa": 0
 }
