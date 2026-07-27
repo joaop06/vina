@@ -1,5 +1,5 @@
 import "server-only";
-import path from "node:path";
+import path from "path";
 
 /** `data-dev` em development; `data` em production (seed versionado). */
 export const DATA_DIR_NAME =
