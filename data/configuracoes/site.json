@@ -1,21 +1,25 @@
 {
-  "versao": 2,
-  "nomeLoja": "Discord Zika",
-  "mostrarNomeComLogo": false,
+  "versao": 27,
+  "nomeLoja": "PÉ QUENTE ",
+  "mostrarNomeComLogo": true,
   "mostrarCarrinho": true,
-  "assinatura": "Catálogo online",
-  "slogan": "Configure sua vitrine no painel admin e comece a vender pelo WhatsApp.",
+  "assinatura": "A loja de calçados mais barato de Barretos e Região 🔥",
+  "slogan": "CALÇADOS · BOLSAS · ACESSÓRIOS",
   "layout": "classic",
   "cores": {
-    "primaria": "#111111",
+    "primaria": "#FF0000",
     "secundaria": "#111111",
     "fundo": "#FFFFFF",
     "fundoNeutro": "#F5F5F5",
     "borda": "#E5E5E5"
   },
-  "logo": null,
+  "logo": {
+    "id": "050ba9b8-5650-4a9a-bcc2-88ac6ecae94e",
+    "path": "imagens/site/050ba9b8-5650-4a9a-bcc2-88ac6ecae94e.jpg",
+    "alt": "PÉ QUENTE"
+  },
   "whatsapp": {
-    "telefone": "11999999999",
+    "telefone": "17976008088",
     "mensagemPadrao": "Olá! Vim pelo site e gostaria de saber mais.",
     "mensagemProdutoParts": {
       "intro": "Tenho interesse no produto",
@@ -23,7 +27,7 @@
       "includeUrl": true,
       "outro": "Segue disponível???"
     },
-    "mensagemProdutoIncluirReferencia": false,
+    "mensagemProdutoIncluirReferencia": true,
     "mensagemProdutoFormatoItens": "produto",
     "mensagemProdutoItemCompactoParts": {
       "bullet": "•",
@@ -47,156 +51,32 @@
     }
   },
   "instagram": {
-    "handle": "",
-    "url": "",
-    "mostrar": false
+    "handle": "pequentebarretos",
+    "url": "https://instagram.com/pequentebarretos",
+    "mostrar": true
   },
   "endereco": {
-    "cep": "",
-    "logradouro": "",
-    "numero": "",
-    "complemento": "",
-    "bairro": "",
-    "cidade": "",
-    "uf": "",
-    "texto": "",
-    "mostrar": false
+    "cep": "14780300",
+    "logradouro": "Avenida 19",
+    "numero": "745",
+    "complemento": "Entre as ruas 18 x 20",
+    "bairro": "Centro",
+    "cidade": "Barretos",
+    "uf": "SP",
+    "texto": "Avenida 19, 745 — Entre as ruas 18 x 20 · Centro · Barretos-SP",
+    "mostrar": true
   },
   "telefones": {
-    "fixo": "",
+    "fixo": "1736120414",
     "celular": "",
     "usarWhatsappComoCelular": true,
     "mostrarFixo": false,
     "mostrarCelular": true
   },
-  "horarios": "Seg–Sex 9h–18h · Sáb 9h–13h",
+  "horarios": "Segunda a Sexta: 9:00 as 18:00\nSábados: 9:00 as 14:00",
   "textos": {
-    "sobre": "Apresente sua loja aqui. Edite este texto em Admin → Personalização → Identidade.",
-    "trocas": "Consulte nossa equipe pelo WhatsApp para trocas e devoluções.",
-    "paginas": {
-      "catalogoTitulo": "Catálogo",
-      "sobreTitulo": "Sobre",
-      "carrinhoTitulo": "Carrinho",
-      "notFoundTitulo": "Página não encontrada",
-      "notFoundTexto": "O conteúdo pode ter sido removido da loja.",
-      "notFoundCtaInicio": "Ir para o início",
-      "notFoundCtaCatalogo": "Ver catálogo",
-      "sobreTituloPrefixo": "Sobre a",
-      "sobreLabelLocal": "Local",
-      "sobreLabelHorarios": "Horários",
-      "sobreLabelTrocas": "Trocas",
-      "sobreCtaWhatsapp": "Falar no WhatsApp"
-    },
-    "home": {
-      "destaquesTitulo": "Destaques",
-      "lancamentosTitulo": "Lançamentos",
-      "fallbackTitulo": "Nossos produtos",
-      "verColecao": "Ver coleção",
-      "verTudo": "Ver tudo",
-      "duvidasTitulo": "Dúvidas?",
-      "duvidasTexto": "Fale com a loja pelo WhatsApp.",
-      "whatsappCurto": "WhatsApp",
-      "whatsappChamar": "Chamar no WhatsApp"
-    },
-    "catalogo": {
-      "buscaPlaceholder": "Buscar produtos…",
-      "empty": "Nenhum produto encontrado.",
-      "limparFiltros": "Limpar filtros",
-      "labelCategoria": "Categoria",
-      "contagemSingular": "produto",
-      "contagemPlural": "produtos"
-    },
-    "produto": {
-      "badgeNovo": "Novo",
-      "badgeEsgotado": "Esgotado",
-      "ctaInteresse": "Tenho interesse",
-      "ctaCarrinho": "Adicionar ao carrinho",
-      "selecioneVariante": "Selecione tamanho e cor",
-      "aPartirDe": "A partir de ",
-      "estoqueSelecione": "Selecione tamanho e cor",
-      "estoqueIndisponivel": "Combinação indisponível",
-      "estoqueUm": "1 disponível",
-      "estoqueVarios": "{n} disponíveis",
-      "waSelecioneVariante": "Selecione tamanho e cor para continuar no WhatsApp",
-      "waEsgotado": "Produto esgotado"
-    },
-    "rodape": {
-      "tituloLoja": "Loja",
-      "tituloRedes": "Redes",
-      "tituloLinks": "Links",
-      "tituloContato": "Contato",
-      "labelEndereco": "Endereço",
-      "labelHorarios": "Horários",
-      "labelTelefone": "Telefone"
-    },
-    "cookies": {
-      "mensagem": "Usamos cookies anônimos para entender o uso do site. Sem dados pessoais até você se identificar no WhatsApp.",
-      "aceitar": "Aceitar",
-      "recusar": "Recusar"
-    },
-    "leadModal": {
-      "eyebrow": "WhatsApp",
-      "titulo": "Quase lá",
-      "descricao": "Só seu nome e um contato — leva segundos.",
-      "labelNome": "Nome",
-      "placeholderNome": "Seu nome",
-      "labelCelular": "Celular",
-      "placeholderCelular": "(16) 9XXXX-XXXX",
-      "labelEmail": "E-mail",
-      "placeholderEmail": "opcional se informar o celular",
-      "submit": "Continuar no WhatsApp"
-    },
-    "carrinho": {
-      "titulo": "Carrinho",
-      "emptyTitulo": "Seu carrinho está vazio",
-      "emptyLead": "Escolha tamanho, cor e quantidade nos produtos e monte seu pedido aqui antes de enviar no WhatsApp.",
-      "esvaziar": "Esvaziar carrinho",
-      "verCatalogo": "Ver catálogo",
-      "voltarHome": "Voltar à home",
-      "limiteWa": "A mensagem do WhatsApp pode ficar longa demais. Envie em partes ou remova alguns itens.",
-      "enviarWhatsapp": "Enviar pedido no WhatsApp"
-    }
-  },
-  "rotulos": {
-    "navCategorias": "Categorias",
-    "dimensoes": [
-      {
-        "id": "tamanho",
-        "rotulo": "Tamanho"
-      },
-      {
-        "id": "cor",
-        "rotulo": "Cor"
-      }
-    ]
-  },
-  "vitrine": {
-    "homeDestaquesLimit": 8,
-    "homeLancamentosFetchLimit": 16,
-    "homeLancamentosLimit": 8,
-    "homeFallbackLimit": 8,
-    "catalogoPageSizeDefault": 12,
-    "catalogoPageSizeOptions": [
-      12,
-      24,
-      48
-    ]
-  },
-  "comportamento": {
-    "whatsappColetarLead": true,
-    "rodapeUsarNavegacao": false
-  },
-  "tema": {
-    "raio": 8,
-    "larguraContainer": "1120px",
-    "corWhatsapp": "#25D366",
-    "corInstagram": "#E1306C",
-    "fonteCorpo": "poppins",
-    "fonteDisplay": "bebas-neue"
-  },
-  "seo": {
-    "titleTemplate": "%s · {nomeLoja}",
-    "idioma": "pt-BR"
+    "sobre": "Há mais de 30 anos no ramo de calçados, proporcionando as melhores marcas do mercado, com preços imbatíveis!!! ",
+    "trocas": "Consulte nossa equipe pelo WhatsApp para trocas e devoluções."
   },
   "navegacao": {
     "topbar": {
@@ -254,7 +134,7 @@
       "mostrarBusca": false,
       "extras": {
         "mostrarTitulo": true,
-        "mostrarAssinatura": true,
+        "mostrarAssinatura": false,
         "mostrarWhatsapp": true,
         "mostrarInstagram": true
       }
@@ -263,5 +143,5 @@
   "painel": {
     "metaReceitaMensal": null
   },
-  "atualizadoEm": "2026-07-27T17:33:19.337Z"
+  "atualizadoEm": "2026-07-23T16:49:17.030Z"
 }
