@@ -32,45 +32,57 @@
   "variantes": [
     {
       "id": "3577e483-52ce-4e21-b6d1-a5ee48b52320",
-      "tamanho": "38",
-      "cor": "Cinza Verde",
       "estoque": 1,
-      "preco": null
+      "preco": null,
+      "atributos": {
+        "tamanho": "38",
+        "cor": "Cinza Verde"
+      }
     },
     {
       "id": "daddcf92-66d8-4adb-b27c-a357c20dc10b",
-      "tamanho": "39",
-      "cor": "Cinza Verde",
       "estoque": 2,
-      "preco": null
+      "preco": null,
+      "atributos": {
+        "tamanho": "39",
+        "cor": "Cinza Verde"
+      }
     },
     {
       "id": "d6fded66-fc01-4399-82fd-aad7fb6ce90a",
-      "tamanho": "40",
-      "cor": "Cinza Verde",
       "estoque": 3,
-      "preco": null
+      "preco": null,
+      "atributos": {
+        "tamanho": "40",
+        "cor": "Cinza Verde"
+      }
     },
     {
       "id": "994a3687-d1b5-41d2-9807-998802ee469f",
-      "tamanho": "41",
-      "cor": "Cinza Verde",
       "estoque": 3,
-      "preco": null
+      "preco": null,
+      "atributos": {
+        "tamanho": "41",
+        "cor": "Cinza Verde"
+      }
     },
     {
       "id": "2f016b01-8c29-41b6-b397-b8572ceac9fb",
-      "tamanho": "42",
-      "cor": "Cinza Verde",
       "estoque": 2,
-      "preco": null
+      "preco": null,
+      "atributos": {
+        "tamanho": "42",
+        "cor": "Cinza Verde"
+      }
     },
     {
       "id": "fcedf9b9-3178-48b3-8b4b-f193845fc5b3",
-      "tamanho": "44",
-      "cor": "Cinza Verde",
       "estoque": 1,
-      "preco": null
+      "preco": null,
+      "atributos": {
+        "tamanho": "44",
+        "cor": "Cinza Verde"
+      }
     }
   ],
   "criadoEm": "2026-07-17T20:23:29.466Z",
