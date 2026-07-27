@@ -1,35 +1,7 @@
 {
   "schemaVersion": 1,
   "updatedAt": "2026-07-27T11:46:45.309Z",
-  "total": 1,
+  "total": 0,
   "sharded": false,
-  "entries": [
-    {
-      "id": "25bc1461-39f7-4ff0-ac3e-549d43824cd4",
-      "nome": "Teste",
-      "slug": "teste",
-      "referencia": "34345",
-      "status": "ativo",
-      "destaque": false,
-      "lancamento": false,
-      "preco": 199.9,
-      "precoPromocional": 174.9,
-      "categoriasIds": [
-        "7c0c1929-796d-4c26-9e84-e7d15ce992fb"
-      ],
-      "capa": null,
-      "estoqueTotal": 2,
-      "variantesCount": 1,
-      "precoExibicao": 174.9,
-      "mostrarAPartirDe": false,
-      "tamanhos": [
-        "39"
-      ],
-      "cores": [
-        "Preto"
-      ],
-      "path": "produtos/25bc1461-39f7-4ff0-ac3e-549d43824cd4.json",
-      "atualizadoEm": "2026-07-27T11:46:45.208Z"
-    }
-  ]
+  "entries": [ ]
 }
