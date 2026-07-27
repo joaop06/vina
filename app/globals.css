@@ -5,6 +5,8 @@
   - micro: 360px — empilhar CTAs extremos
 */
 :root {
+  --vn-bp-md: 768px;
+  --vn-bp-lg: 1024px;
   --vn-primary: #111111;
   --vn-secondary: #111111;
   --vn-surface: #ffffff;

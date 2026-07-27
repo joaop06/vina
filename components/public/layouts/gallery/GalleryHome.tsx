@@ -21,6 +21,8 @@ export function GalleryHome({
     destaques.length === 0 && novos.length === 0 && vitrineFallback.length > 0;
   const showWa = site.whatsapp.mostrar;
   const showContactStrip = showWa;
+  const home = site.textos.home;
+  const produtoCopy = site.textos.produto;
   const rootCategories = buildCategoryTree(categories);
 
   return (
@@ -31,19 +33,25 @@ export function GalleryHome({
         eyebrow={site.assinatura}
         title={site.nomeLoja}
         copy={site.slogan}
+        verColecao={home.verColecao}
       />
 
       {destaques.length > 0 ? (
         <section className={`container ${styles.section}`}>
           <div className={styles.sectionHead}>
-            <h2 className={styles.sectionTitle}>Destaques</h2>
+            <h2 className={styles.sectionTitle}>{home.destaquesTitulo}</h2>
             <Link className={styles.sectionLink} href="/catalogo">
-              Ver tudo
+              {home.verTudo}
             </Link>
           </div>
           <div className={`grid-products ${styles.productGrid}`}>
             {destaques.map((p) => (
-              <ProductCard key={p.id} product={p} cartEnabled={site.mostrarCarrinho} />
+              <ProductCard
+                key={p.id}
+                product={p}
+                cartEnabled={site.mostrarCarrinho}
+                copy={produtoCopy}
+              />
             ))}
           </div>
         </section>
@@ -52,23 +60,28 @@ export function GalleryHome({
       {showFallback ? (
         <section className={`container ${styles.section}`}>
           <div className={styles.sectionHead}>
-            <h2 className={styles.sectionTitle}>Nossos produtos</h2>
+            <h2 className={styles.sectionTitle}>{home.fallbackTitulo}</h2>
             <Link className={styles.sectionLink} href="/catalogo">
-              Ver tudo
+              {home.verTudo}
             </Link>
           </div>
           <div className={`grid-products ${styles.productGrid}`}>
             {vitrineFallback.map((p) => (
-              <ProductCard key={p.id} product={p} cartEnabled={site.mostrarCarrinho} />
+              <ProductCard
+                key={p.id}
+                product={p}
+                cartEnabled={site.mostrarCarrinho}
+                copy={produtoCopy}
+              />
             ))}
           </div>
         </section>
       ) : null}
 
       {rootCategories.length > 0 ? (
-        <section className={styles.categories} aria-label="Categorias">
+        <section className={styles.categories} aria-label={site.rotulos.navCategorias}>
           <div className={`container ${styles.categoriesInner}`}>
-            <h2 className={styles.categoriesTitle}>Explorar</h2>
+            <h2 className={styles.categoriesTitle}>{site.rotulos.navCategorias}</h2>
             <div className={styles.categoryList}>
               {rootCategories.map((c) => (
                 <Link
@@ -80,7 +93,7 @@ export function GalleryHome({
                 </Link>
               ))}
               <Link className={styles.categoryChipAll} href="/catalogo">
-                Toda a coleção
+                {home.verColecao}
               </Link>
             </div>
           </div>
@@ -90,14 +103,19 @@ export function GalleryHome({
       {novos.length > 0 ? (
         <section className={`container ${styles.section}`}>
           <div className={styles.sectionHead}>
-            <h2 className={styles.sectionTitle}>Lançamentos</h2>
+            <h2 className={styles.sectionTitle}>{home.lancamentosTitulo}</h2>
             <Link className={styles.sectionLink} href="/catalogo">
-              Ver tudo
+              {home.verTudo}
             </Link>
           </div>
           <div className={`grid-products ${styles.productGrid}`}>
             {novos.map((p) => (
-              <ProductCard key={p.id} product={p} cartEnabled={site.mostrarCarrinho} />
+              <ProductCard
+                key={p.id}
+                product={p}
+                cartEnabled={site.mostrarCarrinho}
+                copy={produtoCopy}
+              />
             ))}
           </div>
         </section>
@@ -107,12 +125,12 @@ export function GalleryHome({
         <section className={`container ${styles.sectionTight}`}>
           <div className={styles.waStrip}>
             <div>
-              <h2>Dúvidas?</h2>
-              <p>Fale com a loja pelo WhatsApp.</p>
+              <h2>{home.duvidasTitulo}</h2>
+              <p>{home.duvidasTexto}</p>
             </div>
             <div className="contact-actions">
               <WhatsAppButton href={wa} waSource="home_strip">
-                Chamar no WhatsApp
+                {home.whatsappChamar}
               </WhatsAppButton>
             </div>
           </div>

@@ -170,19 +170,21 @@ export function CartPageClient({ site }: { site: SiteConfig }) {
     message.length > 0 &&
     waMessageEncodedLength(message) > WA_MESSAGE_URL_WARN_LENGTH;
 
+  const carrinho = site.textos.carrinho;
+
   return (
     <div
       className={`container cart-page${cart.lines.length === 0 ? " cart-page--empty" : ""}`}
     >
       <header className="cart-page__head">
-        <h1 className="vn-section-title cart-page__title">Carrinho</h1>
+        <h1 className="vn-section-title cart-page__title">{carrinho.titulo}</h1>
         {cart.lines.length > 0 ? (
           <button
             type="button"
             className="cart-page__clear link-btn"
             onClick={() => cart.clear()}
           >
-            Esvaziar carrinho
+            {carrinho.esvaziar}
           </button>
         ) : null}
       </header>
@@ -192,18 +194,15 @@ export function CartPageClient({ site }: { site: SiteConfig }) {
           <div className="cart-page__empty-icon" aria-hidden="true">
             <CartEmptyIcon />
           </div>
-          <h2 className="cart-page__empty-title">Seu carrinho está vazio</h2>
-          <p className="cart-page__empty-lead">
-            Escolha tamanho, cor e quantidade nos produtos e monte seu pedido
-            aqui antes de enviar no WhatsApp.
-          </p>
+          <h2 className="cart-page__empty-title">{carrinho.emptyTitulo}</h2>
+          <p className="cart-page__empty-lead">{carrinho.emptyLead}</p>
           <div className="cart-page__empty-actions">
             <Link href="/catalogo" className="btn btn-primary">
               <CartIcon size={18} className="btn__icon" />
-              Ver catálogo
+              {carrinho.verCatalogo}
             </Link>
             <Link href="/" className="cart-page__empty-link">
-              Voltar à home
+              {carrinho.voltarHome}
             </Link>
           </div>
         </div>
@@ -222,8 +221,7 @@ export function CartPageClient({ site }: { site: SiteConfig }) {
 
           {messageTooLong ? (
             <p className="cart-page__warn" role="status">
-              Muitos itens — a mensagem pode ficar longa demais para o
-              WhatsApp. Considere enviar em partes ou remover alguns itens.
+              {carrinho.limiteWa}
             </p>
           ) : null}
 
@@ -234,7 +232,7 @@ export function CartPageClient({ site }: { site: SiteConfig }) {
                 href={waHref}
                 waSource="cart"
               >
-                Enviar pedido no WhatsApp
+                {carrinho.enviarWhatsapp}
               </WhatsAppButton>
             </div>
           ) : null}

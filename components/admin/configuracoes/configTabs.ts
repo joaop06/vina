@@ -4,6 +4,8 @@ export type ConfiguracoesTabId =
   | "whatsapp"
   | "vitrine"
   | "navegacao"
+  | "textos"
+  | "tema"
   | "painel";
 
 export const CONFIGURACOES_TABS: Array<{
@@ -36,6 +38,14 @@ export const CONFIGURACOES_TABS: Array<{
       label: "Navegação",
     },
     {
+      id: "textos",
+      label: "Textos",
+    },
+    {
+      id: "tema",
+      label: "Tema",
+    },
+    {
       id: "painel",
       label: "Painel",
     },
@@ -47,6 +57,8 @@ export function parseConfigTab(value: string | undefined): ConfiguracoesTabId {
     value === "contato" ||
     value === "whatsapp" ||
     value === "navegacao" ||
+    value === "textos" ||
+    value === "tema" ||
     value === "identidade" ||
     value === "painel"
   ) {

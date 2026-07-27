@@ -60,10 +60,9 @@ export function diffIndexEntryAgainstProduct(
     fields.push("categoriasIds");
   }
   if (
-    stableStringify([...entry.tamanhos].sort()) !==
-    stableStringify([...expected.tamanhos].sort())
+    stableStringify(entry.facetas) !== stableStringify(expected.facetas)
   ) {
-    fields.push("tamanhos");
+    fields.push("facetas");
   }
   if (
     stableStringify([...entry.cores].sort()) !==

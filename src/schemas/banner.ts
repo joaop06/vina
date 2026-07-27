@@ -59,6 +59,7 @@ export const bannerSchema = z.object({
   posicao: bannerPosicaoSchema,
   ordem: z.number().int(),
   ativo: z.boolean(),
+  ctaTexto: z.string().min(1).max(80).optional(),
   imagem: bannerImageSchema,
   href: z.string().max(500).optional(),
   criadoEm: isoDateSchema,
@@ -70,6 +71,7 @@ export const bannerCreateSchema = z.object({
   ativo: z.boolean().optional(),
   ordem: z.number().int().optional(),
   href: bannerHrefSchema,
+  ctaTexto: z.string().max(80).optional(),
   imagem: bannerImageInputSchema,
 });
 

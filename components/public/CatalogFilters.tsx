@@ -42,14 +42,15 @@ type CategoryLite = Pick<Category, "id" | "parentId" | "ativo">;
 
 type Props = {
   categories: CatalogCategoryOption[];
-  /** Compact facet index — do not pass N product DTOs. */
   facets: CompactCatalogFacets;
-  /** Full category list (for subtree filter counts). */
   allCategories?: CategoryLite[];
   q?: string;
   categoria?: string;
   tamanho?: string;
   cor?: string;
+  labelCategoria: string;
+  buscaPlaceholder: string;
+  dimensoes: Array<{ id: string; rotulo: string }>;
 };
 
 function buildFilterHref(values: {
@@ -240,6 +241,9 @@ export function CatalogFilters({
   categoria = "",
   tamanho = "",
   cor = "",
+  labelCategoria,
+  buscaPlaceholder,
+  dimensoes,
 }: Props) {
   const router = useRouter();
   const titleId = useId();
@@ -250,6 +254,8 @@ export function CatalogFilters({
   const [draftTamanho, setDraftTamanho] = useState(tamanho);
   const [draftCor, setDraftCor] = useState(cor);
 
+  const dim0Label = dimensoes[0]?.rotulo ?? "Tamanho";
+  const dim1Label = dimensoes[1]?.rotulo ?? "Cor";
   const tamanhos = facets.tamanhos;
   const cores = facets.cores;
 
@@ -419,7 +425,7 @@ export function CatalogFilters({
   const panelBody = (
     <>
       <div className="catalog-filters__section">
-        <h3 className="catalog-filters__section-title">Categoria</h3>
+        <h3 className="catalog-filters__section-title">{labelCategoria}</h3>
         <CategoryFilterTree
           categories={categories}
           selectedSlug={draftCategoria}
@@ -430,7 +436,7 @@ export function CatalogFilters({
 
       {tamanhos.length > 0 ? (
         <div className="catalog-filters__section">
-          <h3 className="catalog-filters__section-title">Tamanho</h3>
+          <h3 className="catalog-filters__section-title">{dim0Label}</h3>
           <div className="catalog-filters__chips catalog-filters__chips--sizes">
             {tamanhos.map((t) => {
               const active = draftTamanho === t;
@@ -452,7 +458,7 @@ export function CatalogFilters({
 
       {cores.length > 0 ? (
         <div className="catalog-filters__section">
-          <h3 className="catalog-filters__section-title">Cor</h3>
+          <h3 className="catalog-filters__section-title">{dim1Label}</h3>
           <div className="catalog-filters__chips">
             {cores.map((c) => {
               const active = draftCor === c;
@@ -534,14 +540,14 @@ export function CatalogFilters({
           role="search"
         >
           <label className="visually-hidden" htmlFor="catalog-q">
-            Buscar produtos
+            {buscaPlaceholder}
           </label>
           <input
             id="catalog-q"
             className="catalog-filters__search-input"
             type="search"
             name="q"
-            placeholder="Buscar produtos…"
+            placeholder={buscaPlaceholder}
             value={draftQ}
             onChange={(e) => setDraftQ(e.target.value)}
             enterKeyHint="search"

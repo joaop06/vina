@@ -4,19 +4,28 @@ import {
   CATALOG_STATIC_PAGE_LIMIT,
   parseCatalogPageParam,
 } from "@/src/lib/cache/storefront-isr";
-import { getCachedProductIndex } from "@/src/lib/cache/storefront-reads";
+import {
+  getCachedProductIndex,
+  getCachedSiteConfig,
+} from "@/src/lib/cache/storefront-reads";
 import { filterProductIndexEntries } from "@/src/lib/indices/product-index-core";
+import { seoTitleFromTemplate } from "@/src/lib/front/store-copy";
 import { PAGINATION, totalPages } from "@/src/lib/pagination";
 
 type Props = {
   params: Promise<{ page: string }>;
 };
 
-export const metadata = { title: "Catálogo" };
-
 /** Paginated unfiltered browse — ISR + CDN. */
 export const revalidate = 120; // keep in sync with STOREFRONT_REVALIDATE_SECONDS
 export const dynamicParams = true;
+
+export async function generateMetadata() {
+  const site = await getCachedSiteConfig();
+  return {
+    title: seoTitleFromTemplate(site, site.textos.paginas.catalogoTitulo),
+  };
+}
 
 export async function generateStaticParams() {
   const index = await getCachedProductIndex();

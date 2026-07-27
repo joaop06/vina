@@ -12,7 +12,7 @@ import {
   type OrderItem,
   type OrderUpdate,
 } from "@/src/schemas/order";
-import { productSchema, type Product } from "@/src/schemas/product";
+import { productSchema, variantAttr, type Product } from "@/src/schemas/product";
 import { variantSellPrice } from "@/src/lib/front/pricing";
 import { getClient } from "@/src/services/clients.service";
 import { getProductById } from "@/src/services/products.service";
@@ -151,8 +151,8 @@ async function buildOrderItems(
       produtoId: product.id,
       varianteId: variant.id,
       nomeProduto: product.nome,
-      tamanho: variant.tamanho,
-      cor: variant.cor,
+      tamanho: variantAttr(variant, "tamanho") ?? "",
+      cor: variantAttr(variant, "cor") ?? "",
       ...(variant.sku ? { sku: variant.sku } : {}),
       ...(normalizeProductReferencia(product.referencia)
         ? { referenciaProduto: normalizeProductReferencia(product.referencia) }
@@ -221,7 +221,7 @@ async function applyStockDeltas(
       if (next < 0) {
         throw new AppError(
           "INSUFFICIENT_STOCK",
-          `Estoque insuficiente: ${product.nome} (${variant.tamanho}/${variant.cor}). Disponível: ${variant.estoque}.`,
+          `Estoque insuficiente: ${product.nome} (${Object.values(variant.atributos).join("/")}). Disponível: ${variant.estoque}.`,
           400,
         );
       }

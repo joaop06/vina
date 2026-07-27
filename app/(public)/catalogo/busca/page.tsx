@@ -1,4 +1,6 @@
 import { CatalogPageView } from "@/components/public/CatalogPageView";
+import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
+import { seoTitleFromTemplate } from "@/src/lib/front/store-copy";
 import {
   firstSearchParam,
   normalizePagination,
@@ -9,14 +11,19 @@ type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export const metadata = { title: "Catálogo" };
-
 /**
  * Filtered / search catalog. Uses searchParams → dynamic render in Next 15,
  * but loaders hit the product index (cheap miss). Prefer `/catalogo` +
  * `/catalogo/page/N` for unfiltered browse (ISR).
  */
 export const revalidate = 120; // keep in sync with STOREFRONT_REVALIDATE_SECONDS
+
+export async function generateMetadata() {
+  const site = await getCachedSiteConfig();
+  return {
+    title: seoTitleFromTemplate(site, site.textos.paginas.catalogoTitulo),
+  };
+}
 
 export default async function CatalogoBuscaPage({ searchParams }: Props) {
   const sp = await searchParams;

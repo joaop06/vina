@@ -32,7 +32,8 @@ import {
 } from "@/src/lib/categories-tree";
 import { formatBrl, maskBrlInput, parseBrlInput } from "@/src/lib/front/format";
 import { categorySchema, type Category } from "@/src/schemas/category";
-import type { Product } from "@/src/schemas/product";
+import { variantAttr, type Product } from "@/src/schemas/product";
+import type { SiteDimensao } from "@/src/schemas/site-personalization";
 
 function sortCategories(list: Category[]) {
   return [...list].sort(
@@ -58,20 +59,23 @@ const PRODUCT_TABS: Array<{ id: ProductTabId; label: string }> = [
 type Props = {
   product?: Product;
   categories: Category[];
+  dimensoes?: SiteDimensao[];
 };
 
 function normalizeVariant(v: ProductVariantDraft): ProductVariantDraft | null {
-  const tamanho = v.tamanho.trim();
-  const cor = v.cor.trim();
-  if (!tamanho || !cor) return null;
+  const atributos: Record<string, string> = {};
+  for (const [key, val] of Object.entries(v.atributos ?? {})) {
+    const t = val.trim();
+    if (t) atributos[key] = t;
+  }
+  if (Object.keys(atributos).length === 0) return null;
   const preco =
     v.preco != null && Number.isFinite(v.preco) && v.preco >= 0
       ? v.preco
       : null;
   return {
     id: v.id,
-    tamanho,
-    cor,
+    atributos,
     estoque: Math.max(0, Math.floor(Number(v.estoque) || 0)),
     preco,
     ...(v.sku ? { sku: v.sku } : {}),
@@ -119,8 +123,8 @@ function findStockDecreases(
     if (v.estoque < prev.estoque) {
       out.push({
         varianteId: v.id,
-        tamanho: v.tamanho,
-        cor: v.cor,
+        tamanho: variantAttr(v, "tamanho") ?? "",
+        cor: variantAttr(v, "cor") ?? "",
         from: prev.estoque,
         to: v.estoque,
         qty: prev.estoque - v.estoque,
@@ -130,7 +134,7 @@ function findStockDecreases(
   return out;
 }
 
-export function ProductForm({ product, categories }: Props) {
+export function ProductForm({ product, categories, dimensoes }: Props) {
   const router = useRouter();
   const { runMutation } = useAdminBusy();
   const { choose } = useConfirm();
@@ -746,6 +750,7 @@ export function ProductForm({ product, categories }: Props) {
                 <ProductVariantsEditor
                   variantes={variantes}
                   onChange={setVariantes}
+                  dimensoes={dimensoes}
                   baselineVariantes={baseline?.variantes}
                   disabled={disabled}
                 />

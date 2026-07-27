@@ -22,9 +22,14 @@ import { WhatsAppButton } from "@/components/public/WhatsAppButton";
 import { CartIcon } from "@/components/public/icons/StorefrontIcons";
 import { useCartOptional } from "@/components/public/cart/CartProvider";
 import { coverImage } from "@/src/lib/front/media";
+import { selecioneVarianteFromDims } from "@/src/lib/front/store-copy";
+import type { SiteDimensao, SiteTextosExtended } from "@/src/schemas/site-personalization";
 
 type Props = {
   product: Product;
+  productCopy: SiteTextosExtended["produto"];
+  dimensoes: SiteDimensao[];
+  whatsappCurto: string;
   waPhone: string;
   waProductParts: ProductWaTemplateParts;
   waIncluirReferencia?: boolean;
@@ -56,7 +61,7 @@ function resolveInitialVariant(
   if (!variant) {
     return { tamanho: null, cor: null, variant: null };
   }
-  return { tamanho: variant.tamanho, cor: variant.cor, variant };
+  return { tamanho, cor, variant };
 }
 
 function resolveInitialQuantidade(
@@ -172,6 +177,9 @@ function productDetailQueryMatchesUrl(
 
 export function ProductDetailClient({
   product,
+  productCopy,
+  dimensoes,
+  whatsappCurto,
   waPhone,
   waProductParts,
   waIncluirReferencia = false,
@@ -187,6 +195,10 @@ export function ProductDetailClient({
   const cart = useCartOptional();
   const cartActive = Boolean(mostrarCarrinho && cart?.enabled);
   const hasVariants = product.variantes.length > 0;
+  const selecioneVariante = selecioneVarianteFromDims(
+    dimensoes,
+    productCopy.selecioneVariante,
+  );
   const initial = resolveInitialVariant(product, initialTamanho, initialCor);
   const [tamanho, setTamanho] = useState<string | null>(initial.tamanho);
   const [cor, setCor] = useState<string | null>(initial.cor);
@@ -287,18 +299,18 @@ export function ProductDetailClient({
     waHref = waLink(waPhone, msg);
   }
 
-  let ctaLabel = "Tenho interesse";
+  let ctaLabel = productCopy.ctaInteresse;
   if (hasVariants && !selectionComplete) {
-    ctaLabel = "Selecione tamanho e cor";
+    ctaLabel = selecioneVariante;
   } else if (hasVariants && selectionComplete && !inStock) {
-    ctaLabel = "Esgotado";
+    ctaLabel = productCopy.badgeEsgotado;
   }
 
   const dualCta = cartActive && showWhatsApp;
 
-  let waLabel = "Tenho interesse";
+  let waLabel = productCopy.ctaInteresse;
   if (dualCta) {
-    waLabel = selectionReady ? "Tenho interesse" : "WhatsApp";
+    waLabel = selectionReady ? productCopy.ctaInteresse : whatsappCurto;
   } else {
     waLabel = ctaLabel;
   }
@@ -306,10 +318,9 @@ export function ProductDetailClient({
   let waAriaLabel: string | undefined;
   if (!selectionReady) {
     if (hasVariants && !selectionComplete) {
-      waAriaLabel =
-        "Selecione tamanho e cor para continuar no WhatsApp";
+      waAriaLabel = productCopy.waSelecioneVariante;
     } else if (hasVariants && selectionComplete && !inStock) {
-      waAriaLabel = "Produto esgotado";
+      waAriaLabel = productCopy.waEsgotado;
     }
   }
 
@@ -336,11 +347,11 @@ export function ProductDetailClient({
     });
   }
 
-  let cartCtaLabel = "Adicionar ao carrinho";
+  let cartCtaLabel = productCopy.ctaCarrinho;
   if (hasVariants && !selectionComplete) {
-    cartCtaLabel = "Selecione tamanho e cor";
+    cartCtaLabel = selecioneVariante;
   } else if (hasVariants && selectionComplete && !inStock) {
-    cartCtaLabel = "Esgotado";
+    cartCtaLabel = productCopy.badgeEsgotado;
   }
 
   function handleVariantChange(next: {
@@ -374,9 +385,11 @@ export function ProductDetailClient({
         <div className="product-detail__info">
           {product.lancamento || product.status === "esgotado" ? (
             <div className="product-detail__badges">
-              {product.lancamento ? <span className="badge">Novo</span> : null}
+              {product.lancamento ? (
+                <span className="badge">{productCopy.badgeNovo}</span>
+              ) : null}
               {product.status === "esgotado" ? (
-                <span className="badge badge--muted">Esgotado</span>
+                <span className="badge badge--muted">{productCopy.badgeEsgotado}</span>
               ) : null}
             </div>
           ) : null}
@@ -405,6 +418,9 @@ export function ProductDetailClient({
               tamanho={tamanho}
               cor={cor}
               quantidade={quantidade}
+              dimensoes={dimensoes}
+              copy={productCopy}
+              selecioneVariante={selecioneVariante}
               onChange={handleVariantChange}
               onQuantidadeChange={handleQuantidadeChange}
             />

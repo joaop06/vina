@@ -7,10 +7,17 @@ export type RevalidateStorefrontOpts = {
   productSlugs?: string[];
 };
 
+function isOutsideNextRevalidateContext(e: unknown): boolean {
+  const msg = e instanceof Error ? e.message : String(e);
+  return msg.includes("static generation store missing");
+}
+
 /**
  * Invalidate tagged Data Cache and the public Full Route Cache (ISR).
  * Call after a successful commit/write so admin + vitrine see fresh data
  * without waiting for a Vercel redeploy.
+ *
+ * No-op outside a Next.js request (CLI, `data:migrate`, scripts).
  *
  * Path strategy:
  * - `("/", "layout")` — public shell (header/footer) under the root URL tree
@@ -39,51 +46,56 @@ export function revalidateStorefront(
   }
 
   const uniqueTags = [...new Set(tags)];
-  for (const tag of uniqueTags) {
-    revalidateTag(tag);
-  }
+  try {
+    for (const tag of uniqueTags) {
+      revalidateTag(tag);
+    }
 
-  // Public storefront shell + home.
-  revalidatePath("/", "layout");
-  revalidatePath("/");
-
-  // Catalog ISR tree (unfiltered pages + busca).
-  revalidatePath("/catalogo", "layout");
-  revalidatePath("/catalogo");
-  revalidatePath("/catalogo/busca");
-
-  revalidatePath("/sobre");
-  revalidatePath("/carrinho");
-  revalidatePath("/icon");
-  revalidatePath("/apple-icon");
-
-  const touchesProducts = uniqueTags.includes(CACHE_TAGS.products);
-  const touchesSite = uniqueTags.includes(CACHE_TAGS.siteConfig);
-  const touchesCategories = uniqueTags.includes(CACHE_TAGS.categories);
-  const touchesBanners = uniqueTags.includes(CACHE_TAGS.banners);
-
-  if (touchesProducts || touchesSite || touchesCategories) {
-    revalidatePath("/sitemap.xml");
-  }
-
-  if (touchesCategories) {
-    revalidatePath("/admin/categorias");
-    revalidatePath("/admin/produtos", "layout");
-  }
-
-  if (touchesBanners || touchesSite) {
-    // Home hero / branding already covered by `/`; keep explicit for clarity.
+    // Public storefront shell + home.
+    revalidatePath("/", "layout");
     revalidatePath("/");
-  }
 
-  const slugs = [...new Set((opts.productSlugs ?? []).filter(Boolean))];
-  for (const slug of slugs) {
-    revalidatePath(`/produto/${slug}`);
-  }
+    // Catalog ISR tree (unfiltered pages + busca).
+    revalidatePath("/catalogo", "layout");
+    revalidatePath("/catalogo");
+    revalidatePath("/catalogo/busca");
 
-  // Broad product mutations (or index rebuild) — also bust the PDP layout tree
-  // so pages without an explicit slug still refresh on next request.
-  if (touchesProducts && slugs.length === 0) {
-    revalidatePath("/produto", "layout");
+    revalidatePath("/sobre");
+    revalidatePath("/carrinho");
+    revalidatePath("/icon");
+    revalidatePath("/apple-icon");
+
+    const touchesProducts = uniqueTags.includes(CACHE_TAGS.products);
+    const touchesSite = uniqueTags.includes(CACHE_TAGS.siteConfig);
+    const touchesCategories = uniqueTags.includes(CACHE_TAGS.categories);
+    const touchesBanners = uniqueTags.includes(CACHE_TAGS.banners);
+
+    if (touchesProducts || touchesSite || touchesCategories) {
+      revalidatePath("/sitemap.xml");
+    }
+
+    if (touchesCategories) {
+      revalidatePath("/admin/categorias");
+      revalidatePath("/admin/produtos", "layout");
+    }
+
+    if (touchesBanners || touchesSite) {
+      // Home hero / branding already covered by `/`; keep explicit for clarity.
+      revalidatePath("/");
+    }
+
+    const slugs = [...new Set((opts.productSlugs ?? []).filter(Boolean))];
+    for (const slug of slugs) {
+      revalidatePath(`/produto/${slug}`);
+    }
+
+    // Broad product mutations (or index rebuild) — also bust the PDP layout tree
+    // so pages without an explicit slug still refresh on next request.
+    if (touchesProducts && slugs.length === 0) {
+      revalidatePath("/produto", "layout");
+    }
+  } catch (e) {
+    if (isOutsideNextRevalidateContext(e)) return;
+    throw e;
   }
 }

@@ -22,6 +22,7 @@ type Props = {
   eyebrow: string;
   title: string;
   copy: string;
+  verColecao: string;
   catalogHref?: string;
 };
 
@@ -31,6 +32,7 @@ export function GalleryCarousel({
   eyebrow,
   title,
   copy,
+  verColecao,
   catalogHref = "/catalogo",
 }: Props) {
   const [index, setIndex] = useState(0);
@@ -78,7 +80,7 @@ export function GalleryCarousel({
           <h1 className={styles.carouselTitle}>{title}</h1>
           <p className={styles.carouselText}>{copy}</p>
           <Link className={`btn ${styles.carouselCta}`} href={catalogHref}>
-            Ver coleção
+            {verColecao}
           </Link>
         </div>
       </section>
@@ -146,7 +148,7 @@ export function GalleryCarousel({
         <h1 className={styles.carouselTitle}>{title}</h1>
         <p className={styles.carouselText}>{copy}</p>
         <Link className={`btn ${styles.carouselCta}`} href={catalogHref}>
-          Ver coleção
+          {verColecao}
         </Link>
       </div>
 

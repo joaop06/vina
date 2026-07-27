@@ -22,6 +22,7 @@ export function ClassicHeader({ site, categories }: ChromeProps) {
     drawerSubtitle,
     showDrawerSearch,
   } = resolveHeaderNav(site, categories);
+  const buscaPlaceholder = site.textos.catalogo.buscaPlaceholder;
   const showTopbar = headerTopbarVisible(site);
 
   return (
@@ -74,7 +75,9 @@ export function ClassicHeader({ site, categories }: ChromeProps) {
             title={drawerTitle}
             subtitle={drawerSubtitle}
             beforeNav={
-              showDrawerSearch ? <HeaderSearchForm /> : undefined
+              showDrawerSearch ? (
+                <HeaderSearchForm placeholder={buscaPlaceholder} />
+              ) : undefined
             }
             footer={mobileFooter}
           >

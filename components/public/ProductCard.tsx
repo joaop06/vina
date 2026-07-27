@@ -8,14 +8,18 @@ import {
   listItemSell,
   type ProductListItem,
 } from "@/src/schemas/product-list";
+import type { SiteTextosExtended } from "@/src/schemas/site-personalization";
+import { DEFAULT_SITE_TEXTOS_PRODUTO } from "@/src/config/store-copy-defaults";
 import { CartCatalogAction } from "@/components/public/cart/CartCatalogAction";
 
 export function ProductCard({
   product,
   cartEnabled,
+  copy = DEFAULT_SITE_TEXTOS_PRODUTO,
 }: {
   product: ProductListItem;
   cartEnabled?: boolean;
+  copy?: SiteTextosExtended["produto"];
 }) {
   const img = mediaUrl(product.capa?.path);
   const sell = listItemSell(product);
@@ -39,7 +43,7 @@ export function ProductCard({
           )}
           {product.lancamento ? (
             <span className="badge card-product__badge card-product__badge--new">
-              Novo
+              {copy.badgeNovo}
             </span>
           ) : null}
           {pct != null ? (
@@ -49,7 +53,7 @@ export function ProductCard({
           ) : null}
           {product.status === "esgotado" ? (
             <span className="badge badge-dark card-product__badge card-product__badge--sold">
-              Esgotado
+              {copy.badgeEsgotado}
             </span>
           ) : null}
         </Link>
@@ -62,7 +66,7 @@ export function ProductCard({
         <div className="price card-product__price">
           {product.mostrarAPartirDe ? (
             <>
-              <span className="card-product__price-from">A partir de </span>
+              <span className="card-product__price-from">{copy.aPartirDe}</span>
               {formatBrl(sell)}
             </>
           ) : compareAt != null ? (
