@@ -1,6 +1,6 @@
 {
-  "versao": 1,
-  "nomeLoja": "Minha loja",
+  "versao": 2,
+  "nomeLoja": "Discord Zika",
   "mostrarNomeComLogo": false,
   "mostrarCarrinho": true,
   "assinatura": "Catálogo online",
@@ -263,5 +263,5 @@
   "painel": {
     "metaReceitaMensal": null
   },
-  "atualizadoEm": "2026-01-01T00:00:00.000Z"
+  "atualizadoEm": "2026-07-27T17:33:19.337Z"
 }
