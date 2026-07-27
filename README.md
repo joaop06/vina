@@ -123,6 +123,7 @@ Há scripts opcionais de medição de leitura (`baseline:read`, `phase6:verify`)
 
 Passo a passo (fork, Actions, Vercel, sync com o base público): **[docs/configurar-fork-loja.md](docs/configurar-fork-loja.md)**.
 
+
 ---
 
 **Vina** — vitrine na web, conversa no WhatsApp.
