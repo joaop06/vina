@@ -18,16 +18,41 @@ import {
 } from "@/src/schemas/site-config";
 import { DEFAULT_NAVEGACAO, siteNavegacaoSchema } from "@/src/schemas/navigation";
 import {
+  extractTabSlice,
+  parseTabFragment,
+  pickSiteConfigSource,
+  SITE_CONFIG_META_PATH,
+  SITE_CONFIG_TAB_IDS,
+  SITE_CONFIG_TAB_PATHS,
+  siteConfigMetaSchema,
+  siteIdentidadeFragmentSchema,
+  siteIdentidadeUpdateSchema,
+  splitSiteConfig,
+  type SiteConfigFragments,
+  type SiteConfigMeta,
+  type SiteConfigTabApiResponse,
+  type SiteConfigTabId,
+} from "@/src/schemas/site-config-tabs";
+import {
   prepareImageBinary,
   type PendingBinary,
 } from "@/src/services/upload.service";
 import type { z } from "zod";
 
-const PATH = "configuracoes/site.json";
+/** Legacy monolith path — migration removes this. */
+export const LEGACY_SITE_CONFIG_PATH = "configuracoes/site.json";
 
 export { DEFAULT_SITE_CONFIG };
 
 type LogoInput = z.infer<typeof siteLogoInputSchema>;
+
+export type SiteBranding = {
+  nomeLoja: string;
+  logo: SiteLogo | null;
+};
+
+export type SiteConfigTabResponse<T extends SiteConfigTabId = SiteConfigTabId> =
+  SiteConfigTabApiResponse<T>;
 
 async function resolveLogo(
   logo: LogoInput,
@@ -81,16 +106,174 @@ function applyWhatsappTemplateMigrations(config: SiteConfig): SiteConfig {
   return parsed.data;
 }
 
-export const getSiteConfig = cache(async (): Promise<SiteConfig> => {
-  const raw = await readJson<unknown>(PATH);
-  if (!raw) return DEFAULT_SITE_CONFIG;
-  const parsed = siteConfigSchema.safeParse(raw);
+async function readMeta(): Promise<SiteConfigMeta | null> {
+  const raw = await readJson<unknown>(SITE_CONFIG_META_PATH);
+  if (!raw) return null;
+  const parsed = siteConfigMetaSchema.safeParse(raw);
   if (!parsed.success) {
-    console.warn("[site-config] invalid, using defaults", parsed.error.flatten());
-    return DEFAULT_SITE_CONFIG;
+    console.warn("[site-config] invalid meta.json", parsed.error.flatten());
+    return null;
+  }
+  return parsed.data;
+}
+
+async function readAllFragments(): Promise<SiteConfigFragments | null> {
+  const meta = await readMeta();
+  if (!meta) return null;
+
+  const entries = await Promise.all(
+    SITE_CONFIG_TAB_IDS.map(async (tab) => {
+      const raw = await readJson<unknown>(SITE_CONFIG_TAB_PATHS[tab]);
+      if (raw == null) return null;
+      try {
+        return [tab, parseTabFragment(tab, raw)] as const;
+      } catch (e) {
+        console.warn(`[site-config] invalid ${SITE_CONFIG_TAB_PATHS[tab]}`, e);
+        return null;
+      }
+    }),
+  );
+
+  if (entries.some((e) => e == null)) return null;
+
+  const fragments = { meta } as SiteConfigFragments;
+  for (const entry of entries) {
+    if (!entry) continue;
+    const [tab, data] = entry;
+    fragments[tab] = data as never;
+  }
+  return fragments;
+}
+
+function fragmentJsonWrites(fragments: SiteConfigFragments) {
+  return [
+    { path: SITE_CONFIG_META_PATH, data: fragments.meta },
+    ...SITE_CONFIG_TAB_IDS.map((tab) => ({
+      path: SITE_CONFIG_TAB_PATHS[tab],
+      data: fragments[tab],
+    })),
+  ];
+}
+
+async function readLegacySiteConfig(): Promise<SiteConfig | null> {
+  const legacy = await readJson<unknown>(LEGACY_SITE_CONFIG_PATH);
+  if (!legacy) return null;
+  const parsed = siteConfigSchema.safeParse(legacy);
+  if (!parsed.success) {
+    console.warn(
+      "[site-config] invalid legacy site.json, ignoring",
+      parsed.error.flatten(),
+    );
+    return null;
   }
   return applyWhatsappTemplateMigrations(parsed.data);
+}
+
+export const getSiteConfig = cache(async (): Promise<SiteConfig> => {
+  const [legacy, fragments] = await Promise.all([
+    readLegacySiteConfig(),
+    readAllFragments(),
+  ]);
+  if (legacy && fragments) {
+    console.warn(
+      "[site-config] site.json and fragments both present; preferring legacy until migration splits",
+    );
+  }
+  return pickSiteConfigSource({ legacy, fragments });
 });
+
+export const getSiteBranding = cache(async (): Promise<SiteBranding> => {
+  const legacy = await readLegacySiteConfig();
+  if (legacy) {
+    return {
+      nomeLoja: legacy.nomeLoja,
+      logo: legacy.logo ?? null,
+    };
+  }
+
+  const raw = await readJson<unknown>(SITE_CONFIG_TAB_PATHS.identidade);
+  if (raw) {
+    const parsed = siteIdentidadeFragmentSchema.safeParse(raw);
+    if (parsed.success) {
+      return {
+        nomeLoja: parsed.data.nomeLoja,
+        logo: parsed.data.logo ?? null,
+      };
+    }
+  }
+  const full = await getSiteConfig();
+  return {
+    nomeLoja: full.nomeLoja,
+    logo: full.logo ?? null,
+  };
+});
+
+export async function getSiteConfigTab<T extends SiteConfigTabId>(
+  tab: T,
+): Promise<SiteConfigTabResponse<T>> {
+  // Same preference as getSiteConfig: legacy wins while coexisting with seed fragments.
+  const legacy = await readLegacySiteConfig();
+  if (legacy) {
+    return {
+      tab,
+      versao: legacy.versao,
+      atualizadoEm: legacy.atualizadoEm,
+      data: extractTabSlice(legacy, tab),
+    };
+  }
+
+  const meta = await readMeta();
+  const raw = await readJson<unknown>(SITE_CONFIG_TAB_PATHS[tab]);
+
+  if (meta && raw != null) {
+    try {
+      const data = parseTabFragment(tab, raw);
+      return {
+        tab,
+        versao: meta.versao,
+        atualizadoEm: meta.atualizadoEm,
+        data,
+      };
+    } catch (e) {
+      console.warn(`[site-config] invalid tab ${tab}`, e);
+    }
+  }
+
+  const full = await getSiteConfig();
+  return {
+    tab,
+    versao: full.versao,
+    atualizadoEm: full.atualizadoEm,
+    data: extractTabSlice(full, tab),
+  };
+}
+
+function normalizePhoneFields(config: SiteConfig): void {
+  config.whatsapp.telefone = normalizeWaDigits(config.whatsapp.telefone);
+  config.telefones.fixo = normalizeWaDigits(config.telefones.fixo);
+  config.telefones.celular = normalizeWaDigits(config.telefones.celular);
+}
+
+async function commitSiteFragments(
+  fragments: SiteConfigFragments,
+  binaryWrites: { path: string; bytes: Buffer }[],
+  deletes: string[],
+  message: string,
+): Promise<void> {
+  await commitFiles(
+    buildMutationFiles({
+      binaryWrites,
+      jsonWrites: fragmentJsonWrites(fragments),
+      deletes,
+    }),
+    message,
+  );
+  revalidateStorefront(
+    CACHE_TAGS.siteConfig,
+    CACHE_TAGS.media,
+    CACHE_TAGS.dashboard,
+  );
+}
 
 export async function updateSiteConfig(
   input: z.infer<typeof siteConfigUpdateSchema>,
@@ -139,23 +322,197 @@ export async function updateSiteConfig(
     navegacao: rest.navegacao
       ? siteNavegacaoSchema.parse(rest.navegacao)
       : (current.navegacao ?? DEFAULT_NAVEGACAO),
-    painel: { ...(current.painel ?? { metaReceitaMensal: null }), ...(rest.painel ?? {}) },
+    painel: {
+      ...(current.painel ?? { metaReceitaMensal: null }),
+      ...(rest.painel ?? {}),
+    },
     logo,
     versao: current.versao + 1,
     atualizadoEm: new Date().toISOString(),
   };
-  updated.whatsapp.telefone = normalizeWaDigits(updated.whatsapp.telefone);
-  updated.telefones.fixo = normalizeWaDigits(updated.telefones.fixo);
-  updated.telefones.celular = normalizeWaDigits(updated.telefones.celular);
+  normalizePhoneFields(updated);
   const validated = siteConfigSchema.parse(updated);
+  const fragments = splitSiteConfig(validated);
+
+  await commitSiteFragments(
+    fragments,
+    binaryWrites,
+    deletes,
+    "chore(data): update site config",
+  );
+  return validated;
+}
+
+type TabPatchInput = {
+  tab: SiteConfigTabId;
+  data: unknown;
+};
+
+/**
+ * Atomically update one or more tab fragments in a single commit.
+ * `versao` is checked once against meta and bumped once.
+ */
+export async function updateSiteConfigTabs(
+  versao: number,
+  patches: TabPatchInput[],
+  pendingBinaries: Map<string, PendingBinary> = new Map(),
+): Promise<SiteConfig> {
+  if (patches.length === 0) {
+    throw new AppError("VALIDATION_ERROR", "Nenhuma aba para salvar", 400);
+  }
+
+  const current = await getSiteConfig();
+  if (current.versao !== versao) {
+    throw new AppError(
+      "VERSION_CONFLICT",
+      "Versão desatualizada. Recarregue e tente novamente.",
+      409,
+    );
+  }
+
+  let next: SiteConfig = { ...current };
+  let binaryWrites: { path: string; bytes: Buffer }[] = [];
+  const deletes: string[] = [];
+  const touched = new Set<SiteConfigTabId>();
+
+  for (const patch of patches) {
+    touched.add(patch.tab);
+
+    switch (patch.tab) {
+      case "identidade": {
+        const update = siteIdentidadeUpdateSchema.parse(patch.data);
+        const { logo: logoInput, ...base } = update;
+        let logo = next.logo ?? null;
+        if (logoInput === null) {
+          if (next.logo?.path) deletes.push(next.logo.path);
+          logo = null;
+        } else if (logoInput) {
+          const resolved = await resolveLogo(
+            logoInput,
+            pendingBinaries,
+            base.nomeLoja.trim() || next.nomeLoja,
+          );
+          logo = resolved.logo;
+          binaryWrites = [...binaryWrites, ...resolved.binaryWrites];
+          if (next.logo?.path && next.logo.path !== logo.path) {
+            deletes.push(next.logo.path);
+          }
+        }
+        next = {
+          ...next,
+          nomeLoja: base.nomeLoja,
+          mostrarNomeComLogo: base.mostrarNomeComLogo,
+          mostrarCarrinho: base.mostrarCarrinho,
+          assinatura: base.assinatura,
+          slogan: base.slogan,
+          cores: base.cores,
+          logo,
+        };
+        break;
+      }
+      case "whatsapp": {
+        const s = parseTabFragment("whatsapp", patch.data);
+        next = {
+          ...next,
+          whatsapp: s.whatsapp,
+          comportamento: s.comportamento,
+        };
+        break;
+      }
+      case "contato": {
+        const s = parseTabFragment("contato", patch.data);
+        next = {
+          ...next,
+          instagram: s.instagram,
+          endereco: syncEnderecoTexto(s.endereco),
+          telefones: s.telefones,
+          horarios: s.horarios,
+          textos: {
+            ...next.textos,
+            sobre: s.textos.sobre,
+            trocas: s.textos.trocas,
+          },
+        };
+        break;
+      }
+      case "vitrine": {
+        const s = parseTabFragment("vitrine", patch.data);
+        next = {
+          ...next,
+          layout: s.layout,
+          vitrine: s.vitrine,
+        };
+        break;
+      }
+      case "navegacao": {
+        const s = parseTabFragment("navegacao", patch.data);
+        next = {
+          ...next,
+          navegacao: siteNavegacaoSchema.parse(s.navegacao),
+        };
+        break;
+      }
+      case "textos": {
+        const s = parseTabFragment("textos", patch.data);
+        next = {
+          ...next,
+          textos: {
+            ...next.textos,
+            ...s.textos,
+          },
+          rotulos: s.rotulos,
+        };
+        break;
+      }
+      case "tema": {
+        const s = parseTabFragment("tema", patch.data);
+        next = {
+          ...next,
+          tema: s.tema,
+          seo: s.seo,
+        };
+        break;
+      }
+      case "painel": {
+        const s = parseTabFragment("painel", patch.data);
+        next = {
+          ...next,
+          painel: s.painel,
+        };
+        break;
+      }
+      default: {
+        const _exhaustive: never = patch.tab;
+        void _exhaustive;
+      }
+    }
+  }
+
+  next = {
+    ...next,
+    versao: current.versao + 1,
+    atualizadoEm: new Date().toISOString(),
+  };
+  normalizePhoneFields(next);
+  const validated = siteConfigSchema.parse(next);
+  const allFragments = splitSiteConfig(validated);
+
+  // Only rewrite meta + touched tabs (+ identidade if logo side-effects — already in touched).
+  const jsonWrites = [
+    { path: SITE_CONFIG_META_PATH, data: allFragments.meta },
+    ...[...touched].map((tab) => ({
+      path: SITE_CONFIG_TAB_PATHS[tab],
+      data: allFragments[tab],
+    })),
+  ];
 
   await commitFiles(
     buildMutationFiles({
       binaryWrites,
-      jsonWrites: [{ path: PATH, data: validated }],
+      jsonWrites,
       deletes,
     }),
-    "chore(data): update site config",
+    `chore(data): update site config tabs (${[...touched].join(",")})`,
   );
   revalidateStorefront(
     CACHE_TAGS.siteConfig,
@@ -163,4 +520,13 @@ export async function updateSiteConfig(
     CACHE_TAGS.dashboard,
   );
   return validated;
+}
+
+export async function updateSiteConfigTab(
+  tab: SiteConfigTabId,
+  versao: number,
+  data: unknown,
+  pendingBinaries: Map<string, PendingBinary> = new Map(),
+): Promise<SiteConfig> {
+  return updateSiteConfigTabs(versao, [{ tab, data }], pendingBinaries);
 }

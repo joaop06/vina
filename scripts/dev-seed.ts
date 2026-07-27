@@ -594,12 +594,14 @@ function generateDailyAnalytics(
 }
 
 async function updateSiteMeta(orders: Order[]) {
-  const sitePath = path.join(DATA_DEV, "configuracoes/site.json");
-  const raw = await fs.readFile(sitePath, "utf8");
-  const site = JSON.parse(raw) as {
+  const metaPath = path.join(DATA_DEV, "configuracoes/meta.json");
+  const painelPath = path.join(DATA_DEV, "configuracoes/painel.json");
+  const metaRaw = JSON.parse(await fs.readFile(metaPath, "utf8")) as {
     versao: number;
-    painel?: { metaReceitaMensal: number | null };
     atualizadoEm: string;
+  };
+  const painelRaw = JSON.parse(await fs.readFile(painelPath, "utf8")) as {
+    painel?: { metaReceitaMensal: number | null };
   };
   const today = dateInSaoPaulo();
   const monthStart = startOfMonthDateOnly(today);
@@ -611,10 +613,11 @@ async function updateSiteMeta(orders: Order[]) {
   );
   const receitaMes = monthOrders.reduce((s, o) => s + orderTotal(o), 0);
   const meta = receitaMes > 0 ? Math.round(receitaMes * 1.1) : 50000;
-  site.versao = (site.versao ?? 1) + 1;
-  site.painel = { metaReceitaMensal: meta };
-  site.atualizadoEm = new Date().toISOString();
-  await fs.writeFile(sitePath, `${JSON.stringify(site, null, 2)}\n`);
+  metaRaw.versao = (metaRaw.versao ?? 1) + 1;
+  metaRaw.atualizadoEm = new Date().toISOString();
+  painelRaw.painel = { metaReceitaMensal: meta };
+  await fs.writeFile(metaPath, `${JSON.stringify(metaRaw, null, 2)}\n`);
+  await fs.writeFile(painelPath, `${JSON.stringify(painelRaw, null, 2)}\n`);
 }
 
 function validateSamples(

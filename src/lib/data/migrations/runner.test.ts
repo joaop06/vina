@@ -119,3 +119,63 @@ describe("migrationProductionBaseline", () => {
     }
   });
 });
+
+describe("migrationSplitSiteConfigByTab", () => {
+  it("splits site.json into fragments and deletes legacy", async () => {
+    const { migrationSplitSiteConfigByTab } = await import(
+      "@/src/lib/data/migrations/migrations/2026-07-split-site-config-by-tab"
+    );
+    const { DEFAULT_SITE_CONFIG } = await import(
+      "@/src/config/default-site-config"
+    );
+    const { SITE_CONFIG_META_PATH, SITE_CONFIG_TAB_PATHS } = await import(
+      "@/src/schemas/site-config-tabs"
+    );
+
+    const files = new Map<string, unknown>([
+      ["configuracoes/site.json", DEFAULT_SITE_CONFIG],
+    ]);
+    const ctx: MigrationContext = {
+      trigger: "cli",
+      dryRun: true,
+      readJson: async <T>(relativePath: string) =>
+        files.has(relativePath) ? (files.get(relativePath) as T) : null,
+      listJsonDir: async () => [],
+    };
+    const result = await migrationSplitSiteConfigByTab.run(ctx);
+    assert.ok(result.changes.some((c) => c.path === SITE_CONFIG_META_PATH));
+    assert.ok(
+      result.changes.some((c) => c.path === SITE_CONFIG_TAB_PATHS.identidade),
+    );
+    assert.ok(
+      result.changes.some(
+        (c) =>
+          c.path === "configuracoes/site.json" &&
+          "delete" in c &&
+          c.delete === true,
+      ),
+    );
+  });
+
+  it("is a no-op when already split", async () => {
+    const { migrationSplitSiteConfigByTab } = await import(
+      "@/src/lib/data/migrations/migrations/2026-07-split-site-config-by-tab"
+    );
+    const files = new Map<string, unknown>([
+      [
+        "configuracoes/meta.json",
+        { versao: 1, atualizadoEm: "2026-01-01T00:00:00.000Z" },
+      ],
+    ]);
+    const ctx: MigrationContext = {
+      trigger: "cli",
+      dryRun: true,
+      readJson: async <T>(relativePath: string) =>
+        files.has(relativePath) ? (files.get(relativePath) as T) : null,
+      listJsonDir: async () => [],
+    };
+    const result = await migrationSplitSiteConfigByTab.run(ctx);
+    assert.equal(result.changes.length, 0);
+    assert.equal(result.stats.skipped, "already-split");
+  });
+});

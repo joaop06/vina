@@ -3,7 +3,7 @@ import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AdminToaster } from "@/components/admin/AdminToaster";
 import { ConfirmProvider } from "@/components/admin/ConfirmDialog";
 import { mediaUrl } from "@/src/lib/front/format";
-import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
+import { getCachedSiteBranding } from "@/src/lib/cache/storefront-reads";
 import { clearSession } from "@/src/lib/auth/session";
 import { redirect } from "next/navigation";
 
@@ -18,7 +18,7 @@ export default async function AdminPanelLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const site = await getCachedSiteConfig();
+  const site = await getCachedSiteBranding();
   return (
     <ConfirmProvider>
       <AdminBusyProvider>

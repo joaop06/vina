@@ -1,6 +1,13 @@
 import { z } from "zod";
 import { productSchema } from "@/src/schemas/product";
 import { siteConfigSchema } from "@/src/schemas/site-config";
+import {
+  SITE_CONFIG_META_PATH,
+  SITE_CONFIG_TAB_PATHS,
+  siteConfigMetaSchema,
+  SITE_CONFIG_TAB_SCHEMAS,
+  type SiteConfigTabId,
+} from "@/src/schemas/site-config-tabs";
 import { categorySchema } from "@/src/schemas/category";
 import { clientSchema } from "@/src/schemas/client";
 import { orderSchema } from "@/src/schemas/order";
@@ -11,6 +18,12 @@ type Validator = z.ZodType;
 function validatorForPath(relativePath: string): Validator | null {
   const posix = relativePath.replace(/\\/g, "/");
   if (posix === "configuracoes/site.json") return siteConfigSchema;
+  if (posix === SITE_CONFIG_META_PATH) return siteConfigMetaSchema;
+  for (const [tab, path] of Object.entries(SITE_CONFIG_TAB_PATHS) as Array<
+    [SiteConfigTabId, string]
+  >) {
+    if (posix === path) return SITE_CONFIG_TAB_SCHEMAS[tab];
+  }
   if (posix === "configuracoes/migrations.json") return null;
   if (posix.startsWith("produtos/") && posix.endsWith(".json")) {
     return productSchema;

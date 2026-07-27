@@ -42,7 +42,7 @@ import {
   listAllProducts,
   type ListProductsFilters,
 } from "@/src/services/products.service";
-import { getSiteConfig } from "@/src/services/site-config.service";
+import { getSiteConfig, getSiteBranding } from "@/src/services/site-config.service";
 import type { Banner } from "@/src/schemas/banner";
 import type { Product } from "@/src/schemas/product";
 import {
@@ -89,6 +89,12 @@ async function loadProductIndexStateUncached(): Promise<ProductIndexState> {
 export const getCachedSiteConfig = unstable_cache(
   async () => getSiteConfig(),
   ["storefront-site-config"],
+  { tags: [CACHE_TAGS.siteConfig], revalidate: REVALIDATE_SECONDS },
+);
+
+export const getCachedSiteBranding = unstable_cache(
+  async () => getSiteBranding(),
+  ["storefront-site-branding"],
   { tags: [CACHE_TAGS.siteConfig], revalidate: REVALIDATE_SECONDS },
 );
 

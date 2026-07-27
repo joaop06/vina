@@ -15,7 +15,7 @@ O catálogo base é público: [github.com/joaop06/vina](https://github.com/joaop
 
 Evite alterar `src/` ou `app/` sem necessidade — isso aumenta conflitos quando o base for atualizado.
 
-Após atualizar o base, confira [docs/personalizacao.md](personalizacao.md): novos campos em `site.json` costumam ter default no schema. O app roda migrations ordenadas no **startup** (e via `npm run data:migrate`); o ledger fica em `data/configuracoes/migrations.json`. Em deploys com várias réplicas no GitHub, commits concorrentes são tratados com retry.
+Após atualizar o base, confira [docs/personalizacao.md](personalizacao.md): novos campos nos fragmentos de `configuracoes/` costumam ter default no schema. O app roda migrations ordenadas no **startup** (e via `npm run data:migrate`); o ledger fica em `data/configuracoes/migrations.json`. Em deploys com várias réplicas no GitHub, commits concorrentes são tratados com retry.
 
 ---
 

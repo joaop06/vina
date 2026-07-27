@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AdminPageActions } from "@/components/admin/AdminPageActions";
 import { useAdminBusy } from "@/components/admin/AdminBusy";
@@ -15,18 +16,11 @@ import {
   buildMutationFormData,
   revokePreviewUrl,
 } from "@/components/admin/uploadClient";
-import { ContatoPanel } from "@/components/admin/configuracoes/ContatoPanel";
-import { WhatsAppPanel } from "@/components/admin/configuracoes/WhatsAppPanel";
-import { IdentidadePanel } from "@/components/admin/configuracoes/IdentidadePanel";
-import { VitrinePanel } from "@/components/admin/configuracoes/VitrinePanel";
-import { NavegacaoPanel } from "@/components/admin/configuracoes/NavegacaoPanel";
-import { TextosVitrinePanel } from "@/components/admin/configuracoes/TextosVitrinePanel";
-import { TemaAvancadoPanel } from "@/components/admin/configuracoes/TemaAvancadoPanel";
-import { PainelPanel } from "@/components/admin/configuracoes/PainelPanel";
 import {
-  configFingerprint,
+  listDirtyTabs,
   logoFromConfig,
   normalizeSiteConfig,
+  tabBaselineFingerprints,
 } from "@/components/admin/configuracoes/configDirty";
 import {
   CONFIGURACOES_TABS,
@@ -42,8 +36,70 @@ import type { ImageMeta } from "@/components/admin/ImageField";
 import { normalizeWaDigits } from "@/src/lib/wa";
 import type { Banner } from "@/src/schemas/banner";
 import type { Category } from "@/src/schemas/category";
-import { DEFAULT_NAVEGACAO } from "@/src/schemas/navigation";
 import type { SiteConfig } from "@/src/schemas/site-config";
+import {
+  extractTabSlice,
+  mergeTabIntoConfig,
+  type SiteConfigTabApiResponse,
+  type SiteConfigTabId,
+} from "@/src/schemas/site-config-tabs";
+
+const IdentidadePanel = dynamic(
+  () =>
+    import("@/components/admin/configuracoes/IdentidadePanel").then(
+      (m) => m.IdentidadePanel,
+    ),
+  { ssr: false },
+);
+const ContatoPanel = dynamic(
+  () =>
+    import("@/components/admin/configuracoes/ContatoPanel").then(
+      (m) => m.ContatoPanel,
+    ),
+  { ssr: false },
+);
+const WhatsAppPanel = dynamic(
+  () =>
+    import("@/components/admin/configuracoes/WhatsAppPanel").then(
+      (m) => m.WhatsAppPanel,
+    ),
+  { ssr: false },
+);
+const VitrinePanel = dynamic(
+  () =>
+    import("@/components/admin/configuracoes/VitrinePanel").then(
+      (m) => m.VitrinePanel,
+    ),
+  { ssr: false },
+);
+const NavegacaoPanel = dynamic(
+  () =>
+    import("@/components/admin/configuracoes/NavegacaoPanel").then(
+      (m) => m.NavegacaoPanel,
+    ),
+  { ssr: false },
+);
+const TextosVitrinePanel = dynamic(
+  () =>
+    import("@/components/admin/configuracoes/TextosVitrinePanel").then(
+      (m) => m.TextosVitrinePanel,
+    ),
+  { ssr: false },
+);
+const TemaAvancadoPanel = dynamic(
+  () =>
+    import("@/components/admin/configuracoes/TemaAvancadoPanel").then(
+      (m) => m.TemaAvancadoPanel,
+    ),
+  { ssr: false },
+);
+const PainelPanel = dynamic(
+  () =>
+    import("@/components/admin/configuracoes/PainelPanel").then(
+      (m) => m.PainelPanel,
+    ),
+  { ssr: false },
+);
 
 function isLeavingConfiguracoes(href: string): boolean {
   try {
@@ -51,8 +107,74 @@ function isLeavingConfiguracoes(href: string): boolean {
     if (url.origin !== window.location.origin) return true;
     return !url.pathname.startsWith("/admin/personalizacao");
   } catch {
-    return false;
+    return true;
   }
+}
+
+function tabPayload(
+  config: SiteConfig,
+  tab: SiteConfigTabId,
+  logoDraft: ImageMeta | null,
+): unknown {
+  const slice = extractTabSlice(config, tab);
+  if (tab === "identidade") {
+    const logoPayload = logoDraft
+      ? logoDraft.file
+        ? {
+            id: logoDraft.id,
+            path: "",
+            alt: logoDraft.alt?.trim() || config.nomeLoja,
+            pending: true as const,
+          }
+        : {
+            id: logoDraft.id,
+            path: logoDraft.path,
+            alt: logoDraft.alt?.trim() || config.nomeLoja,
+          }
+      : null;
+    return {
+      nomeLoja: config.nomeLoja,
+      mostrarNomeComLogo: Boolean(config.mostrarNomeComLogo),
+      mostrarCarrinho: Boolean(config.mostrarCarrinho),
+      assinatura: config.assinatura,
+      slogan: config.slogan,
+      cores: config.cores,
+      logo: logoPayload,
+    };
+  }
+  if (tab === "whatsapp") {
+    return {
+      whatsapp: {
+        ...config.whatsapp,
+        telefone: normalizeWaDigits(config.whatsapp.telefone),
+      },
+      comportamento: config.comportamento,
+    };
+  }
+  if (tab === "contato") {
+    return {
+      instagram: config.instagram,
+      endereco: {
+        ...config.endereco,
+        mostrar: Boolean(config.endereco.mostrar),
+      },
+      telefones: {
+        fixo: normalizeWaDigits(config.telefones.fixo),
+        celular: normalizeWaDigits(config.telefones.celular),
+        usarWhatsappComoCelular: Boolean(
+          config.telefones.usarWhatsappComoCelular,
+        ),
+        mostrarFixo: Boolean(config.telefones.mostrarFixo),
+        mostrarCelular: Boolean(config.telefones.mostrarCelular),
+      },
+      horarios: config.horarios,
+      textos: {
+        sobre: config.textos.sobre,
+        trocas: config.textos.trocas,
+      },
+    };
+  }
+  return slice;
 }
 
 export function PersonalizacaoClient({
@@ -60,11 +182,13 @@ export function PersonalizacaoClient({
   initialBanners,
   initialCategories,
   initialTab,
+  initialLoadedTabs,
 }: {
   initialConfig: SiteConfig;
   initialBanners: Banner[];
   initialCategories: Category[];
   initialTab?: string;
+  initialLoadedTabs: ConfiguracoesTabId[];
 }) {
   const router = useRouter();
   const { confirm } = useConfirm();
@@ -89,14 +213,32 @@ export function PersonalizacaoClient({
   const [logoDraft, setLogoDraft] = useState<ImageMeta | null>(() =>
     logoFromConfig(initialConfig),
   );
-  const [baselineFp, setBaselineFp] = useState(() =>
-    configFingerprint(
+  const [loadedTabs, setLoadedTabs] = useState<Set<ConfiguracoesTabId>>(
+    () => new Set(initialLoadedTabs),
+  );
+  const loadedTabsRef = useRef(loadedTabs);
+  loadedTabsRef.current = loadedTabs;
+  const [loadingTab, setLoadingTab] = useState<ConfiguracoesTabId | null>(null);
+  const [baselineByTab, setBaselineByTab] = useState(() =>
+    tabBaselineFingerprints(
       normalizeSiteConfig(initialConfig),
       logoFromConfig(initialConfig),
+      initialLoadedTabs,
     ),
   );
   const [baselineLayout, setBaselineLayout] = useState(
     () => initialConfig.layout ?? "classic",
+  );
+  const [banners, setBanners] = useState<Banner[]>(initialBanners);
+  const [categories, setCategories] = useState<Category[]>(initialCategories);
+  const [bannersLoaded, setBannersLoaded] = useState(
+    () => initialBanners.length > 0 || initialLoadedTabs.includes("vitrine"),
+  );
+  const [categoriesLoaded, setCategoriesLoaded] = useState(
+    () =>
+      initialCategories.length > 0 ||
+      initialLoadedTabs.includes("vitrine") ||
+      initialLoadedTabs.includes("navegacao"),
   );
   const [saving, setSaving] = useState(false);
   const { runMutation } = useAdminBusy();
@@ -107,8 +249,8 @@ export function PersonalizacaoClient({
 
   const colorPickerValue = normalizeHexForPicker(config.cores.primaria);
   const selectedLayout = config.layout ?? "classic";
-  const isDirty =
-    configFingerprint(config, logoDraft) !== baselineFp;
+  const dirtyTabs = listDirtyTabs(config, logoDraft, baselineByTab, loadedTabs);
+  const isDirty = dirtyTabs.length > 0;
 
   const activeFormId =
     tab === "contato"
@@ -123,13 +265,80 @@ export function PersonalizacaoClient({
               ? textosFormId
               : tab === "tema"
                 ? temaFormId
-            : tab === "painel"
-              ? painelFormId
-              : identidadeFormId;
+                : tab === "painel"
+                  ? painelFormId
+                  : identidadeFormId;
+
+  const ensureTabLoaded = useCallback(
+    async (next: ConfiguracoesTabId) => {
+      if (loadedTabsRef.current.has(next)) return;
+
+      setLoadingTab(next);
+      try {
+        const res = await fetch(`/api/v1/admin/site-config?tab=${next}`);
+        const data = (await res.json()) as SiteConfigTabApiResponse & {
+          error?: { message?: string };
+        };
+        if (!res.ok) {
+          throw new Error(data.error?.message ?? "Erro ao carregar aba");
+        }
+
+        setConfig((prev) => {
+          const merged = normalizeSiteConfig(
+            mergeTabIntoConfig(prev, next, data.data, {
+              versao: data.versao,
+              atualizadoEm: data.atualizadoEm,
+            }),
+          );
+          const logo =
+            next === "identidade" ? logoFromConfig(merged) : logoDraft;
+          if (next === "identidade") {
+            setLogoDraft(logoFromConfig(merged));
+          }
+          setBaselineByTab((baseline) => ({
+            ...baseline,
+            ...tabBaselineFingerprints(merged, logo, [next]),
+          }));
+          return merged;
+        });
+        setLoadedTabs((prev) => {
+          const nextSet = new Set(prev).add(next);
+          loadedTabsRef.current = nextSet;
+          return nextSet;
+        });
+
+        if (next === "vitrine" && !bannersLoaded) {
+          const bRes = await fetch("/api/v1/admin/banners");
+          const bData = (await bRes.json()) as { items?: Banner[] };
+          setBanners(bData.items ?? []);
+          setBannersLoaded(true);
+        }
+        if (
+          (next === "vitrine" || next === "navegacao") &&
+          !categoriesLoaded
+        ) {
+          const cRes = await fetch("/api/v1/admin/categories");
+          const cData = (await cRes.json()) as { items?: Category[] };
+          setCategories(cData.items ?? []);
+          setCategoriesLoaded(true);
+        }
+        if (next === "vitrine") {
+          const vitrineData = data.data as { layout?: SiteConfig["layout"] };
+          setBaselineLayout(vitrineData.layout ?? "classic");
+        }
+      } finally {
+        setLoadingTab(null);
+      }
+    },
+    [bannersLoaded, categoriesLoaded, logoDraft],
+  );
 
   function selectTab(next: ConfiguracoesTabId) {
     setTab(next);
     router.replace(configTabHref(next), { scroll: false });
+    void ensureTabLoaded(next).catch((err) => {
+      toastMutationError(err, { id: "load-config-tab" });
+    });
   }
 
   function focusTab(index: number) {
@@ -154,11 +363,12 @@ export function PersonalizacaoClient({
 
   // Live theme preview; restore committed theme on unmount.
   useEffect(() => {
+    if (!loadedTabs.has("identidade") && !loadedTabs.has("vitrine")) return;
     applySiteTheme({
       cores: { ...config.cores, primaria: colorPickerValue },
       layout: selectedLayout,
     });
-  }, [colorPickerValue, config.cores, selectedLayout]);
+  }, [colorPickerValue, config.cores, loadedTabs, selectedLayout]);
 
   useEffect(() => {
     return () => {
@@ -166,7 +376,6 @@ export function PersonalizacaoClient({
     };
   }, []);
 
-  // Normalize legacy URLs (layout/banners/personalização) to canonical tab.
   useEffect(() => {
     const canonical = parseConfigTab(initialTab);
     if (initialTab && initialTab !== canonical) {
@@ -261,26 +470,21 @@ export function PersonalizacaoClient({
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
+    const tabsToSave = listDirtyTabs(
+      config,
+      logoDraft,
+      baselineByTab,
+      loadedTabs,
+    );
+    if (tabsToSave.length === 0) return;
+
     setSaving(true);
     try {
       const pendingFiles = logoDraft?.file
         ? [{ id: logoDraft.id, file: logoDraft.file }]
         : [];
-      const hasUploads = pendingFiles.length > 0;
-      const logoPayload = logoDraft
-        ? logoDraft.file
-          ? {
-              id: logoDraft.id,
-              path: "",
-              alt: logoDraft.alt?.trim() || config.nomeLoja,
-              pending: true as const,
-            }
-          : {
-              id: logoDraft.id,
-              path: logoDraft.path,
-              alt: logoDraft.alt?.trim() || config.nomeLoja,
-            }
-        : null;
+      const hasUploads =
+        tabsToSave.includes("identidade") && pendingFiles.length > 0;
 
       await runMutation(
         {
@@ -288,40 +492,13 @@ export function PersonalizacaoClient({
           determinate: hasUploads,
         },
         async ({ setProgress }) => {
+          const tabsPayload: Record<string, unknown> = {};
+          for (const t of tabsToSave) {
+            tabsPayload[t] = tabPayload(config, t, logoDraft);
+          }
           const payload = {
             versao: config.versao,
-            nomeLoja: config.nomeLoja,
-            mostrarNomeComLogo: Boolean(config.mostrarNomeComLogo),
-            mostrarCarrinho: Boolean(config.mostrarCarrinho),
-            assinatura: config.assinatura,
-            slogan: config.slogan,
-            layout: config.layout,
-            cores: config.cores,
-            logo: logoPayload,
-            whatsapp: {
-              ...config.whatsapp,
-              telefone: normalizeWaDigits(config.whatsapp.telefone),
-            },
-            instagram: config.instagram,
-            endereco: {
-              ...config.endereco,
-              mostrar: Boolean(config.endereco.mostrar),
-            },
-            telefones: {
-              fixo: normalizeWaDigits(config.telefones.fixo),
-              celular: normalizeWaDigits(config.telefones.celular),
-              usarWhatsappComoCelular: Boolean(
-                config.telefones.usarWhatsappComoCelular,
-              ),
-              mostrarFixo: Boolean(config.telefones.mostrarFixo),
-              mostrarCelular: Boolean(config.telefones.mostrarCelular),
-            },
-            horarios: config.horarios,
-            textos: config.textos,
-            navegacao: config.navegacao ?? DEFAULT_NAVEGACAO,
-            painel: {
-              metaReceitaMensal: config.painel?.metaReceitaMensal ?? null,
-            },
+            tabs: tabsPayload,
           };
 
           const res = await mutationFetch(
@@ -353,7 +530,9 @@ export function PersonalizacaoClient({
           applySiteTheme(committedTheme.current);
           setConfig(next);
           setLogoDraft(nextLogo);
-          setBaselineFp(configFingerprint(next, nextLogo));
+          setBaselineByTab(
+            tabBaselineFingerprints(next, nextLogo, loadedTabs),
+          );
           setBaselineLayout(data.layout ?? "classic");
           toastMutationSuccess("Configurações salvas.", {
             id: "save-site-config",
@@ -366,6 +545,8 @@ export function PersonalizacaoClient({
       setSaving(false);
     }
   }
+
+  const tabReady = loadedTabs.has(tab) && loadingTab !== tab;
 
   return (
     <div className="admin-page">
@@ -449,140 +630,164 @@ export function PersonalizacaoClient({
           })}
         </div>
 
-        <div
-          className="dash-tabs__panel"
-          role="tabpanel"
-          id={`${tabsId}-panel-identidade`}
-          aria-labelledby={`${tabsId}-tab-identidade`}
-          hidden={tab !== "identidade"}
-        >
-          <IdentidadePanel
-            formId={identidadeFormId}
-            config={config}
-            logoDraft={logoDraft}
-            disabled={saving}
-            onSubmit={save}
-            onConfigChange={onConfigChange}
-            onLogoChange={onLogoChange}
-          />
-        </div>
+        {!tabReady ? (
+          <div className="dash-tabs__panel" role="status">
+            <p className="muted">Carregando…</p>
+          </div>
+        ) : (
+          <>
+            <div
+              className="dash-tabs__panel"
+              role="tabpanel"
+              id={`${tabsId}-panel-identidade`}
+              aria-labelledby={`${tabsId}-tab-identidade`}
+              hidden={tab !== "identidade"}
+            >
+              {tab === "identidade" ? (
+                <IdentidadePanel
+                  formId={identidadeFormId}
+                  config={config}
+                  logoDraft={logoDraft}
+                  disabled={saving}
+                  onSubmit={save}
+                  onConfigChange={onConfigChange}
+                  onLogoChange={onLogoChange}
+                />
+              ) : null}
+            </div>
 
-        <div
-          className="dash-tabs__panel"
-          role="tabpanel"
-          id={`${tabsId}-panel-contato`}
-          aria-labelledby={`${tabsId}-tab-contato`}
-          hidden={tab !== "contato"}
-        >
-          <ContatoPanel
-            formId={contatoFormId}
-            config={config}
-            disabled={saving}
-            onSubmit={save}
-            onConfigChange={onConfigChange}
-          />
-        </div>
+            <div
+              className="dash-tabs__panel"
+              role="tabpanel"
+              id={`${tabsId}-panel-contato`}
+              aria-labelledby={`${tabsId}-tab-contato`}
+              hidden={tab !== "contato"}
+            >
+              {tab === "contato" ? (
+                <ContatoPanel
+                  formId={contatoFormId}
+                  config={config}
+                  disabled={saving}
+                  onSubmit={save}
+                  onConfigChange={onConfigChange}
+                />
+              ) : null}
+            </div>
 
-        <div
-          className="dash-tabs__panel"
-          role="tabpanel"
-          id={`${tabsId}-panel-whatsapp`}
-          aria-labelledby={`${tabsId}-tab-whatsapp`}
-          hidden={tab !== "whatsapp"}
-        >
-          <WhatsAppPanel
-            formId={whatsappFormId}
-            config={config}
-            disabled={saving}
-            onSubmit={save}
-            onConfigChange={onConfigChange}
-            onOpenIdentidadeTab={() => selectTab("identidade")}
-          />
-        </div>
+            <div
+              className="dash-tabs__panel"
+              role="tabpanel"
+              id={`${tabsId}-panel-whatsapp`}
+              aria-labelledby={`${tabsId}-tab-whatsapp`}
+              hidden={tab !== "whatsapp"}
+            >
+              {tab === "whatsapp" ? (
+                <WhatsAppPanel
+                  formId={whatsappFormId}
+                  config={config}
+                  disabled={saving}
+                  onSubmit={save}
+                  onConfigChange={onConfigChange}
+                  onOpenIdentidadeTab={() => selectTab("identidade")}
+                />
+              ) : null}
+            </div>
 
-        <div
-          className="dash-tabs__panel"
-          role="tabpanel"
-          id={`${tabsId}-panel-vitrine`}
-          aria-labelledby={`${tabsId}-tab-vitrine`}
-          hidden={tab !== "vitrine"}
-        >
-          <VitrinePanel
-            formId={vitrineFormId}
-            config={config}
-            baselineLayout={baselineLayout}
-            primaryColor={colorPickerValue}
-            initialBanners={initialBanners}
-            disabled={saving}
-            onSubmit={save}
-            onConfigChange={onConfigChange}
-          />
-        </div>
+            <div
+              className="dash-tabs__panel"
+              role="tabpanel"
+              id={`${tabsId}-panel-vitrine`}
+              aria-labelledby={`${tabsId}-tab-vitrine`}
+              hidden={tab !== "vitrine"}
+            >
+              {tab === "vitrine" ? (
+                <VitrinePanel
+                  formId={vitrineFormId}
+                  config={config}
+                  baselineLayout={baselineLayout}
+                  primaryColor={colorPickerValue}
+                  initialBanners={banners}
+                  disabled={saving}
+                  onSubmit={save}
+                  onConfigChange={onConfigChange}
+                />
+              ) : null}
+            </div>
 
-        <div
-          className="dash-tabs__panel"
-          role="tabpanel"
-          id={`${tabsId}-panel-navegacao`}
-          aria-labelledby={`${tabsId}-tab-navegacao`}
-          hidden={tab !== "navegacao"}
-        >
-          <NavegacaoPanel
-            formId={navegacaoFormId}
-            config={config}
-            initialCategories={initialCategories}
-            disabled={saving}
-            onSubmit={save}
-            onConfigChange={onConfigChange}
-          />
-        </div>
+            <div
+              className="dash-tabs__panel"
+              role="tabpanel"
+              id={`${tabsId}-panel-navegacao`}
+              aria-labelledby={`${tabsId}-tab-navegacao`}
+              hidden={tab !== "navegacao"}
+            >
+              {tab === "navegacao" ? (
+                <NavegacaoPanel
+                  formId={navegacaoFormId}
+                  config={config}
+                  initialCategories={categories}
+                  disabled={saving}
+                  onSubmit={save}
+                  onConfigChange={onConfigChange}
+                />
+              ) : null}
+            </div>
 
-        <div
-          className="dash-tabs__panel"
-          role="tabpanel"
-          id={`${tabsId}-panel-textos`}
-          aria-labelledby={`${tabsId}-tab-textos`}
-          hidden={tab !== "textos"}
-        >
-          <TextosVitrinePanel
-            formId={textosFormId}
-            config={config}
-            disabled={saving}
-            onSubmit={save}
-            onConfigChange={onConfigChange}
-          />
-        </div>
+            <div
+              className="dash-tabs__panel"
+              role="tabpanel"
+              id={`${tabsId}-panel-textos`}
+              aria-labelledby={`${tabsId}-tab-textos`}
+              hidden={tab !== "textos"}
+            >
+              {tab === "textos" ? (
+                <TextosVitrinePanel
+                  formId={textosFormId}
+                  config={config}
+                  disabled={saving}
+                  onSubmit={save}
+                  onConfigChange={onConfigChange}
+                />
+              ) : null}
+            </div>
 
-        <div
-          className="dash-tabs__panel"
-          role="tabpanel"
-          id={`${tabsId}-panel-tema`}
-          aria-labelledby={`${tabsId}-tab-tema`}
-          hidden={tab !== "tema"}
-        >
-          <TemaAvancadoPanel
-            formId={temaFormId}
-            config={config}
-            disabled={saving}
-            onSubmit={save}
-            onConfigChange={onConfigChange}
-          />
-        </div>
+            <div
+              className="dash-tabs__panel"
+              role="tabpanel"
+              id={`${tabsId}-panel-tema`}
+              aria-labelledby={`${tabsId}-tab-tema`}
+              hidden={tab !== "tema"}
+            >
+              {tab === "tema" ? (
+                <TemaAvancadoPanel
+                  formId={temaFormId}
+                  config={config}
+                  disabled={saving}
+                  onSubmit={save}
+                  onConfigChange={onConfigChange}
+                />
+              ) : null}
+            </div>
 
-        <div
-          className="dash-tabs__panel"
-          role="tabpanel"
-          id={`${tabsId}-panel-painel`}
-          aria-labelledby={`${tabsId}-tab-painel`}
-          hidden={tab !== "painel"}
-        >
-          <PainelPanel
-            formId={painelFormId}
-            config={config}
-            disabled={saving}
-            onSubmit={save}
-            onConfigChange={onConfigChange}
-          />
-        </div>
+            <div
+              className="dash-tabs__panel"
+              role="tabpanel"
+              id={`${tabsId}-panel-painel`}
+              aria-labelledby={`${tabsId}-tab-painel`}
+              hidden={tab !== "painel"}
+            >
+              {tab === "painel" ? (
+                <PainelPanel
+                  formId={painelFormId}
+                  config={config}
+                  disabled={saving}
+                  onSubmit={save}
+                  onConfigChange={onConfigChange}
+                />
+              ) : null}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

@@ -45,7 +45,7 @@ Ou seja: o site **organiza e formata** o pedido; a **venda e o pagamento** conti
 
 Nome da loja, slogan, cores, logo, layout da home, menu, rodapé, Instagram, endereço, telefones e textos legais são editáveis no admin (**Personalização** → Identidade, Textos, Tema, Vitrine, Navegação, WhatsApp, Contato).
 
-A maior parte dos rótulos da vitrine (home, catálogo, produto, carrinho, cookies, modal de lead) fica em `site.json` em `textos`, `rotulos`, `vitrine`, `comportamento`, `tema` e `seo`. Veja [docs/personalizacao.md](docs/personalizacao.md).
+A maior parte dos rótulos da vitrine (home, catálogo, produto, carrinho, cookies, modal de lead) fica em `data/configuracoes/` (`textos`, `rotulos`, `vitrine`, `comportamento`, `tema` e `seo`). Veja [docs/personalizacao.md](docs/personalizacao.md).
 
 Variantes de produto usam `atributos` genéricos alinhados a `rotulos.dimensoes` (padrão: tamanho e cor). O servidor aplica **migrations** de JSON na inicialização; para rodar manualmente: `npm run data:migrate` (ledger em `data/configuracoes/migrations.json`).
 

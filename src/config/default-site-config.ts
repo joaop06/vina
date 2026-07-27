@@ -19,7 +19,7 @@ import {
 import { DEFAULT_NAVEGACAO } from "@/src/schemas/navigation";
 import type { SiteConfig } from "@/src/schemas/site-config";
 
-/** Canonical defaults for new installs and `data/configuracoes/site.json` seed. */
+/** Canonical defaults for new installs and `data/configuracoes/*.json` seed. */
 export const DEFAULT_SITE_CONFIG: SiteConfig = {
   versao: 1,
   nomeLoja: "Minha loja",

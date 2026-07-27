@@ -1,9 +1,11 @@
 import { migrationProductionBaseline } from "@/src/lib/data/migrations/migrations/2026-07-production-baseline";
+import { migrationSplitSiteConfigByTab } from "@/src/lib/data/migrations/migrations/2026-07-split-site-config-by-tab";
 import type { DataMigration } from "@/src/lib/data/migrations/types";
 
 /** Entity-file migrations (no server-only imports). Indices repair is appended in the runner. */
 export const DATA_MIGRATIONS: DataMigration[] = [
   migrationProductionBaseline,
+  migrationSplitSiteConfigByTab,
 ].sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
 
 export function assertRegistryValid(migrations: DataMigration[]): void {
