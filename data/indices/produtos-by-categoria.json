@@ -1,9 +1,5 @@
 {
   "schemaVersion": 1,
   "updatedAt": "2026-07-27T11:46:45.309Z",
-  "byCategoria": {
-    "7c0c1929-796d-4c26-9e84-e7d15ce992fb": [
-      "25bc1461-39f7-4ff0-ac3e-549d43824cd4"
-    ]
-  }
+  "byCategoria": { }
 }
