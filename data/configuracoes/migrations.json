@@ -3,6 +3,9 @@
   "applied": {
     "2026-07-production-baseline": {
       "appliedAt": "2026-07-27T17:57:36.299Z"
+    },
+    "2026-07-indices-repair": {
+      "appliedAt": "2026-07-27T17:57:54.172Z"
     }
   }
 }
