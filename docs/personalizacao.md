@@ -1,6 +1,22 @@
 # Personalização da vitrine (referência)
 
-Configuração canônica: `data/configuracoes/site.json` (schema `SiteConfig` em `src/schemas/site-config.ts`).
+Configuração canônica: arquivos em `data/configuracoes/` segmentados por aba do admin (schema composto `SiteConfig` em `src/schemas/site-config.ts`; fatias em `src/schemas/site-config-tabs.ts`).
+
+| Arquivo | Aba / conteúdo |
+|---------|----------------|
+| `meta.json` | `versao`, `atualizadoEm` |
+| `identidade.json` | marca, cores, logo |
+| `whatsapp.json` | templates WA + `comportamento` |
+| `contato.json` | Instagram, endereço, telefones, horários, `textos.sobre`/`trocas` |
+| `vitrine.json` | `layout` + limites `vitrine` |
+| `navegacao.json` | `navegacao` |
+| `textos.json` | restante de `textos.*` + `rotulos` |
+| `tema.json` | `tema`, `seo` |
+| `painel.json` | meta de receita do dashboard |
+
+A migration `2026-07-split-site-config-by-tab` converte o legado `site.json` monolítico nesses fragmentos.
+
+Enquanto `site.json` e os fragmentos coexistirem (ex.: sync de fork que trouxe o seed fatiado antes da migration rodar), o app **prefere o `site.json` legado** para não servir defaults do base por cima da config da loja. A migration grava os fragmentos a partir do legado e remove o monolito.
 
 ## Matriz resumida (campo → superfície)
 
@@ -26,9 +42,9 @@ Configuração canônica: `data/configuracoes/site.json` (schema `SiteConfig` em
 
 ## Scripts de governança
 
-- `npm run seed:validate` — valida `site.json` e catálogo.
+- `npm run seed:validate` — valida fragmentos de config e catálogo.
 - `npm run check:store-copy` — falha se strings vitrine conhecidas aparecerem em TSX sem usar `store-copy` / `site.textos` (ver `scripts/check-store-copy.ts`).
-- `npm run data:migrate` — aplica migrations JSON pendentes (mesma ordem do boot). A migration inicial `2026-07-production-baseline` converte o modelo de produção (`variantes` com `tamanho`/`cor`, `site.json` enxuto, WhatsApp em string) para o schema atual; ledger em `configuracoes/migrations.json`.
+- `npm run data:migrate` — aplica migrations JSON pendentes (mesma ordem do boot). A migration inicial `2026-07-production-baseline` converte o modelo de produção; `2026-07-split-site-config-by-tab` fatia `site.json`. Ledger em `configuracoes/migrations.json`.
 
 ## Variantes de produto
 
@@ -36,4 +52,4 @@ Produtos usam `variantes[].atributos` (chaves = `rotulos.dimensoes[].id`). Legad
 
 ## Forks
 
-Novos campos em `site.json` têm default no schema; forks antigos são atualizados pelas migrations no startup ou com `npm run data:migrate`.
+Novos campos nos fragmentos têm default no schema; forks antigos são atualizados pelas migrations no startup ou com `npm run data:migrate`.

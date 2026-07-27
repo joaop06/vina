@@ -18,6 +18,12 @@ import { dashboardCatalogIndexSchema } from "@/src/schemas/dashboard-catalog-ind
 import { orderSchema } from "@/src/schemas/order";
 import { productSchema } from "@/src/schemas/product";
 import { siteConfigSchema } from "@/src/schemas/site-config";
+import {
+  SITE_CONFIG_TAB_IDS,
+  SITE_CONFIG_TAB_SCHEMAS,
+  siteConfigMetaSchema,
+  composeSiteConfigRaw,
+} from "@/src/schemas/site-config-tabs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -62,10 +68,23 @@ async function validateDir<T>(
 async function main() {
   const dataRoot = path.join(root, parseArgs(process.argv.slice(2)));
 
-  const sitePath = path.join(dataRoot, "configuracoes/site.json");
-  const siteRaw = JSON.parse(await fs.readFile(sitePath, "utf8")) as unknown;
-  siteConfigSchema.parse(siteRaw);
-  console.log("OK configuracoes/site.json");
+  const siteDir = path.join(dataRoot, "configuracoes");
+  const metaPath = path.join(siteDir, "meta.json");
+  const metaRaw = JSON.parse(await fs.readFile(metaPath, "utf8")) as unknown;
+  const meta = siteConfigMetaSchema.parse(metaRaw);
+  console.log("OK configuracoes/meta.json");
+
+  const fragments = { meta } as Parameters<typeof composeSiteConfigRaw>[0];
+  for (const tab of SITE_CONFIG_TAB_IDS) {
+    const fragmentPath = path.join(siteDir, `${tab}.json`);
+    const fragmentRaw = JSON.parse(
+      await fs.readFile(fragmentPath, "utf8"),
+    ) as unknown;
+    fragments[tab] = SITE_CONFIG_TAB_SCHEMAS[tab].parse(fragmentRaw) as never;
+  }
+  console.log(`OK configuracoes/{${SITE_CONFIG_TAB_IDS.join(",")}}.json`);
+  siteConfigSchema.parse(composeSiteConfigRaw(fragments));
+  console.log("OK composed SiteConfig");
 
   await validateDir("produtos", path.join(dataRoot, "produtos"), productSchema);
   await validateDir("categorias", path.join(dataRoot, "categorias"), categorySchema);
