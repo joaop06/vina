@@ -20,7 +20,7 @@ require.cache[serverOnlyPath] = {
   filename: serverOnlyPath,
   loaded: true,
   exports: {},
-};
+} as NodeModule;
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
