@@ -6,9 +6,7 @@ export type CompactCartItemParts = CompactCartItemPartsInput;
 export const DEFAULT_COMPACT_CART_ITEM_PARTS: CompactCartItemParts = {
   bullet: "•",
   showResumo: true,
-  showQuantidade: true,
   showUrl: false,
-  showReferenciaSeparada: false,
 };
 
 function bulletPrefix(bullet: CompactCartItemParts["bullet"]): string {
@@ -20,14 +18,8 @@ export function buildCompactCartItemTemplate(
   parts: CompactCartItemParts,
 ): string {
   let line = `${bulletPrefix(parts.bullet)}{nome}`;
-  if (parts.showReferenciaSeparada) {
-    line += " (Ref. {referencia})";
-  }
   if (parts.showResumo) {
     line += " — {resumo}";
-  }
-  if (parts.showQuantidade) {
-    line += " (x{quantidade})";
   }
   if (parts.showUrl) {
     line += " {url}";
@@ -61,9 +53,7 @@ export function parseCompactCartItemTemplate(
     rest = rest.slice(2);
   }
 
-  const showReferenciaSeparada = rest.includes("{referencia}");
   const showResumo = rest.includes("{resumo}");
-  const showQuantidade = rest.includes("{quantidade}");
   const showUrl = rest.includes("{url}");
 
   if (!rest.includes("{nome}")) {
@@ -73,8 +63,6 @@ export function parseCompactCartItemTemplate(
   return {
     bullet,
     showResumo,
-    showQuantidade,
     showUrl,
-    showReferenciaSeparada,
   };
 }

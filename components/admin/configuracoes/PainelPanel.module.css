@@ -1,9 +1,10 @@
 .layout {
   display: grid;
   gap: 1.25rem;
+  min-width: 0;
 }
 
-@media (min-width: 720px) {
+@container form-section (min-width: 48rem) {
   .layout {
     grid-template-columns: minmax(0, 16rem) minmax(0, 1fr);
     align-items: start;

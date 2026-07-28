@@ -118,35 +118,37 @@ export function PainelPanel({
             selecionado em relação ao mês calendário.
           </p>
         </header>
-        <div className={`admin-form__section-body ${styles.layout}`}>
-          <label className={`admin-form__field ${styles.field}`}>
-            <span className="admin-field-label">
-              Meta mensal (R$)
-              <FieldHint text="Deixe vazio para não exibir meta no Painel." />
-            </span>
-            <input
-              type="text"
-              inputMode="decimal"
-              autoComplete="off"
-              className="input"
-              placeholder="R$ 0,00"
-              value={metaDraft}
-              disabled={disabled}
-              onChange={(e) => {
-                const masked = maskBrlInput(e.target.value);
-                setMetaDraft(masked);
-                commitMeta(masked);
-              }}
-              onBlur={() => {
-                if (!metaDraft.trim()) {
-                  commitMeta("");
-                  return;
-                }
-                commitMeta(metaDraft);
-              }}
-            />
-          </label>
-          <MetaPreview mensal={meta} />
+        <div className="admin-form__section-body">
+          <div className={styles.layout}>
+            <label className={`admin-form__field ${styles.field}`}>
+              <span className="admin-field-label">
+                Meta mensal (R$)
+                <FieldHint text="Deixe vazio para não exibir meta no Painel." />
+              </span>
+              <input
+                type="text"
+                inputMode="decimal"
+                autoComplete="off"
+                className="input"
+                placeholder="R$ 0,00"
+                value={metaDraft}
+                disabled={disabled}
+                onChange={(e) => {
+                  const masked = maskBrlInput(e.target.value);
+                  setMetaDraft(masked);
+                  commitMeta(masked);
+                }}
+                onBlur={() => {
+                  if (!metaDraft.trim()) {
+                    commitMeta("");
+                    return;
+                  }
+                  commitMeta(metaDraft);
+                }}
+              />
+            </label>
+            <MetaPreview mensal={meta} />
+          </div>
         </div>
       </section>
     </form>

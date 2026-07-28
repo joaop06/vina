@@ -12,12 +12,12 @@ export const DEFAULT_PRODUCT_WA_TEMPLATE_PARTS: ProductWaTemplateParts = {
   intro: "Tenho interesse no produto",
   includeVariantDetails: true,
   includeUrl: true,
-  outro: "Segue disponível???",
+  outro: "Segue disponível?",
 };
 
 /** Previous default before nested-bullet layout (for migration). */
 export const LEGACY_DEFAULT_MENSAGEM_PRODUTO =
-  "Tenho interesse no produto {nome}:\n- {resumo}\n- {url}\n\nSegue disponível???";
+  "Tenho interesse no produto {nome}:\n- {resumo}\n- {url}\n\nSegue disponível?";
 
 export function buildProductWaTemplate(parts: ProductWaTemplateParts): string {
   const heading = parts.intro.trim();

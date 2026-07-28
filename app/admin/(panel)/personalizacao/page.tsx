@@ -14,6 +14,8 @@ type Props = {
   searchParams: Promise<{ tab?: string | string[] }>;
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminPersonalizacaoPage({ searchParams }: Props) {
   const params = await searchParams;
   const tabParam = Array.isArray(params.tab) ? params.tab[0] : params.tab;
