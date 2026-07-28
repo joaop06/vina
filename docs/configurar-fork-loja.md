@@ -30,15 +30,37 @@ Após atualizar o base, confira [docs/personalizacao.md](personalizacao.md): nov
 |--------|-------------|--------|
 | `SYNC_COMMIT_NAME` | Sim | Nome público da conta GitHub ligada ao projeto na Vercel |
 | `SYNC_COMMIT_EMAIL` | Sim | E-mail principal ou `noreply` da mesma conta |
-| `SYNC_COMMIT_TOKEN` | Não | PAT fine-grained com **Contents: read/write** só no **fork** — use se a Vercel não deployar após sync/repair mesmo com nome/e-mail corretos |
+| `SYNC_COMMIT_TOKEN` | **Recomendado** | PAT fine-grained do **owner** do fork — ver [Criar `SYNC_COMMIT_TOKEN`](#criar-sync_commit_token) |
 
-`SYNC_COMMIT_NAME` e `SYNC_COMMIT_EMAIL` definem o **autor** dos commits de sincronização e do workflow **Data indices** (reparo de `data/indices/`). Na Vercel (plano Hobby), o deploy automático costuma exigir que o push seja reconhecido como a conta dona do projeto; o PAT opcional faz o **push** em nome dessa conta, não só o metadado de autor.
+`SYNC_COMMIT_NAME` e `SYNC_COMMIT_EMAIL` definem o **autor** dos commits de sincronização e do workflow **Data indices** (reparo de `data/indices/`). Na Vercel (plano Hobby), o deploy automático costuma exigir que o push seja reconhecido como a conta dona do projeto; o PAT faz o **push** (e a abertura de PR em conflito) em nome dessa conta, não só o metadado de autor.
+
+Sem `SYNC_COMMIT_TOKEN`, o sync ainda tenta push/PR com o `GITHUB_TOKEN` do Actions. Em muitos forks isso **não dispara deploy** na Vercel Hobby e **falha ao abrir PR** (`Resource not accessible by integration`).
 
 5. O workflow **CI** roda em todo PR e push na `main` (lint, testes, validação de índices em `data/`, build). PR com catálogo inconsistente **não passa** — corrija com `npm run indices:repair -- --data=data` antes do merge.
 
 6. O workflow **Data indices** roda em **push na `main`** quando `data/` (ou código de índice) muda: se a validação falhar, repara `data/indices/`, commita e dá push (útil se você editou só `data/produtos/*.json` direto no GitHub).
 
 Prefira criar produtos pelo admin (índices atualizados no mesmo commit) ou rode `npm run indices:repair -- --data=data` localmente antes do push.
+
+### Criar `SYNC_COMMIT_TOKEN`
+
+PAT **fine-grained** da conta GitHub dona do projeto na Vercel (a mesma de `SYNC_COMMIT_NAME` / `SYNC_COMMIT_EMAIL`):
+
+1. GitHub → **Settings → Developer settings → Personal access tokens → Fine-grained tokens** → **Generate new token**.
+2. **Resource owner:** a conta (ou org) dona do fork.
+3. **Repository access:** **Only select repositories** → selecione **somente o fork** (nunca o `joaop06/vina`).
+4. **Permissions → Repository permissions:**
+
+| Permissão | Nível | Para quê |
+|-----------|--------|----------|
+| **Contents** | Read and write | Push de commits e branches de sync |
+| **Metadata** | Read-only | Obrigatório pelo GitHub |
+| **Pull requests** | Read and write | Abrir PR quando há conflito / sync parcial |
+| **Workflows** | Read and write | Push quando o upstream altera `.github/workflows/` |
+
+5. Gere o token e cole no fork em **Settings → Secrets and variables → Actions** como `SYNC_COMMIT_TOKEN`.
+
+Não use o nome `GITHUB_TOKEN` para este secret — esse nome é reservado ao token automático do Actions.
 
 ---
 
@@ -73,13 +95,13 @@ Variáveis de ambiente (Production):
 | `JWT_SECRET` | Segredo longo (≥ 32 caracteres) |
 | `NEXT_PUBLIC_SITE_URL` | URL pública do site na Vercel |
 
-**Dois tokens diferentes:** o `GITHUB_TOKEN` na Vercel **grava** no fork (admin → `data/`). Os secrets de Actions **não** substituem esse token — servem só para autor de commit no sync.
+**Dois tokens diferentes:** o `GITHUB_TOKEN` na Vercel **grava** no fork (admin → `data/`). O `SYNC_COMMIT_TOKEN` nas Actions faz **push/PR** do sync. Podem ser o mesmo PAT (com as permissões da tabela acima) ou tokens separados — o da Vercel só precisa de **Contents: read and write**.
 
 ### Criar `GITHUB_TOKEN` (Vercel)
 
 1. GitHub → **Settings → Developer settings → Personal access tokens** (fine-grained recomendado).
 2. **Repository access:** somente o **fork**.
-3. **Contents:** read and write.
+3. **Contents:** read and write (Metadata read-only vem junto).
 4. Cole na Vercel como `GITHUB_TOKEN`.
 
 ---
@@ -114,6 +136,8 @@ O que a pipeline faz:
 | Workflow **Sync upstream** não aparece | Actions desabilitadas no fork; faça pull da `main` do base se o fork for antigo |
 | Cron a cada 10 min não roda (só manual) | No fork: habilitar Actions + banner de workflows; em **Sync upstream**, **Enable workflow** se estiver `disabled_fork` |
 | Vercel não deploya após sync | `SYNC_COMMIT_NAME` / `SYNC_COMMIT_EMAIL` batem com a conta do projeto; se ainda falhar, adicione `SYNC_COMMIT_TOKEN` (PAT do owner no fork) |
+| `Resource not accessible by integration (createPullRequest)` | Falta `SYNC_COMMIT_TOKEN` com **Pull requests: read and write**, ou o secret não está no fork |
+| Push do sync falha em arquivos de workflow | `SYNC_COMMIT_TOKEN` precisa de **Workflows: read and write** |
 | Falha em `npm run build` no workflow | Erro no código vindo do base ou conflito não resolvido — corrija localmente ou no PR |
 | PR de sync toda semana | Você editou os mesmos arquivos de app que o base (`src/`, `app/`, etc.) |
 
