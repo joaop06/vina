@@ -137,18 +137,18 @@ jobs:
           gh pr create \
             --base "${{ inputs.target_branch }}" \
             --head "${SYNC_CONFLICT_BRANCH}" \
-            --title "Sync upstream (${{ inputs.upstream_repo }})" \
+            --title "Sync fork (${{ inputs.upstream_repo }})" \
             --body "$(cat <<'EOF'
-          ## Sincronização com upstream
+          ## Sincronização com o repositório base
 
-          O sync automático trouxe as mudanças do upstream que **não conflitam** com alterações desta loja.
+          O **Sync fork** trouxe as mudanças do upstream que **não conflitam** com alterações desta loja.
 
           Alguns arquivos foram alterados **tanto aqui quanto no upstream** e precisam de revisão manual. Veja a mensagem do último commit nesta branch para a lista.
 
           ### O que fazer
           1. Revise os arquivos listados no commit.
           2. Mescle as mudanças do upstream onde fizer sentido.
-          3. **Merge** deste PR na branch principal → dispara o deploy.
+          3. **Merge** deste PR na `main` → dispara o **Release vercel** (espelho `main` → `vercel` → deploy).
 
           Se precisar de ajuda, contate quem mantém o catálogo base.
           EOF
