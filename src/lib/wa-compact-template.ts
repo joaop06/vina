@@ -6,7 +6,7 @@ export type CompactCartItemParts = CompactCartItemPartsInput;
 export const DEFAULT_COMPACT_CART_ITEM_PARTS: CompactCartItemParts = {
   bullet: "•",
   showResumo: true,
-  showUrl: false,
+  showUrl: true,
 };
 
 function bulletPrefix(bullet: CompactCartItemParts["bullet"]): string {
