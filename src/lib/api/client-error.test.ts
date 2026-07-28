@@ -53,6 +53,31 @@ describe("formatApiErrorForUser", () => {
     assert.equal(formatted.title, "Sessão expirada");
     assert.deepEqual(formatted.lines, ["Não autenticado"]);
   });
+
+  it("distingue REF_CONFLICT de VERSION_CONFLICT", () => {
+    const ref = formatApiErrorForUser({
+      code: "REF_CONFLICT",
+      message:
+        "Não foi possível gravar (conflito de armazenamento). Tente novamente.",
+    });
+    assert.equal(ref.code, "REF_CONFLICT");
+    assert.match(ref.title, /armazenamento/i);
+
+    const version = formatApiErrorForUser({
+      code: "VERSION_CONFLICT",
+      message: "Versão desatualizada. Recarregue e tente novamente.",
+    });
+    assert.equal(version.code, "VERSION_CONFLICT");
+    assert.match(version.title, /Versão desatualizada/);
+  });
+
+  it("usa mensagem de STORAGE_BUSY quando fornecida", () => {
+    const formatted = formatApiErrorForUser({
+      code: "STORAGE_BUSY",
+      message: "Armazenamento ocupado. Tente novamente.",
+    });
+    assert.equal(formatted.title, "Armazenamento ocupado. Tente novamente.");
+  });
 });
 
 describe("site-config validation flatten", () => {

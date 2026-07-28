@@ -66,6 +66,17 @@ export const SITE_CONFIG_FRAGMENT_PATHS = [
   ...Object.values(SITE_CONFIG_TAB_PATHS),
 ] as const;
 
+/**
+ * Tabs written on a partial update: patched tabs plus missing/invalid ones to heal.
+ * Valid untouched tabs are left on disk (isolation between abas).
+ */
+export function siteConfigTabsToPersist(
+  touched: Iterable<SiteConfigTabId>,
+  fallbackTabs: Iterable<SiteConfigTabId> = [],
+): SiteConfigTabId[] {
+  return [...new Set([...touched, ...fallbackTabs])];
+}
+
 export const siteConfigMetaSchema = z.object({
   versao: z.number().int().min(1),
   atualizadoEm: isoDateSchema,
@@ -449,17 +460,15 @@ function fragmentsToConfig(fragments: SiteConfigFragments): SiteConfig {
 }
 
 /**
- * Prefer legacy `site.json` while it still exists.
- *
- * Fork sync can add seed fragment files before the split migration rewrites
- * them from the store's customized monolith — reading fragments first would
- * briefly serve defaults and hide the real config.
+ * Prefer tab fragments when present (canonical post-split storage).
+ * Legacy `site.json` is only used when fragments have not been migrated yet.
+ * Successful fragment writes delete the monolith so both never linger.
  */
 export function pickSiteConfigSource(opts: {
   legacy: SiteConfig | null;
   fragments: SiteConfigFragments | null;
 }): SiteConfig {
-  if (opts.legacy) return opts.legacy;
   if (opts.fragments) return fragmentsToConfig(opts.fragments);
+  if (opts.legacy) return opts.legacy;
   return DEFAULT_SITE_CONFIG;
 }

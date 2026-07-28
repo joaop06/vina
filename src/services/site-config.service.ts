@@ -25,6 +25,7 @@ import {
   SITE_CONFIG_TAB_IDS,
   SITE_CONFIG_TAB_PATHS,
   siteConfigMetaSchema,
+  siteConfigTabsToPersist,
   siteIdentidadeFragmentSchema,
   siteIdentidadeUpdateSchema,
   splitSiteConfig,
@@ -119,39 +120,59 @@ async function readMeta(): Promise<SiteConfigMeta | null> {
 
 /** Canonical optimistic-lock version (matches tab GET / meta.json). */
 async function readSiteConfigVersao(): Promise<number> {
-  const legacy = await readLegacySiteConfig();
-  if (legacy) return legacy.versao;
   const meta = await readMeta();
   if (meta) return meta.versao;
+  const legacy = await readLegacySiteConfig();
+  if (legacy) return legacy.versao;
   return DEFAULT_SITE_CONFIG.versao;
 }
 
-async function readAllFragments(): Promise<SiteConfigFragments | null> {
+type FragmentsLoad = {
+  fragments: SiteConfigFragments;
+  fallbackTabs: SiteConfigTabId[];
+};
+
+/**
+ * Load meta + all tab files. Missing/invalid tabs fall back to defaults
+ * instead of discarding the entire config.
+ */
+async function readAllFragments(): Promise<FragmentsLoad | null> {
   const meta = await readMeta();
   if (!meta) return null;
 
-  const entries = await Promise.all(
+  const defaults = splitSiteConfig(DEFAULT_SITE_CONFIG);
+  const fallbackTabs: SiteConfigTabId[] = [];
+  const fragments = { meta } as SiteConfigFragments;
+
+  await Promise.all(
     SITE_CONFIG_TAB_IDS.map(async (tab) => {
       const raw = await readJson<unknown>(SITE_CONFIG_TAB_PATHS[tab]);
-      if (raw == null) return null;
+      if (raw == null) {
+        console.warn(
+          `[site-config] missing ${SITE_CONFIG_TAB_PATHS[tab]}, using defaults`,
+        );
+        fragments[tab] = defaults[tab] as never;
+        fallbackTabs.push(tab);
+        return;
+      }
       try {
-        return [tab, parseTabFragment(tab, raw)] as const;
+        fragments[tab] = parseTabFragment(tab, raw) as never;
       } catch (e) {
         console.warn(`[site-config] invalid ${SITE_CONFIG_TAB_PATHS[tab]}`, e);
-        return null;
+        fragments[tab] = defaults[tab] as never;
+        fallbackTabs.push(tab);
       }
     }),
   );
 
-  if (entries.some((e) => e == null)) return null;
+  return { fragments, fallbackTabs };
+}
 
-  const fragments = { meta } as SiteConfigFragments;
-  for (const entry of entries) {
-    if (!entry) continue;
-    const [tab, data] = entry;
-    fragments[tab] = data as never;
-  }
-  return fragments;
+async function legacyDeleteIfPresent(deletes: string[]): Promise<string[]> {
+  const legacy = await readJson<unknown>(LEGACY_SITE_CONFIG_PATH);
+  if (legacy == null) return deletes;
+  if (deletes.includes(LEGACY_SITE_CONFIG_PATH)) return deletes;
+  return [...deletes, LEGACY_SITE_CONFIG_PATH];
 }
 
 function fragmentJsonWrites(fragments: SiteConfigFragments) {
@@ -179,13 +200,14 @@ async function readLegacySiteConfig(): Promise<SiteConfig | null> {
 }
 
 export const getSiteConfig = cache(async (): Promise<SiteConfig> => {
-  const [legacy, fragments] = await Promise.all([
+  const [legacy, loaded] = await Promise.all([
     readLegacySiteConfig(),
     readAllFragments(),
   ]);
+  const fragments = loaded?.fragments ?? null;
   if (legacy && fragments) {
     console.warn(
-      "[site-config] site.json and fragments both present; preferring legacy until migration splits",
+      "[site-config] site.json and fragments both present; preferring fragments (legacy will be removed on next save)",
     );
   }
   return pickSiteConfigSource({ legacy, fragments });
@@ -220,7 +242,16 @@ export const getSiteBranding = cache(async (): Promise<SiteBranding> => {
 export async function getSiteConfigTab<T extends SiteConfigTabId>(
   tab: T,
 ): Promise<SiteConfigTabResponse<T>> {
-  // Same preference as getSiteConfig: legacy wins while coexisting with seed fragments.
+  const loaded = await readAllFragments();
+  if (loaded) {
+    return {
+      tab,
+      versao: loaded.fragments.meta.versao,
+      atualizadoEm: loaded.fragments.meta.atualizadoEm,
+      data: loaded.fragments[tab] as SiteConfigTabResponse<T>["data"],
+    };
+  }
+
   const legacy = await readLegacySiteConfig();
   if (legacy) {
     return {
@@ -229,23 +260,6 @@ export async function getSiteConfigTab<T extends SiteConfigTabId>(
       atualizadoEm: legacy.atualizadoEm,
       data: extractTabSlice(legacy, tab),
     };
-  }
-
-  const meta = await readMeta();
-  const raw = await readJson<unknown>(SITE_CONFIG_TAB_PATHS[tab]);
-
-  if (meta && raw != null) {
-    try {
-      const data = parseTabFragment(tab, raw);
-      return {
-        tab,
-        versao: meta.versao,
-        atualizadoEm: meta.atualizadoEm,
-        data,
-      };
-    } catch (e) {
-      console.warn(`[site-config] invalid tab ${tab}`, e);
-    }
   }
 
   const full = await getSiteConfig();
@@ -269,11 +283,12 @@ async function commitSiteFragments(
   deletes: string[],
   message: string,
 ): Promise<void> {
+  const deletesWithLegacy = await legacyDeleteIfPresent(deletes);
   await commitFiles(
     buildMutationFiles({
       binaryWrites,
       jsonWrites: fragmentJsonWrites(fragments),
-      deletes,
+      deletes: deletesWithLegacy,
     }),
     message,
   );
@@ -296,6 +311,7 @@ export async function updateSiteConfig(
       409,
     );
   }
+
   const current = await getSiteConfig();
   const { versao: _ignoredVersao, logo: inputLogo, ...rest } = input;
   void _ignoredVersao;
@@ -337,7 +353,7 @@ export async function updateSiteConfig(
       ...(rest.painel ?? {}),
     },
     logo,
-    versao: current.versao + 1,
+    versao: expectedVersao + 1,
     atualizadoEm: new Date().toISOString(),
   };
   normalizePhoneFields(updated);
@@ -379,6 +395,9 @@ export async function updateSiteConfigTabs(
       409,
     );
   }
+
+  const loaded = await readAllFragments();
+  const fallbackTabs = loaded?.fallbackTabs ?? [];
 
   const current = await getSiteConfig();
   let next: SiteConfig = { ...current };
@@ -501,27 +520,30 @@ export async function updateSiteConfigTabs(
 
   next = {
     ...next,
-    versao: current.versao + 1,
+    versao: expectedVersao + 1,
     atualizadoEm: new Date().toISOString(),
   };
   normalizePhoneFields(next);
   const validated = siteConfigSchema.parse(next);
   const allFragments = splitSiteConfig(validated);
 
-  // Only rewrite meta + touched tabs (+ identidade if logo side-effects — already in touched).
+  // Persist patched tabs + heal missing/invalid ones; leave valid untouched tabs alone.
+  const tabsToWrite = siteConfigTabsToPersist(touched, fallbackTabs);
   const jsonWrites = [
     { path: SITE_CONFIG_META_PATH, data: allFragments.meta },
-    ...[...touched].map((tab) => ({
+    ...tabsToWrite.map((tab) => ({
       path: SITE_CONFIG_TAB_PATHS[tab],
       data: allFragments[tab],
     })),
   ];
 
+  const deletesWithLegacy = await legacyDeleteIfPresent(deletes);
+
   await commitFiles(
     buildMutationFiles({
       binaryWrites,
       jsonWrites,
-      deletes,
+      deletes: deletesWithLegacy,
     }),
     `chore(data): update site config tabs (${[...touched].join(",")})`,
   );

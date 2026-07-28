@@ -34,6 +34,7 @@ import {
 } from "@/components/admin/configuracoes/siteTheme";
 import type { ImageMeta } from "@/components/admin/ImageField";
 import { normalizeWaDigits } from "@/src/lib/wa";
+import { isApiClientError } from "@/src/lib/api/client-error";
 import type { Banner } from "@/src/schemas/banner";
 import type { Category } from "@/src/schemas/category";
 import type { SiteConfig } from "@/src/schemas/site-config";
@@ -43,6 +44,10 @@ import {
   type SiteConfigTabApiResponse,
   type SiteConfigTabId,
 } from "@/src/schemas/site-config-tabs";
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 const IdentidadePanel = dynamic(
   () =>
@@ -359,8 +364,44 @@ export function PersonalizacaoClient({
   function selectTab(next: ConfiguracoesTabId) {
     setTab(next);
     router.replace(configTabHref(next), { scroll: false });
-    void ensureTabLoaded(next).catch((err) => {
+    void (async () => {
+      await ensureTabLoaded(next);
+      // Contato preview uses whatsapp.telefone when usarWhatsappComoCelular.
+      if (next === "contato") await ensureTabLoaded("whatsapp");
+    })().catch((err) => {
       toastMutationError(err, { id: "load-config-tab" });
+    });
+  }
+
+  useEffect(() => {
+    if (initialTab === "contato" && !loadedTabsRef.current.has("whatsapp")) {
+      void ensureTabLoaded("whatsapp").catch((err) => {
+        toastMutationError(err, { id: "load-config-tab" });
+      });
+    }
+  }, [ensureTabLoaded, initialTab]);
+
+  async function syncVersaoFromServer() {
+    const syncTab =
+      [...loadedTabsRef.current][0] ??
+      (tab as SiteConfigTabId) ??
+      "identidade";
+    const res = await fetch(`/api/v1/admin/site-config?tab=${syncTab}`);
+    const data = (await res.json()) as SiteConfigTabApiResponse & {
+      error?: { message?: string };
+    };
+    if (!res.ok) {
+      throw new Error(data.error?.message ?? "Erro ao sincronizar versão");
+    }
+    setConfig((prev) =>
+      normalizeSiteConfig({
+        ...prev,
+        versao: data.versao,
+        atualizadoEm: data.atualizadoEm,
+      }),
+    );
+    toastMutationSuccess("Versão atualizada. Salve novamente.", {
+      id: "save-site-config",
     });
   }
 
@@ -544,42 +585,43 @@ export function PersonalizacaoClient({
             tabsPayload[t] = tabPayload(config, t, logoDraft);
           }
 
-          const syncTab = tabsToSave[0]!;
-          const versaoRes = await fetch(
-            `/api/v1/admin/site-config?tab=${syncTab}`,
-          );
-          const versaoData = (await versaoRes.json()) as SiteConfigTabApiResponse & {
-            error?: { message?: string };
-          };
-          if (!versaoRes.ok) {
-            throw new Error(
-              versaoData.error?.message ?? "Erro ao sincronizar versão",
-            );
-          }
-
           const payload = {
-            versao: versaoData.versao,
+            versao: config.versao,
             tabs: tabsPayload,
           };
 
-          const res = await mutationFetch(
+          const buildBody = () =>
+            hasUploads
+              ? buildMutationFormData(payload, pendingFiles)
+              : JSON.stringify(payload);
+          const headers = hasUploads
+            ? undefined
+            : { "Content-Type": "application/json" };
+
+          let res = await mutationFetch(
             "/api/v1/admin/site-config",
-            {
-              method: "PUT",
-              body: hasUploads
-                ? buildMutationFormData(payload, pendingFiles)
-                : JSON.stringify(payload),
-              headers: hasUploads
-                ? undefined
-                : { "Content-Type": "application/json" },
-            },
-            {
-              onUploadProgress: hasUploads ? setProgress : undefined,
-            },
+            { method: "PUT", body: buildBody(), headers },
+            { onUploadProgress: hasUploads ? setProgress : undefined },
           );
-          const data = (await res.json()) as SiteConfig & {
-            error?: { message?: string };
+          let data = (await res.json()) as SiteConfig & {
+            error?: { message?: string; code?: string };
           };
+
+          if (!res.ok) {
+            const code = data.error?.code;
+            if (code === "REF_CONFLICT" || code === "STORAGE_BUSY") {
+              await sleep(400);
+              res = await mutationFetch(
+                "/api/v1/admin/site-config",
+                { method: "PUT", body: buildBody(), headers },
+                { onUploadProgress: hasUploads ? setProgress : undefined },
+              );
+              data = (await res.json()) as SiteConfig & {
+                error?: { message?: string; code?: string };
+              };
+            }
+          }
+
           assertMutationOk(res, data, "Erro ao salvar");
           revokePreviewUrl(logoDraft?.previewUrl);
           const next = normalizeSiteConfig(data);
@@ -602,7 +644,21 @@ export function PersonalizacaoClient({
         },
       );
     } catch (err) {
-      toastMutationError(err, { id: "save-site-config" });
+      if (isApiClientError(err) && err.code === "VERSION_CONFLICT") {
+        toastMutationError(err, {
+          id: "save-site-config",
+          action: {
+            label: "Atualizar versão",
+            onClick: () => {
+              void syncVersaoFromServer().catch((syncErr) => {
+                toastMutationError(syncErr, { id: "save-site-config" });
+              });
+            },
+          },
+        });
+      } else {
+        toastMutationError(err, { id: "save-site-config" });
+      }
     } finally {
       setSaving(false);
     }

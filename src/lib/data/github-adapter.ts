@@ -88,6 +88,20 @@ async function resolveFileBytes(file: {
   return readBlobBySha(file.sha);
 }
 
+const COMMIT_REF_MAX_RETRIES = 5;
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function refConflictError(): Error & { code: string } {
+  const err = new Error(
+    "Não foi possível gravar (conflito de armazenamento). Tente novamente.",
+  ) as Error & { code: string };
+  err.code = "REF_CONFLICT";
+  return err;
+}
+
 export const githubAdapter: DataAdapter = {
   async getFileSha(relativePath) {
     const file = await getContent(relativePath);
@@ -266,20 +280,7 @@ export const githubAdapter: DataAdapter = {
     const { owner, repo, branch } = githubRepo();
     const api = octokit();
 
-    const { data: refData } = await api.git.getRef({
-      owner,
-      repo,
-      ref: `heads/${branch}`,
-    });
-    const latestCommitSha = refData.object.sha;
-
-    const { data: commitData } = await api.git.getCommit({
-      owner,
-      repo,
-      commit_sha: latestCommitSha,
-    });
-    const baseTreeSha = commitData.tree.sha;
-
+    // Blobs are content-addressed; create once and reuse across ref retries.
     const treeItems: {
       path: string;
       mode: "100644";
@@ -304,9 +305,8 @@ export const githubAdapter: DataAdapter = {
       }
 
       const writeFile = file as Exclude<FileChange, { delete: true }>;
-      let content: string;
       if (Buffer.isBuffer(writeFile.content)) {
-        content = writeFile.content.toString("base64");
+        const content = writeFile.content.toString("base64");
         const { data: blob } = await api.git.createBlob({
           owner,
           repo,
@@ -342,32 +342,60 @@ export const githubAdapter: DataAdapter = {
       }
     }
 
-    const { data: newTree } = await api.git.createTree({
-      owner,
-      repo,
-      base_tree: baseTreeSha,
-      tree: treeItems,
-    });
-
-    const { data: newCommit } = await api.git.createCommit({
-      owner,
-      repo,
-      message,
-      tree: newTree.sha,
-      parents: [latestCommitSha],
-    });
-
-    try {
-      await api.git.updateRef({
+    let lastError: Error | null = null;
+    for (let attempt = 1; attempt <= COMMIT_REF_MAX_RETRIES; attempt++) {
+      const { data: refData } = await api.git.getRef({
         owner,
         repo,
         ref: `heads/${branch}`,
-        sha: newCommit.sha,
       });
-    } catch (e) {
-      const err = e as Error & { code?: string; status?: number };
-      err.code = "VERSION_CONFLICT";
-      throw err;
+      const latestCommitSha = refData.object.sha;
+
+      const { data: commitData } = await api.git.getCommit({
+        owner,
+        repo,
+        commit_sha: latestCommitSha,
+      });
+      const baseTreeSha = commitData.tree.sha;
+
+      const { data: newTree } = await api.git.createTree({
+        owner,
+        repo,
+        base_tree: baseTreeSha,
+        tree: treeItems,
+      });
+
+      const { data: newCommit } = await api.git.createCommit({
+        owner,
+        repo,
+        message,
+        tree: newTree.sha,
+        parents: [latestCommitSha],
+      });
+
+      try {
+        await api.git.updateRef({
+          owner,
+          repo,
+          ref: `heads/${branch}`,
+          sha: newCommit.sha,
+        });
+        return;
+      } catch (e) {
+        const err = e as Error & { code?: string; status?: number };
+        err.code = "REF_CONFLICT";
+        lastError = err;
+        if (attempt < COMMIT_REF_MAX_RETRIES) {
+          const backoff = 200 * attempt;
+          console.warn(
+            `[github] REF_CONFLICT on updateRef, retry ${attempt}/${COMMIT_REF_MAX_RETRIES} in ${backoff}ms`,
+          );
+          await sleep(backoff);
+          continue;
+        }
+      }
     }
+
+    throw lastError ?? refConflictError();
   },
 };
