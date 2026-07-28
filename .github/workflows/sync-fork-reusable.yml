@@ -11,7 +11,7 @@ on:
         description: E-mail do autor do commit (mesma conta GitHub da Vercel)
       SYNC_COMMIT_TOKEN:
         required: false
-        description: PAT opcional do owner (contents write no fork) se push com GITHUB_TOKEN não disparar deploy na Vercel
+        description: "PAT fine-grained do owner no fork (Contents + Pull requests + Workflows read/write). Recomendado: deploy Vercel Hobby e PR em conflito"
     inputs:
       upstream_repo:
         description: "owner/repo do upstream público (default joaop06/vina)"
@@ -125,7 +125,8 @@ jobs:
       - name: Abrir PR (conflitos ou sync parcial)
         if: steps.merge.outputs.partial_or_conflict == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Preferir PAT do fork: em muitos forks o GITHUB_TOKEN não consegue createPullRequest.
+          GH_TOKEN: ${{ secrets.SYNC_COMMIT_TOKEN || secrets.GITHUB_TOKEN }}
           SYNC_CONFLICT_BRANCH: sync/upstream-${{ github.run_id }}
         run: |
           existing=$(gh pr list --head "${SYNC_CONFLICT_BRANCH}" --base "${{ inputs.target_branch }}" --json number --jq 'length')
