@@ -16,7 +16,21 @@ Configuração canônica: arquivos em `data/configuracoes/` segmentados por aba 
 
 A migration `2026-07-split-site-config-by-tab` converte o legado `site.json` monolítico nesses fragmentos.
 
-Enquanto `site.json` e os fragmentos coexistirem (ex.: sync de fork que trouxe o seed fatiado antes da migration rodar), o app **prefere o `site.json` legado** para não servir defaults do base por cima da config da loja. A migration grava os fragmentos a partir do legado e remove o monolito.
+Fragments são a fonte canônica quando `meta.json` + abas existem. O monolito `site.json` só é lido se os fragmentos ainda não tiverem sido migrados. Qualquer save bem-sucedido no admin **remove** `site.json` residual no mesmo commit.
+
+Locks otimistas usam `meta.versao` (compartilhado entre abas). Conflitos de tip do GitHub (`REF_CONFLICT`) são distintos de `VERSION_CONFLICT` e têm retry automático.
+
+## Frescor na vitrine pública
+
+Após salvar no admin, `revalidateStorefront("site-config", …)` invalida a Data Cache (`getCachedSiteConfig`, tag `site-config`) e o Full Route Cache de `/`, `/catalogo`, `/sobre`, `/carrinho`, `/produto` (layout) e ícones. A vitrine deve refletir a mudança na próxima request — sem redeploy. O TTL de 120s (`STOREFRONT_REVALIDATE_SECONDS`) é só rede de segurança se a invalidação on-demand falhar.
+
+Checklist rápido pós-save:
+
+- Identidade (nome/cores/logo) → header/footer/CSS vars em `/`
+- WhatsApp → CTA home, header, PDP
+- Contato / textos sobre → `/sobre`
+- `mostrarCarrinho` → `/carrinho` (404 se desligado)
+- Vitrine/layout → home + catálogo
 
 ## Matriz resumida (campo → superfície)
 

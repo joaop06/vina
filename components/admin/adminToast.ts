@@ -22,26 +22,41 @@ function linesToDescription(lines: string[]): ReactNode {
 
 export type AdminToastOptions = {
   id?: string;
+  action?: {
+    label: string;
+    onClick: () => void;
+  };
 };
 
 export function toastMutationError(
   err: unknown,
   options: AdminToastOptions = {},
 ): void {
+  const action = options.action
+    ? {
+        label: options.action.label,
+        onClick: options.action.onClick,
+      }
+    : undefined;
+
   if (isApiClientError(err)) {
     toast.error(err.displayTitle, {
       id: options.id,
       description: linesToDescription(err.displayLines),
       duration:
         err.code === "VALIDATION_ERROR" ? DEFAULT_ERROR_DURATION : undefined,
+      action,
     });
     return;
   }
   if (err instanceof Error && err.message) {
-    toast.error(err.message, { id: options.id });
+    toast.error(err.message, { id: options.id, action });
     return;
   }
-  toast.error("Algo deu errado. Tente novamente.", { id: options.id });
+  toast.error("Algo deu errado. Tente novamente.", {
+    id: options.id,
+    action,
+  });
 }
 
 export function toastMutationSuccess(

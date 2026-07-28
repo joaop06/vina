@@ -35,7 +35,22 @@ export function toErrorResponse(e: unknown) {
     return {
       status: 503,
       body: {
-        error: { code: "STORAGE_BUSY", message: "Storage busy" },
+        error: {
+          code: "STORAGE_BUSY",
+          message: "Armazenamento ocupado. Tente novamente.",
+        },
+      },
+    };
+  }
+  if (e instanceof Error && (e as { code?: string }).code === "REF_CONFLICT") {
+    return {
+      status: 409,
+      body: {
+        error: {
+          code: "REF_CONFLICT",
+          message:
+            "Não foi possível gravar (conflito de armazenamento). Tente novamente.",
+        },
       },
     };
   }

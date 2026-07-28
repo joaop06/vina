@@ -22,6 +22,7 @@ function isOutsideNextRevalidateContext(e: unknown): boolean {
  * Path strategy:
  * - `("/", "layout")` — public shell (header/footer) under the root URL tree
  * - `/catalogo` layout — page 1, `/catalogo/page/N`, `/catalogo/busca`
+ * - `/produto` layout when site-config changes (PDP embeds textos / WA)
  * - per-slug PDP + sitemap when products change
  * - icons always (logo / branding)
  */
@@ -82,6 +83,11 @@ export function revalidateStorefront(
     if (touchesBanners || touchesSite) {
       // Home hero / branding already covered by `/`; keep explicit for clarity.
       revalidatePath("/");
+    }
+
+    if (touchesSite) {
+      // PDPs embed site textos / WhatsApp templates / cart flags.
+      revalidatePath("/produto", "layout");
     }
 
     const slugs = [...new Set((opts.productSlugs ?? []).filter(Boolean))];

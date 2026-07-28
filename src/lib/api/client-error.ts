@@ -78,10 +78,12 @@ function titleForCode(code: string, message: string): string {
       return "Conflito de identificador";
     case "VERSION_CONFLICT":
       return message || "Versão desatualizada";
+    case "REF_CONFLICT":
+      return message || "Conflito de armazenamento";
     case "RATE_LIMITED":
       return "Muitas tentativas";
     case "STORAGE_BUSY":
-      return "Armazenamento ocupado";
+      return message || "Armazenamento ocupado";
     case "STORAGE_ERROR":
       return "Erro ao salvar dados";
     default:

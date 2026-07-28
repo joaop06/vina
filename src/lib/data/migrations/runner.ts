@@ -27,8 +27,9 @@ assertRegistryValid(ALL_MIGRATIONS);
 
 const MAX_CONFLICT_RETRIES = 5;
 
-function isVersionConflict(e: unknown): boolean {
-  return (e as { code?: string }).code === "VERSION_CONFLICT";
+function isRetriableStorageConflict(e: unknown): boolean {
+  const code = (e as { code?: string }).code;
+  return code === "VERSION_CONFLICT" || code === "REF_CONFLICT";
 }
 
 function sleep(ms: number) {
@@ -115,10 +116,11 @@ export async function runDataMigrations(options: {
           );
           break;
         } catch (e) {
-          if (isVersionConflict(e) && attempt < MAX_CONFLICT_RETRIES) {
+          if (isRetriableStorageConflict(e) && attempt < MAX_CONFLICT_RETRIES) {
             const backoff = 200 * attempt;
+            const code = (e as { code?: string }).code ?? "CONFLICT";
             console.warn(
-              `[migrations] VERSION_CONFLICT on ${migration.id}, retry ${attempt}/${MAX_CONFLICT_RETRIES} in ${backoff}ms`,
+              `[migrations] ${code} on ${migration.id}, retry ${attempt}/${MAX_CONFLICT_RETRIES} in ${backoff}ms`,
             );
             await sleep(backoff);
             continue;
