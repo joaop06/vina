@@ -439,7 +439,11 @@ function fragmentsToConfig(fragments: SiteConfigFragments): SiteConfig {
       "[site-config] compose invalid, using defaults",
       parsed.error.flatten(),
     );
-    return DEFAULT_SITE_CONFIG;
+    return {
+      ...DEFAULT_SITE_CONFIG,
+      versao: fragments.meta.versao,
+      atualizadoEm: fragments.meta.atualizadoEm,
+    };
   }
   return parsed.data;
 }

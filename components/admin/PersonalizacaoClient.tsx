@@ -516,6 +516,7 @@ export function PersonalizacaoClient({
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
+    if (saving) return;
     const tabsToSave = listDirtyTabs(
       config,
       logoDraft,
@@ -542,8 +543,22 @@ export function PersonalizacaoClient({
           for (const t of tabsToSave) {
             tabsPayload[t] = tabPayload(config, t, logoDraft);
           }
+
+          const syncTab = tabsToSave[0]!;
+          const versaoRes = await fetch(
+            `/api/v1/admin/site-config?tab=${syncTab}`,
+          );
+          const versaoData = (await versaoRes.json()) as SiteConfigTabApiResponse & {
+            error?: { message?: string };
+          };
+          if (!versaoRes.ok) {
+            throw new Error(
+              versaoData.error?.message ?? "Erro ao sincronizar versão",
+            );
+          }
+
           const payload = {
-            versao: config.versao,
+            versao: versaoData.versao,
             tabs: tabsPayload,
           };
 

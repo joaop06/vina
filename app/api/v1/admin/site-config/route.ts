@@ -8,7 +8,7 @@ import {
   updateSiteConfig,
   updateSiteConfigTabs,
 } from "@/src/services/site-config.service";
-import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
+import { getSiteConfig } from "@/src/services/site-config.service";
 import { siteConfigUpdateSchema } from "@/src/schemas/site-config";
 import {
   SITE_CONFIG_TAB_IDS,
@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
     if (tab) {
       return jsonOk(await getSiteConfigTab(tab));
     }
-    return jsonOk(await getCachedSiteConfig());
+    return jsonOk(await getSiteConfig());
   } catch (e) {
     return jsonError(e);
   }

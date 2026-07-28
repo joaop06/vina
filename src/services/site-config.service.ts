@@ -117,6 +117,15 @@ async function readMeta(): Promise<SiteConfigMeta | null> {
   return parsed.data;
 }
 
+/** Canonical optimistic-lock version (matches tab GET / meta.json). */
+async function readSiteConfigVersao(): Promise<number> {
+  const legacy = await readLegacySiteConfig();
+  if (legacy) return legacy.versao;
+  const meta = await readMeta();
+  if (meta) return meta.versao;
+  return DEFAULT_SITE_CONFIG.versao;
+}
+
 async function readAllFragments(): Promise<SiteConfigFragments | null> {
   const meta = await readMeta();
   if (!meta) return null;
@@ -279,14 +288,15 @@ export async function updateSiteConfig(
   input: z.infer<typeof siteConfigUpdateSchema>,
   pendingBinaries: Map<string, PendingBinary> = new Map(),
 ): Promise<SiteConfig> {
-  const current = await getSiteConfig();
-  if (current.versao !== input.versao) {
+  const expectedVersao = await readSiteConfigVersao();
+  if (expectedVersao !== input.versao) {
     throw new AppError(
       "VERSION_CONFLICT",
       "Versão desatualizada. Recarregue e tente novamente.",
       409,
     );
   }
+  const current = await getSiteConfig();
   const { versao: _ignoredVersao, logo: inputLogo, ...rest } = input;
   void _ignoredVersao;
 
@@ -361,8 +371,8 @@ export async function updateSiteConfigTabs(
     throw new AppError("VALIDATION_ERROR", "Nenhuma aba para salvar", 400);
   }
 
-  const current = await getSiteConfig();
-  if (current.versao !== versao) {
+  const expectedVersao = await readSiteConfigVersao();
+  if (expectedVersao !== versao) {
     throw new AppError(
       "VERSION_CONFLICT",
       "Versão desatualizada. Recarregue e tente novamente.",
@@ -370,6 +380,7 @@ export async function updateSiteConfigTabs(
     );
   }
 
+  const current = await getSiteConfig();
   let next: SiteConfig = { ...current };
   let binaryWrites: { path: string; bytes: Buffer }[] = [];
   const deletes: string[] = [];
