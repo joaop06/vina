@@ -93,9 +93,7 @@ Detalhes e comentários extras estão em **`.env.example`**.
 
 Se produtos existirem mas listagens falharem, rode `npm run indices:rebuild -- --data=data-dev` (ou `indices:repair`).
 
-Em PRs e pushes na `main`, o workflow **CI** (`.github/workflows/ci.yml`) roda lint, testes, `indices:validate` em `data/` e `next build` — PR com produto sem índice coerente falha antes do merge.
-
-Na `main`, o workflow **Data indices** (`.github/workflows/data-indices.yml`) repara e faz push de `data/indices/` se a validação falhar após alterações em `data/`. Nos **forks**, o **Sync upstream** faz poll a cada 10 min da `main` de `joaop06/vina`; configure secrets `SYNC_COMMIT_*` e o PAT `SYNC_COMMIT_TOKEN` (Contents + Pull requests + Workflows) — ver [docs/configurar-fork-loja.md](docs/configurar-fork-loja.md).
+Nos **forks**, **Sync fork** faz poll a cada 10 min da `main` de `joaop06/vina` e **Release vercel** espelha a `main` do fork na branch `vercel` (deploy). Configure secrets `SYNC_COMMIT_*` e o PAT `SYNC_COMMIT_TOKEN` — ver [docs/configurar-fork-loja.md](docs/configurar-fork-loja.md).
 
 ### Produção
 
@@ -121,7 +119,7 @@ Há scripts opcionais de medição de leitura (`baseline:read`, `phase6:verify`)
 
 ### Lojas (fork do repositório base)
 
-Passo a passo (fork, Actions, Vercel, sync com o base público): **[docs/configurar-fork-loja.md](docs/configurar-fork-loja.md)**.
+Passo a passo (fork, Actions, Vercel, Sync fork + Release vercel): **[docs/configurar-fork-loja.md](docs/configurar-fork-loja.md)**.
 
 
 ---
