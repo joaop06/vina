@@ -175,25 +175,6 @@ export function MensagemProdutoEditor({
                 className="admin-switch admin-switch--block"
                 data-disabled={disabled ? "true" : undefined}
               >
-                <span>Quantidade (x2)</span>
-                <input
-                  type="checkbox"
-                  role="switch"
-                  disabled={disabled}
-                  checked={compactParts.showQuantidade}
-                  onChange={(e) =>
-                    updateCompact({
-                      ...compactParts,
-                      showQuantidade: e.target.checked,
-                    })
-                  }
-                />
-                <span className="admin-switch__track" aria-hidden="true" />
-              </label>
-              <label
-                className="admin-switch admin-switch--block"
-                data-disabled={disabled ? "true" : undefined}
-              >
                 <span>Link da página</span>
                 <input
                   type="checkbox"
@@ -213,32 +194,13 @@ export function MensagemProdutoEditor({
                 className="admin-switch admin-switch--block"
                 data-disabled={disabled ? "true" : undefined}
               >
-                <span>Referência separada (além do nome)</span>
-                <input
-                  type="checkbox"
-                  role="switch"
-                  disabled={disabled}
-                  checked={compactParts.showReferenciaSeparada}
-                  onChange={(e) =>
-                    updateCompact({
-                      ...compactParts,
-                      showReferenciaSeparada: e.target.checked,
-                    })
-                  }
-                />
-                <span className="admin-switch__track" aria-hidden="true" />
-              </label>
-              <label
-                className="admin-switch admin-switch--block"
-                data-disabled={disabled ? "true" : undefined}
-              >
-                <span>Referência junto ao nome (quando cadastrada)</span>
+                <span>Referência do produto (quando cadastrada)</span>
                 <input
                   type="checkbox"
                   role="switch"
                   disabled={disabled}
                   checked={incluirReferencia}
-                  aria-label="Incluir referência interna junto ao nome do produto"
+                  aria-label="Incluir referência do produto na mensagem"
                   onChange={(e) =>
                     patchWhatsapp({
                       mensagemProdutoIncluirReferencia: e.target.checked,
@@ -275,13 +237,13 @@ export function MensagemProdutoEditor({
               className="admin-switch admin-switch--block"
               data-disabled={disabled ? "true" : undefined}
             >
-              <span>Referência junto ao nome (quando cadastrada)</span>
+              <span>Referência do produto (quando cadastrada)</span>
               <input
                 type="checkbox"
                 role="switch"
                 disabled={disabled}
                 checked={incluirReferencia}
-                aria-label="Incluir referência interna junto ao nome do produto"
+                aria-label="Incluir referência do produto na mensagem"
                 onChange={(e) =>
                   patchWhatsapp({
                     mensagemProdutoIncluirReferencia: e.target.checked,

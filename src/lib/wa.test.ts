@@ -38,6 +38,25 @@ describe("productWaMessage referencia", () => {
     assert.equal(msg, "Cód. ABC");
   });
 
+  it("compact product line includes ref once when flag is on", () => {
+    const msg = productWaMessageFromParts(
+      DEFAULT_PRODUCT_WA_TEMPLATE_PARTS,
+      "Vestido",
+      "vestido",
+      {
+        formatoItens: "compacto",
+        itemCompactoParts: {
+          ...DEFAULT_COMPACT_CART_ITEM_PARTS,
+          showResumo: false,
+        },
+        referencia: "12425",
+        mensagemProdutoIncluirReferencia: true,
+      },
+    );
+    assert.match(msg, /• Vestido \(Ref\. 12425\)/);
+    assert.doesNotMatch(msg, /\(Ref\. 12425\) \(Ref\./);
+  });
+
   it("compact cart line respects incluir referencia flag", () => {
     const line = {
       nome: "Vestido",
@@ -51,7 +70,6 @@ describe("productWaMessage referencia", () => {
       mensagemCarrinhoItemCompactoParts: {
         ...DEFAULT_COMPACT_CART_ITEM_PARTS,
         showResumo: false,
-        showQuantidade: false,
       },
       mensagemCarrinhoFormatoItens: "compacto" as const,
     };
@@ -134,7 +152,6 @@ describe("productWaMessageFromParts segmented assembly", () => {
         itemCompactoParts: {
           ...DEFAULT_COMPACT_CART_ITEM_PARTS,
           showUrl: false,
-          showQuantidade: false,
         },
         tamanho: "M",
         cor: "Azul",

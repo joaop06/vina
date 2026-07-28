@@ -46,8 +46,7 @@ export function isRecognizedCartWaTemplate(template: string): boolean {
   );
 }
 
-export const DEFAULT_CART_WA_COMPACT_ITEM =
-  "• {nome} — {resumo} (x{quantidade})";
+export const DEFAULT_CART_WA_COMPACT_ITEM = "• {nome} — {resumo}";
 
 export const DEFAULT_CART_WA_ENVELOPE = buildCartWaTemplate(
   DEFAULT_CART_WA_TEMPLATE_PARTS,

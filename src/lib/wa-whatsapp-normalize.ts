@@ -31,11 +31,47 @@ type WhatsappRaw = {
   mensagemProdutoItemCompactoParts?: z.infer<
     typeof compactCartItemPartsSchema
   >;
+  mensagemProdutoIncluirReferencia?: boolean;
   mensagemProduto?: string;
   mensagemCarrinho?: string;
   mensagemCarrinhoItemCompacto?: string;
   [key: string]: unknown;
 };
+
+type CompactParts = z.infer<typeof compactCartItemPartsSchema>;
+
+/** Drops removed `showReferenciaSeparada`; ORs it into incluir referencia. */
+function normalizeCompactItemParts(
+  raw: unknown,
+  legacyLineTemplate?: string,
+): { parts: CompactParts; incluirReferenciaFromLegacy: boolean } {
+  let incluirReferenciaFromLegacy = false;
+  if (legacyLineTemplate?.includes("{referencia}")) {
+    incluirReferenciaFromLegacy = true;
+  }
+
+  let source = raw;
+  if (!source) {
+    return {
+      parts: { ...DEFAULT_COMPACT_CART_ITEM_PARTS },
+      incluirReferenciaFromLegacy,
+    };
+  }
+
+  if (typeof source === "object") {
+    const record = { ...(source as Record<string, unknown>) };
+    if (record.showReferenciaSeparada === true) {
+      incluirReferenciaFromLegacy = true;
+    }
+    delete record.showReferenciaSeparada;
+    source = record;
+  }
+
+  return {
+    parts: compactCartItemPartsSchema.parse(source),
+    incluirReferenciaFromLegacy,
+  };
+}
 
 export function normalizeWhatsappTemplates<T extends WhatsappRaw>(
   whatsapp: T,
@@ -78,24 +114,32 @@ export function normalizeWhatsappTemplates<T extends WhatsappRaw>(
 
   let mensagemCarrinhoItemCompactoParts =
     whatsapp.mensagemCarrinhoItemCompactoParts;
+  const cartCompactLegacyLine = whatsapp.mensagemCarrinhoItemCompacto?.trim();
+  let incluirReferencia = Boolean(whatsapp.mensagemProdutoIncluirReferencia);
   if (!mensagemCarrinhoItemCompactoParts) {
-    const legacy = whatsapp.mensagemCarrinhoItemCompacto?.trim();
-    mensagemCarrinhoItemCompactoParts = legacy
-      ? parseCompactCartItemTemplate(legacy)
+    mensagemCarrinhoItemCompactoParts = cartCompactLegacyLine
+      ? parseCompactCartItemTemplate(cartCompactLegacyLine)
       : DEFAULT_COMPACT_CART_ITEM_PARTS;
   }
-  mensagemCarrinhoItemCompactoParts = compactCartItemPartsSchema.parse(
+  const cartCompact = normalizeCompactItemParts(
     mensagemCarrinhoItemCompactoParts,
+    whatsapp.mensagemCarrinhoItemCompactoParts
+      ? undefined
+      : cartCompactLegacyLine,
   );
+  mensagemCarrinhoItemCompactoParts = cartCompact.parts;
+  if (cartCompact.incluirReferenciaFromLegacy) incluirReferencia = true;
 
   let mensagemProdutoItemCompactoParts =
     whatsapp.mensagemProdutoItemCompactoParts;
   if (!mensagemProdutoItemCompactoParts) {
     mensagemProdutoItemCompactoParts = { ...DEFAULT_COMPACT_CART_ITEM_PARTS };
   }
-  mensagemProdutoItemCompactoParts = compactCartItemPartsSchema.parse(
+  const prodCompact = normalizeCompactItemParts(
     mensagemProdutoItemCompactoParts,
   );
+  mensagemProdutoItemCompactoParts = prodCompact.parts;
+  if (prodCompact.incluirReferenciaFromLegacy) incluirReferencia = true;
 
   const rest = { ...whatsapp };
   delete rest.mensagemProduto;
@@ -105,6 +149,7 @@ export function normalizeWhatsappTemplates<T extends WhatsappRaw>(
 
   return {
     ...rest,
+    mensagemProdutoIncluirReferencia: incluirReferencia,
     mensagemProdutoParts,
     mensagemCarrinhoParts,
     mensagemCarrinhoItemCompactoParts,

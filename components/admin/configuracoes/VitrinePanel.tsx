@@ -104,11 +104,13 @@ export function VitrinePanel({
             banner é criado ou atualizado automaticamente.
           </p>
         </header>
-        <BannersClient
-          initialItems={initialBanners}
-          layout={selectedLayout}
-          embedded
-        />
+        <div className="admin-form__section-body">
+          <BannersClient
+            initialItems={initialBanners}
+            layout={selectedLayout}
+            embedded
+          />
+        </div>
       </section>
     </div>
   );

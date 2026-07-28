@@ -39,7 +39,6 @@ describe("wa template parts round-trip", () => {
     );
     assert.equal(parts.bullet, "•");
     assert.equal(parts.showResumo, true);
-    assert.equal(parts.showQuantidade, true);
   });
 });
 
@@ -48,7 +47,7 @@ describe("normalizeWhatsappTemplates", () => {
     const normalized = normalizeWhatsappTemplates({
       telefone: "16999999999",
       mensagemProduto:
-        "*Tenho interesse no produto:*\n- {nome}:\n- - {resumo}\n- - {url}\n\nSegue disponível???",
+        "*Tenho interesse no produto:*\n- {nome}:\n- - {resumo}\n- - {url}\n\nSegue disponível?",
       mensagemCarrinho:
         "Gostaria de pedir os itens abaixo:\n\n{itens}\n\nPodem me confirmar?",
       mensagemCarrinhoItemCompacto: "• {nome} — {resumo} (x{quantidade})",
@@ -64,6 +63,28 @@ describe("normalizeWhatsappTemplates", () => {
     assert.equal(normalized.mensagemCarrinhoItemCompactoParts.showResumo, true);
     assert.equal(
       (normalized as { mensagemProduto?: string }).mensagemProduto,
+      undefined,
+    );
+  });
+
+  it("migrates legacy showReferenciaSeparada into mensagemProdutoIncluirReferencia", () => {
+    const normalized = normalizeWhatsappTemplates({
+      telefone: "16999999999",
+      mensagemProdutoIncluirReferencia: false,
+      mensagemProdutoItemCompactoParts: {
+        bullet: "•",
+        showResumo: true,
+        showUrl: false,
+        showReferenciaSeparada: true,
+      },
+    });
+    assert.equal(normalized.mensagemProdutoIncluirReferencia, true);
+    assert.equal(
+      (
+        normalized.mensagemProdutoItemCompactoParts as {
+          showReferenciaSeparada?: boolean;
+        }
+      ).showReferenciaSeparada,
       undefined,
     );
   });

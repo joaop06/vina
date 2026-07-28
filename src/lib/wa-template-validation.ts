@@ -39,9 +39,7 @@ export const compactCartItemBulletSchema = z.enum(["•", "-", "none"]);
 export const compactCartItemPartsSchema = z.object({
   bullet: compactCartItemBulletSchema,
   showResumo: z.boolean(),
-  showQuantidade: z.boolean(),
   showUrl: z.boolean(),
-  showReferenciaSeparada: z.boolean(),
 });
 
 export type ProductWaTemplatePartsInput = z.infer<

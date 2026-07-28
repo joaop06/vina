@@ -101,6 +101,22 @@ const PainelPanel = dynamic(
   { ssr: false },
 );
 
+function snapshotCommitted(
+  config: SiteConfig,
+  logo: ImageMeta | null,
+): { config: SiteConfig; logo: ImageMeta | null } {
+  return {
+    config: normalizeSiteConfig(structuredClone(config)),
+    logo: logo
+      ? {
+          id: logo.id,
+          path: logo.path,
+          alt: logo.alt,
+        }
+      : null,
+  };
+}
+
 function isLeavingConfiguracoes(href: string): boolean {
   try {
     const url = new URL(href, window.location.origin);
@@ -246,6 +262,12 @@ export function PersonalizacaoClient({
     cores: initialConfig.cores,
     layout: initialConfig.layout ?? "classic",
   });
+  const committedSnapshotRef = useRef(
+    snapshotCommitted(
+      normalizeSiteConfig(initialConfig),
+      logoFromConfig(initialConfig),
+    ),
+  );
 
   const colorPickerValue = normalizeHexForPicker(config.cores.primaria);
   const selectedLayout = config.layout ?? "classic";
@@ -299,6 +321,7 @@ export function PersonalizacaoClient({
             ...baseline,
             ...tabBaselineFingerprints(merged, logo, [next]),
           }));
+          committedSnapshotRef.current = snapshotCommitted(merged, logo);
           return merged;
         });
         setLoadedTabs((prev) => {
@@ -468,6 +491,29 @@ export function PersonalizacaoClient({
     return () => document.removeEventListener("click", onClickCapture, true);
   }, [isDirty, confirm, router]);
 
+  async function discardChanges() {
+    if (!isDirty || saving) return;
+    const ok = await confirm({
+      title: "Descartar alterações",
+      description:
+        "As alterações não salvas em Configurações serão perdidas. Esta ação não pode ser desfeita.",
+      confirmLabel: "Descartar",
+      cancelLabel: "Continuar editando",
+      tone: "danger",
+    });
+    if (!ok) return;
+
+    revokePreviewUrl(logoDraft?.previewUrl);
+    const { config: snapConfig, logo: snapLogo } = committedSnapshotRef.current;
+    const next = normalizeSiteConfig(snapConfig);
+    const nextLogo = snapLogo ? { ...snapLogo } : null;
+    applySiteTheme(committedTheme.current);
+    setConfig(next);
+    setLogoDraft(nextLogo);
+    setBaselineByTab(tabBaselineFingerprints(next, nextLogo, loadedTabs));
+    setBaselineLayout(next.layout ?? "classic");
+  }
+
   async function save(e: React.FormEvent) {
     e.preventDefault();
     const tabsToSave = listDirtyTabs(
@@ -534,6 +580,7 @@ export function PersonalizacaoClient({
             tabBaselineFingerprints(next, nextLogo, loadedTabs),
           );
           setBaselineLayout(data.layout ?? "classic");
+          committedSnapshotRef.current = snapshotCommitted(next, nextLogo);
           toastMutationSuccess("Configurações salvas.", {
             id: "save-site-config",
           });
@@ -559,9 +606,24 @@ export function PersonalizacaoClient({
             </p>
           ) : null}
         </div>
-        <AdminPageActions>
+        <AdminPageActions className="admin-config-actions">
+          {isDirty ? (
+            <button
+              type="button"
+              className="btn btn-ghost btn-sm"
+              onClick={() => void discardChanges()}
+              disabled={saving}
+            >
+              Descartar alterações
+            </button>
+          ) : null}
           <LoadingButton
-            className="btn btn-primary btn-sm"
+            className={[
+              "btn btn-sm",
+              isDirty || saving
+                ? "btn-primary admin-config-save--dirty"
+                : "admin-config-save--idle",
+            ].join(" ")}
             type="submit"
             form={activeFormId}
             loading={saving}

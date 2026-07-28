@@ -44,6 +44,7 @@ export function MensagemCarrinhoEditor({
   const wa = config.whatsapp;
   const envelopeParts = wa.mensagemCarrinhoParts;
   const compactParts = wa.mensagemCarrinhoItemCompactoParts;
+  const incluirReferencia = Boolean(wa.mensagemProdutoIncluirReferencia);
 
   const preview = useMemo(
     () =>
@@ -175,25 +176,6 @@ export function MensagemCarrinhoEditor({
                 className="admin-switch admin-switch--block"
                 data-disabled={disabled ? "true" : undefined}
               >
-                <span>Quantidade (x2)</span>
-                <input
-                  type="checkbox"
-                  role="switch"
-                  disabled={disabled}
-                  checked={compactParts.showQuantidade}
-                  onChange={(e) =>
-                    updateCompact({
-                      ...compactParts,
-                      showQuantidade: e.target.checked,
-                    })
-                  }
-                />
-                <span className="admin-switch__track" aria-hidden="true" />
-              </label>
-              <label
-                className="admin-switch admin-switch--block"
-                data-disabled={disabled ? "true" : undefined}
-              >
                 <span>Link da página</span>
                 <input
                   type="checkbox"
@@ -213,16 +195,16 @@ export function MensagemCarrinhoEditor({
                 className="admin-switch admin-switch--block"
                 data-disabled={disabled ? "true" : undefined}
               >
-                <span>Referência separada (além do nome)</span>
+                <span>Referência do produto (quando cadastrada)</span>
                 <input
                   type="checkbox"
                   role="switch"
                   disabled={disabled}
-                  checked={compactParts.showReferenciaSeparada}
+                  checked={incluirReferencia}
+                  aria-label="Incluir referência do produto na mensagem"
                   onChange={(e) =>
-                    updateCompact({
-                      ...compactParts,
-                      showReferenciaSeparada: e.target.checked,
+                    patchWhatsapp({
+                      mensagemProdutoIncluirReferencia: e.target.checked,
                     })
                   }
                 />
@@ -232,11 +214,36 @@ export function MensagemCarrinhoEditor({
           </div>
         </>
       ) : (
-        <p className="wa-product-msg__block-desc">
-          A lista usa o título em negrito da seção &quot;Interesse em um
-          produto&quot; (uma vez) e, para cada item, o nome do produto com
-          tamanho, cor, quantidade e link conforme as opções daquela seção.
-        </p>
+        <div className="wa-product-msg__block">
+          <span className="wa-product-msg__block-title">Incluir em cada item</span>
+          <p className="wa-product-msg__block-desc">
+            A lista usa o título em negrito da seção &quot;Interesse em um
+            produto&quot; (uma vez) e, para cada item, nome, variantes e link
+            conforme as opções daquela seção — exceto a referência abaixo, que
+            vale para o carrinho e para interesse em um produto.
+          </p>
+          <div className="wa-product-msg__toggles">
+            <label
+              className="admin-switch admin-switch--block"
+              data-disabled={disabled ? "true" : undefined}
+            >
+              <span>Referência do produto (quando cadastrada)</span>
+              <input
+                type="checkbox"
+                role="switch"
+                disabled={disabled}
+                checked={incluirReferencia}
+                aria-label="Incluir referência do produto na mensagem"
+                onChange={(e) =>
+                  patchWhatsapp({
+                    mensagemProdutoIncluirReferencia: e.target.checked,
+                  })
+                }
+              />
+              <span className="admin-switch__track" aria-hidden="true" />
+            </label>
+          </div>
+        </div>
       )}
 
       <label className="wa-product-msg__block">
