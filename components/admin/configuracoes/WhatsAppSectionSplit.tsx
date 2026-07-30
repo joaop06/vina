@@ -24,7 +24,7 @@ export function WhatsAppSectionSplit({
   storeName,
   phoneLabel,
   asideExtra,
-  mobileSummary = "Ver exemplo",
+  mobileSummary = "Ver prévia",
 }: Props) {
   const previewProps = {
     label: previewLabel,

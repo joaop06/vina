@@ -9,6 +9,8 @@ import {
 import { FieldHint } from "@/components/admin/FieldHint";
 import { ImageField, type ImageMeta } from "@/components/admin/ImageField";
 import { ColorField } from "@/components/admin/configuracoes/ColorField";
+import { ConfigGuide } from "@/components/admin/configuracoes/ConfigGuide";
+import { ConfigPreviewSplit } from "@/components/admin/configuracoes/ConfigPreviewSplit";
 import {
   expandHexIfComplete,
   normalizeHexForPicker,
@@ -63,6 +65,21 @@ const COLOR_FIELDS: Array<{
   },
 ];
 
+const GERAL_GUIDE_STEPS = [
+  {
+    title: "Marca",
+    body: "logo, nome e textos do cabeçalho, home e rodapé.",
+  },
+  {
+    title: "Carrinho",
+    body: "pedido na loja ou só pelo WhatsApp.",
+  },
+  {
+    title: "Cores e meta",
+    body: "paleta da vitrine e meta só do Painel.",
+  },
+];
+
 function WhereBadge({ children }: { children: ReactNode }) {
   return <span className={styles.whereBadge}>{children}</span>;
 }
@@ -82,8 +99,8 @@ function BrandPreview({
   const slogan = config.slogan.trim();
 
   return (
-    <aside className={styles.livePreview} aria-live="polite">
-      <p className={styles.previewEyebrow}>Prévia ao vivo · Vitrine</p>
+    <div className={styles.livePreview} aria-live="polite">
+      <p className={styles.previewEyebrow}>Prévia · Vitrine</p>
 
       <div className={styles.brandStage}>
         <div className={styles.brandChrome}>
@@ -168,7 +185,7 @@ function BrandPreview({
           Logo como ícone (favicon)
         </li>
       </ul>
-    </aside>
+    </div>
   );
 }
 
@@ -187,27 +204,34 @@ function CartFlow({ on }: { on: boolean }) {
         { label: "Pedido em lote inativo", tone: "off" as const },
       ];
 
+  const compact = on
+    ? "Cliente monta o pedido na loja e envia pelo WhatsApp."
+    : "Sem carrinho: o cliente fala no WhatsApp em cada produto.";
+
   return (
-    <ol className={styles.cartFlow} aria-label="O que muda com o carrinho">
-      {steps.map((step, i) => (
-        <li
-          key={step.label}
-          className={[
-            styles.cartStep,
-            step.tone === "on"
-              ? styles.cartStepOn
-              : step.tone === "alt"
-                ? styles.cartStepAlt
-                : styles.cartStepOff,
-          ].join(" ")}
-        >
-          <span className={styles.cartStepNum} aria-hidden>
-            {i + 1}
-          </span>
-          <span>{step.label}</span>
-        </li>
-      ))}
-    </ol>
+    <>
+      <p className={styles.cartFlowCompact}>{compact}</p>
+      <ol className={styles.cartFlow} aria-label="O que muda com o carrinho">
+        {steps.map((step, i) => (
+          <li
+            key={step.label}
+            className={[
+              styles.cartStep,
+              step.tone === "on"
+                ? styles.cartStepOn
+                : step.tone === "alt"
+                  ? styles.cartStepAlt
+                  : styles.cartStepOff,
+            ].join(" ")}
+          >
+            <span className={styles.cartStepNum} aria-hidden>
+              {i + 1}
+            </span>
+            <span>{step.label}</span>
+          </li>
+        ))}
+      </ol>
+    </>
   );
 }
 
@@ -221,8 +245,8 @@ function ColorsPreview({ cores }: { cores: SiteConfig["cores"] }) {
   } as CSSProperties;
 
   return (
-    <aside className={styles.livePreview} aria-live="polite" style={style}>
-      <p className={styles.previewEyebrow}>Prévia ao vivo · Cores</p>
+    <div className={styles.livePreview} aria-live="polite" style={style}>
+      <p className={styles.previewEyebrow}>Prévia · Cores</p>
       <div className={styles.colorStage}>
         <div className={styles.colorShell}>
           <header className={styles.colorHeader}>
@@ -254,24 +278,23 @@ function ColorsPreview({ cores }: { cores: SiteConfig["cores"] }) {
           </li>
         ))}
       </ul>
-    </aside>
+    </div>
   );
 }
 
 function MetaPreview({ mensal }: { mensal: number | null }) {
   if (mensal == null || mensal <= 0) {
     return (
-      <aside className={styles.livePreview} aria-live="polite">
+      <div className={styles.livePreview} aria-live="polite">
         <p className={styles.previewEyebrow}>Prévia · Painel admin</p>
         <div className={styles.metaEmpty}>
           <DashIcon icon={dashIcons.meta} className={styles.metaEmptyIcon} />
           <p className={styles.metaEmptyTitle}>Meta oculta</p>
           <p className={styles.previewEmpty}>
-            Sem valor, o bloco de progresso <strong>não aparece</strong> na aba
-            Negócio do Painel. A vitrine dos clientes não é afetada.
+            Sem valor, o bloco não aparece na aba Negócio.
           </p>
         </div>
-      </aside>
+      </div>
     );
   }
 
@@ -282,14 +305,12 @@ function MetaPreview({ mensal }: { mensal: number | null }) {
   const pct = Math.min((receitaExemplo / proporcional) * 100, 100);
 
   return (
-    <aside className={styles.livePreview} aria-live="polite">
+    <div className={styles.livePreview} aria-live="polite">
       <p className={styles.previewEyebrow}>Prévia · Painel admin</p>
       <div className={styles.previewCard}>
         <DashIcon icon={dashIcons.meta} className={styles.previewIcon} />
         <div className={styles.previewBody}>
-          <p className={styles.previewTitle}>
-            Meta de receita (proporcional ao período)
-          </p>
+          <p className={styles.previewTitle}>Meta (proporcional ao período)</p>
           <div
             className={styles.previewBar}
             role="img"
@@ -308,11 +329,20 @@ function MetaPreview({ mensal }: { mensal: number | null }) {
         </div>
       </div>
       <p className={styles.previewNote}>
-        Só aparece no Painel (aba Negócio). Valores ilustrativos para 15 dias no
-        mês.
+        Só no Painel · Negócio. Exemplo ilustrativo (15 dias).
       </p>
-    </aside>
+    </div>
   );
+}
+
+function nomeLojaHint(logoDraft: ImageMeta | null, mostrarNome: boolean) {
+  if (!logoDraft) {
+    return "Cabeçalho, rodapé e títulos. Sem logo, o nome sempre aparece no cabeçalho.";
+  }
+  if (mostrarNome) {
+    return "Cabeçalho (junto da logo), rodapé e títulos. Desligue o switch para ocultar no cabeçalho.";
+  }
+  return "Só no rodapé e títulos — a logo sozinha no cabeçalho. Ligue o switch para mostrar o nome junto.";
 }
 
 export function GeralPanel({
@@ -367,38 +397,11 @@ export function GeralPanel({
 
   return (
     <div className={styles.shell}>
-      <div className={styles.guide} aria-label="Como configurar a identidade">
-        <p className={styles.guideTitle}>Como funciona</p>
-        <ol className={styles.guideSteps}>
-          <li className={styles.guideStep}>
-            <span className={styles.guideNum} aria-hidden>
-              1
-            </span>
-            <span>
-              <strong>Marca</strong> — logo, nome e textos que aparecem no
-              cabeçalho, home e rodapé.
-            </span>
-          </li>
-          <li className={styles.guideStep}>
-            <span className={styles.guideNum} aria-hidden>
-              2
-            </span>
-            <span>
-              <strong>Carrinho</strong> — decide se o cliente monta pedido na
-              loja ou fala só pelo WhatsApp.
-            </span>
-          </li>
-          <li className={styles.guideStep}>
-            <span className={styles.guideNum} aria-hidden>
-              3
-            </span>
-            <span>
-              <strong>Cores e meta</strong> — paleta da vitrine e meta só do
-              Painel admin.
-            </span>
-          </li>
-        </ol>
-      </div>
+      <ConfigGuide
+        guideId="geral"
+        ariaLabel="Como configurar a identidade"
+        steps={GERAL_GUIDE_STEPS}
+      />
 
       <form
         id={formId}
@@ -415,127 +418,130 @@ export function GeralPanel({
       >
         <section className={`admin-form__section ${styles.section}`}>
           <header className="admin-form__section-header">
-            <h2 className="admin-form__section-title">
-              Marca
-              <FieldHint text="Logo, nome e textos de identidade exibidos na vitrine." />
-            </h2>
+            <h2 className="admin-form__section-title">Marca</h2>
             <p className="admin-form__section-desc">
-              O que o cliente vê primeiro: no topo da loja, na home e no rodapé.
-              A prévia ao lado atualiza enquanto você digita.
+              Logo, nome e textos do cabeçalho, home e rodapé.
             </p>
           </header>
 
-          <div className={`admin-form__section-body ${styles.sectionSplit}`}>
-            <div className={styles.editCol}>
-              <div className={styles.fieldBlock}>
-                <span className="admin-field-label">
-                  Logo da loja
-                  <FieldHint text="Exibida no cabeçalho, rodapé e como ícone da aba do navegador." />
-                </span>
-                <p className={styles.fieldHelp}>
-                  Aparece no <strong>cabeçalho</strong>, no{" "}
-                  <strong>rodapé</strong> e como ícone da aba do navegador.
-                </p>
-                <ImageField
-                  dominio="site"
-                  value={logoDraft}
-                  onChange={onLogoChange}
-                  disabled={disabled}
-                  label="Logo"
-                  showAlt={false}
-                  showRemove
-                />
-              </div>
+          <div className="admin-form__section-body">
+            <ConfigPreviewSplit
+              preview={
+                <BrandPreview config={config} logoDraft={logoDraft} />
+              }
+              edit={
+                <div className={styles.editCol}>
+                  <div className={styles.fieldBlock}>
+                    <span className="admin-field-label">
+                      Logo da loja
+                      <FieldHint text="Cabeçalho, rodapé e ícone da aba do navegador." />
+                    </span>
+                    <ImageField
+                      dominio="site"
+                      value={logoDraft}
+                      onChange={onLogoChange}
+                      disabled={disabled}
+                      label="Logo"
+                      showAlt={false}
+                      showRemove
+                    />
+                  </div>
 
-              <div className={styles.fieldBlock}>
-                <div className="admin-field-label">
-                  Nome da loja
-                  <FieldHint text="Cabeçalho, rodapé, home e título das páginas na vitrine. Com logo carregada, o switch controla se o nome também aparece no cabeçalho." />
-                  <label
-                    className="admin-switch"
-                    data-disabled={!logoDraft || disabled ? "true" : undefined}
-                    title={
-                      logoDraft
-                        ? "Mostrar o nome junto da logo no cabeçalho"
-                        : "Disponível quando houver logo da loja"
-                    }
-                  >
-                    <span>Mostrar no cabeçalho</span>
+                  <div className={styles.fieldBlock}>
+                    <div className="admin-field-label">
+                      Nome da loja
+                      <FieldHint
+                        text={nomeLojaHint(
+                          logoDraft,
+                          Boolean(config.mostrarNomeComLogo),
+                        )}
+                      />
+                      <label
+                        className="admin-switch"
+                        data-disabled={
+                          !logoDraft || disabled ? "true" : undefined
+                        }
+                        title={
+                          logoDraft
+                            ? "Mostrar o nome junto da logo no cabeçalho"
+                            : "Disponível quando houver logo da loja"
+                        }
+                      >
+                        <span>Mostrar no cabeçalho</span>
+                        <input
+                          type="checkbox"
+                          role="switch"
+                          checked={Boolean(
+                            logoDraft && config.mostrarNomeComLogo,
+                          )}
+                          disabled={!logoDraft || disabled}
+                          aria-label="Mostrar nome da loja no cabeçalho quando houver logo"
+                          onChange={(e) =>
+                            onConfigChange({
+                              ...config,
+                              mostrarNomeComLogo: e.target.checked,
+                            })
+                          }
+                        />
+                        <span
+                          className="admin-switch__track"
+                          aria-hidden="true"
+                        />
+                      </label>
+                    </div>
                     <input
-                      type="checkbox"
-                      role="switch"
-                      checked={Boolean(logoDraft && config.mostrarNomeComLogo)}
-                      disabled={!logoDraft || disabled}
-                      aria-label="Mostrar nome da loja no cabeçalho quando houver logo"
+                      className="input"
+                      value={config.nomeLoja}
+                      disabled={disabled}
                       onChange={(e) =>
                         onConfigChange({
                           ...config,
-                          mostrarNomeComLogo: e.target.checked,
+                          nomeLoja: e.target.value,
                         })
                       }
                     />
-                    <span className="admin-switch__track" aria-hidden="true" />
+                  </div>
+
+                  <label className={styles.fieldBlock}>
+                    <span className="admin-field-label">
+                      Assinatura
+                      <FieldHint text="Linha curta sob o nome no cabeçalho e no rodapé." />
+                    </span>
+                    <input
+                      className="input"
+                      value={config.assinatura}
+                      disabled={disabled}
+                      placeholder="Ex.: Catálogo online"
+                      onChange={(e) =>
+                        onConfigChange({
+                          ...config,
+                          assinatura: e.target.value,
+                        })
+                      }
+                    />
+                  </label>
+
+                  <label className={styles.fieldBlock}>
+                    <span className="admin-field-label">
+                      Slogan
+                      <FieldHint text="Boas-vindas na home (sem banner) e descrição usada pelo Google." />
+                    </span>
+                    <textarea
+                      className="textarea"
+                      rows={2}
+                      value={config.slogan}
+                      disabled={disabled}
+                      onChange={(e) =>
+                        onConfigChange({
+                          ...config,
+                          slogan: e.target.value,
+                        })
+                      }
+                    />
                   </label>
                 </div>
-                <p className={styles.fieldHelp}>
-                  {logoDraft
-                    ? config.mostrarNomeComLogo
-                      ? "Com a opção ligada, o nome aparece ao lado da logo no cabeçalho."
-                      : "Com a opção desligada, só a logo aparece no cabeçalho (o nome segue no rodapé)."
-                    : "Sem logo, o nome sempre aparece no cabeçalho. Envie uma logo para poder ocultá-lo."}
-                </p>
-                <input
-                  className="input"
-                  value={config.nomeLoja}
-                  disabled={disabled}
-                  onChange={(e) =>
-                    onConfigChange({ ...config, nomeLoja: e.target.value })
-                  }
-                />
-              </div>
-
-              <label className={styles.fieldBlock}>
-                <span className="admin-field-label">
-                  Assinatura
-                  <FieldHint text="Linha sob o nome no cabeçalho e no rodapé." />
-                </span>
-                <p className={styles.fieldHelp}>
-                  Linha curta sob o nome — no <strong>cabeçalho</strong> e no{" "}
-                  <strong>rodapé</strong>.
-                </p>
-                <input
-                  className="input"
-                  value={config.assinatura}
-                  disabled={disabled}
-                  placeholder="Ex.: Catálogo online"
-                  onChange={(e) =>
-                    onConfigChange({ ...config, assinatura: e.target.value })
-                  }
-                />
-              </label>
-
-              <label className={styles.fieldBlock}>
-                <span className="admin-field-label">
-                  Slogan
-                  <FieldHint text="Meta description do site e texto do hero na home (se não houver banner)." />
-                </span>
-                <p className={styles.fieldHelp}>
-                  Texto de boas-vindas na <strong>home</strong> (quando não
-                  houver banner) e descrição usada pelo Google.
-                </p>
-                <textarea
-                  className="textarea"
-                  rows={2}
-                  value={config.slogan}
-                  disabled={disabled}
-                  onChange={(e) =>
-                    onConfigChange({ ...config, slogan: e.target.value })
-                  }
-                />
-              </label>
-            </div>
-
-            <BrandPreview config={config} logoDraft={logoDraft} />
+              }
+            />
           </div>
         </section>
 
@@ -545,11 +551,10 @@ export function GeralPanel({
           <header className="admin-form__section-header">
             <h2 className="admin-form__section-title">
               Carrinho na loja
-              <FieldHint text="Configuração global da vitrine. Também habilita ou desativa a mensagem de pedido pelo carrinho no WhatsApp." />
+              <FieldHint text="Liga o carrinho na vitrine e a mensagem de pedido pelo carrinho no WhatsApp. Afeta cabeçalho, página do produto e /carrinho." />
             </h2>
             <p className="admin-form__section-desc">
-              Escolha como o cliente fecha o pedido: montando um carrinho na
-              loja ou falando produto a produto no WhatsApp.
+              Pedido na loja ou só pelo WhatsApp.
             </p>
           </header>
 
@@ -567,8 +572,8 @@ export function GeralPanel({
                   </p>
                   <p className={styles.cartStatusDesc}>
                     {cartOn
-                      ? "O cliente adiciona itens, revisa em /carrinho e envia o pedido pelo WhatsApp."
-                      : "Não há carrinho na vitrine. O cliente fala com você pelo WhatsApp em cada produto."}
+                      ? "Cliente adiciona itens e envia o pedido pelo WhatsApp."
+                      : "Cliente fala no WhatsApp em cada produto."}
                   </p>
                 </div>
                 <label
@@ -594,13 +599,6 @@ export function GeralPanel({
               </div>
 
               <CartFlow on={cartOn} />
-
-              <div className={styles.cartWhere}>
-                <WhereBadge>Cabeçalho</WhereBadge>
-                <WhereBadge>Página do produto</WhereBadge>
-                <WhereBadge>/carrinho</WhereBadge>
-                <WhereBadge>WhatsApp</WhereBadge>
-              </div>
             </div>
           </div>
         </section>
@@ -609,32 +607,32 @@ export function GeralPanel({
           <header className="admin-form__section-header">
             <h2 className="admin-form__section-title">
               Cores
-              <FieldHint text="Paleta aplicada à vitrine e ao painel. A pré-visualização é ao vivo." />
+              <FieldHint text="Paleta da vitrine e acentos do painel. A prévia atualiza ao vivo." />
             </h2>
             <p className="admin-form__section-desc">
-              A paleta pinta a loja e também os acentos do painel. Mude uma cor e
-              veja o efeito na miniatura.
+              Paleta da loja e acentos do painel.
             </p>
           </header>
 
-          <div className={`admin-form__section-body ${styles.sectionSplit}`}>
-            <div className={styles.editCol}>
-              <div className={styles.colorGrid}>
-                {COLOR_FIELDS.map((field) => (
-                  <div key={field.key} className={styles.colorFieldWrap}>
-                    <ColorField
-                      label={field.label}
-                      hint={field.hint}
-                      value={config.cores[field.key]}
-                      disabled={disabled}
-                      onCommit={(hex) => setColor(field.key, hex)}
-                    />
-                    <p className={styles.fieldHelp}>{field.where}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <ColorsPreview cores={config.cores} />
+          <div className="admin-form__section-body">
+            <ConfigPreviewSplit
+              preview={<ColorsPreview cores={config.cores} />}
+              edit={
+                <div className={styles.colorGrid}>
+                  {COLOR_FIELDS.map((field) => (
+                    <div key={field.key} className={styles.colorFieldWrap}>
+                      <ColorField
+                        label={field.label}
+                        hint={field.hint}
+                        value={config.cores[field.key]}
+                        disabled={disabled}
+                        onCommit={(hex) => setColor(field.key, hex)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              }
+            />
           </div>
         </section>
 
@@ -642,56 +640,45 @@ export function GeralPanel({
           <header className="admin-form__section-header">
             <h2 className="admin-form__section-title">
               Meta de receita
-              <FieldHint text="Valor mensal usado no Painel admin (aba Negócio). Deixe vazio para ocultar." />
+              <FieldHint text="Valor mensal na aba Negócio do Painel. Vazio = bloco oculto. Não aparece na loja." />
             </h2>
             <p className="admin-form__section-desc">
-              Só para você no Painel admin — a loja dos clientes{" "}
-              <strong>não mostra</strong> esse valor. O progresso é proporcional
-              aos dias do período escolhido.
+              Só no Painel · Negócio; não aparece na loja.
             </p>
           </header>
 
-          <div className={`admin-form__section-body ${styles.sectionSplit}`}>
-            <div className={styles.editCol}>
-              <label className={`${styles.fieldBlock} ${styles.metaField}`}>
-                <span className="admin-field-label">
-                  Meta mensal (R$)
-                  <FieldHint text="Deixe vazio para não exibir meta no Painel." />
-                </span>
-                <p className={styles.fieldHelp}>
-                  Aparece na aba <strong>Negócio</strong> do Painel. Vazio =
-                  bloco oculto.
-                </p>
-                <input
-                  type="text"
-                  inputMode="decimal"
-                  autoComplete="off"
-                  className="input"
-                  placeholder="R$ 0,00"
-                  value={metaDraft}
-                  disabled={disabled}
-                  onChange={(e) => {
-                    const masked = maskBrlInput(e.target.value);
-                    setMetaDraft(masked);
-                    commitMeta(masked);
-                  }}
-                  onBlur={() => {
-                    if (!metaDraft.trim()) {
-                      commitMeta("");
-                      return;
-                    }
-                    commitMeta(metaDraft);
-                  }}
-                />
-              </label>
-              <div className={styles.metaWhere}>
-                <WhereBadge>Painel · Negócio</WhereBadge>
-                <span className={styles.metaWhereNote}>
-                  Não aparece na vitrine pública
-                </span>
-              </div>
-            </div>
-            <MetaPreview mensal={meta} />
+          <div className="admin-form__section-body">
+            <ConfigPreviewSplit
+              preview={<MetaPreview mensal={meta} />}
+              edit={
+                <div className={styles.editCol}>
+                  <label className={`${styles.fieldBlock} ${styles.metaField}`}>
+                    <span className="admin-field-label">Meta mensal (R$)</span>
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      autoComplete="off"
+                      className="input"
+                      placeholder="R$ 0,00"
+                      value={metaDraft}
+                      disabled={disabled}
+                      onChange={(e) => {
+                        const masked = maskBrlInput(e.target.value);
+                        setMetaDraft(masked);
+                        commitMeta(masked);
+                      }}
+                      onBlur={() => {
+                        if (!metaDraft.trim()) {
+                          commitMeta("");
+                          return;
+                        }
+                        commitMeta(metaDraft);
+                      }}
+                    />
+                  </label>
+                </div>
+              }
+            />
           </div>
         </section>
       </form>

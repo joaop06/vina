@@ -193,27 +193,6 @@ export function NavegacaoEditor({
 
   return (
     <div className={styles.shell}>
-      <div className={styles.intro}>
-        <div>
-          <h3 className={styles.introTitle}>Como montar o menu da loja</h3>
-          <p className={styles.introText}>
-            Escolha o que aparece no topo do site e no menu do celular. A prévia
-            ao lado mostra exatamente onde cada opção entra — ligue ou desligue
-            e veja o resultado na hora.
-          </p>
-        </div>
-        <div className={styles.introMeta}>
-          <span className={styles.chip}>
-            <MapPinned size={12} strokeWidth={2} aria-hidden />
-            Impacto imediato na prévia
-          </span>
-          <span className={styles.chip}>
-            <Monitor size={12} strokeWidth={2} aria-hidden />
-            Computador e celular separados
-          </span>
-        </div>
-      </div>
-
       <section className={styles.card} aria-labelledby={`${tabsId}-topbar`}>
         <header className={styles.cardHeader}>
           <span className={styles.cardIcon} aria-hidden>
@@ -224,13 +203,13 @@ export function NavegacaoEditor({
               Faixa superior
             </h3>
             <p className={styles.cardDesc}>
-              Linha fina acima do cabeçalho, em todas as páginas da loja.
+              Linha fina acima do cabeçalho.
             </p>
             <p className={styles.where}>
               <span className={styles.whereMark} aria-hidden>
                 <MapPinned size={12} strokeWidth={2} />
               </span>
-              Aparece acima do logo e dos menus — no computador e no celular
+              Acima do logo — desktop e celular
             </p>
           </div>
         </header>
@@ -323,7 +302,7 @@ export function NavegacaoEditor({
         <div className={styles.editorCol}>
           <details className={styles.previewMobile}>
             <summary className={styles.previewMobileSummary}>
-              Ver prévia deste menu
+              Ver prévia
             </summary>
             <div className={styles.previewMobileBody}>
               <NavMenuPreview
@@ -340,8 +319,8 @@ export function NavegacaoEditor({
             <p className={styles.sectionTitle}>Opções deste menu</p>
             <p className={styles.sectionLead}>
               {surfaceKey === "header"
-                ? "Controla o que aparece na barra do topo no computador."
-                : "Controla o que aparece quando o cliente abre o menu no celular."}
+                ? "Barra do topo no computador."
+                : "Menu aberto no celular."}
             </p>
 
             <div className={styles.optionGrid}>
@@ -452,8 +431,8 @@ export function NavegacaoEditor({
           <div className={styles.panel}>
             <p className={styles.sectionTitle}>Links do menu</p>
             <p className={styles.sectionLead}>
-              Ordem da esquerda para a direita no computador, ou de cima para
-              baixo no celular. Itens ocultos não entram na prévia nem na loja.
+              Ordem na barra (desktop) ou de cima para baixo (celular). Itens
+              ocultos não entram na loja.
             </p>
             <NavMenuList
               surfaceKey={surfaceKey}

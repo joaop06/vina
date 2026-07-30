@@ -8,76 +8,8 @@
   min-width: 0;
 }
 
-.guide {
-  display: grid;
-  gap: 0.55rem;
-  padding: 0.9rem 1.05rem;
-  border: 1px solid var(--vn-border);
-  border-radius: var(--vn-radius);
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--vn-primary) 7%, #fff),
-      color-mix(in srgb, var(--vn-secondary) 3%, #fff) 52%,
-      #fff 100%
-    );
-}
-
-.guideTitle {
-  margin: 0;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: color-mix(in srgb, var(--vn-secondary) 55%, transparent);
-}
-
-.guideSteps {
-  display: grid;
-  gap: 0.45rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
-}
-
-.guideStep {
-  display: flex;
-  gap: 0.55rem;
-  align-items: flex-start;
-  font-size: 0.84rem;
-  line-height: 1.4;
-  color: color-mix(in srgb, var(--vn-secondary) 72%, transparent);
-}
-
-.guideNum {
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  width: 1.45rem;
-  height: 1.45rem;
-  border-radius: 999px;
-  background: var(--vn-secondary);
-  color: #fff;
-  font-size: 0.72rem;
-  font-weight: 700;
-}
-
 .section {
   overflow: hidden;
-}
-
-.sectionSplit {
-  display: grid;
-  gap: 1.25rem;
-  align-items: start;
-}
-
-@container form-section (min-width: 52rem) {
-  .sectionSplit {
-    grid-template-columns: minmax(0, 1.1fr) minmax(15rem, 0.9fr);
-    gap: 1.5rem 1.75rem;
-  }
 }
 
 .editCol {
@@ -93,19 +25,6 @@
   gap: 0.4rem;
   font-size: 0.85rem;
   font-weight: 600;
-}
-
-.fieldHelp {
-  margin: 0;
-  font-size: 0.78rem;
-  line-height: 1.45;
-  font-weight: 500;
-  color: color-mix(in srgb, var(--vn-secondary) 52%, transparent);
-}
-
-.fieldHelp strong {
-  font-weight: 650;
-  color: color-mix(in srgb, var(--vn-secondary) 72%, transparent);
 }
 
 .whereBadge {
@@ -446,6 +365,15 @@
   margin: 0;
 }
 
+.cartFlowCompact {
+  display: none;
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.4;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--vn-secondary) 62%, transparent);
+}
+
 .cartFlow {
   display: grid;
   gap: 0.45rem;
@@ -453,6 +381,20 @@
   padding: 0;
   list-style: none;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
+}
+
+@media (max-width: 767.98px) {
+  .cartFlowCompact {
+    display: block;
+  }
+
+  .cartFlow {
+    display: none;
+  }
+
+  .cartStatusDesc {
+    display: none;
+  }
 }
 
 .cartStep {

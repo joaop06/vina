@@ -109,7 +109,7 @@ export function NavMenuPreview({
               <span className={styles.mockCallout}>Links do menu</span>
               {entries.length === 0 ? (
                 <p className={styles.mockEmpty}>
-                  Nenhum link visível. Adicione ou mostre itens na lista ao lado.
+                  Nenhum link visível. Adicione ou mostre itens na lista.
                 </p>
               ) : (
                 <ul className={`${styles.mockLinks} ${styles.mockLinksStack}`}>

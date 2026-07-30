@@ -3,12 +3,28 @@
 import { useState } from "react";
 import { BannersClient } from "@/components/admin/BannersClient";
 import { FieldHint } from "@/components/admin/FieldHint";
+import { ConfigGuide } from "@/components/admin/configuracoes/ConfigGuide";
 import { LayoutPreview } from "@/components/admin/configuracoes/siteTheme";
 import { VitrinePreview } from "@/components/admin/configuracoes/VitrinePreview";
 import { SITE_LAYOUT_OPTIONS } from "@/components/public/layouts/options";
 import type { Banner } from "@/src/schemas/banner";
 import type { SiteConfig, SiteLayoutId } from "@/src/schemas/site-config";
 import styles from "./VitrinePanel.module.css";
+
+const VITRINE_GUIDE_STEPS = [
+  {
+    title: "Escolha o modelo",
+    body: "da página inicial. A prévia mostra onde cada área aparece.",
+  },
+  {
+    title: "Configure as áreas",
+    body: "numeradas — envie fotos e, se quiser, link e texto do botão.",
+  },
+  {
+    title: "Salve o layout",
+    body: "no botão Salvar. Imagens gravadas ao escolher o arquivo.",
+  },
+];
 
 export function VitrinePanel({
   formId,
@@ -45,38 +61,11 @@ export function VitrinePanel({
 
   return (
     <div className="admin-config-vitrine">
-      <div className={styles.guide} aria-label="Como configurar a vitrine">
-        <p className={styles.guideTitle}>Como funciona</p>
-        <ol className={styles.guideSteps}>
-          <li className={styles.guideStep}>
-            <span className={styles.guideNum} aria-hidden>
-              1
-            </span>
-            <span>
-              <strong>Escolha o modelo</strong> da página inicial. A prévia ao
-              lado mostra onde cada área aparece.
-            </span>
-          </li>
-          <li className={styles.guideStep}>
-            <span className={styles.guideNum} aria-hidden>
-              2
-            </span>
-            <span>
-              <strong>Configure as áreas</strong> numeradas abaixo — envie as
-              fotos e, se quiser, o link e o texto do botão.
-            </span>
-          </li>
-          <li className={styles.guideStep}>
-            <span className={styles.guideNum} aria-hidden>
-              3
-            </span>
-            <span>
-              <strong>Salve o layout</strong> no botão Salvar. As imagens são
-              gravadas na hora, ao escolher o arquivo.
-            </span>
-          </li>
-        </ol>
-      </div>
+      <ConfigGuide
+        guideId="vitrine"
+        ariaLabel="Como configurar a vitrine"
+        steps={VITRINE_GUIDE_STEPS}
+      />
 
       <form
         id={formId}
@@ -94,19 +83,17 @@ export function VitrinePanel({
           <header className="admin-form__section-header">
             <h2 className="admin-form__section-title">
               Modelo da página inicial
-              <FieldHint text="O modelo define a disposição do topo, do meio e do final da home. Cabeçalho e rodapé também acompanham a escolha. As áreas de imagem abaixo mudam conforme o modelo." />
+              <FieldHint text="Define topo, meio e final da home; cabeçalho e rodapé acompanham. Áreas de imagem mudam com o modelo. Imagens salvam ao enviar; o modelo só publica com Salvar." />
             </h2>
             <p className="admin-form__section-desc">
-              Compare os três modelos e veja na prévia onde cada foto será
-              exibida. Depois de escolher, clique em Salvar para publicar o
-              modelo na loja.
+              Escolha o modelo da home e salve para publicar.
             </p>
           </header>
 
           <div className={`admin-form__section-body ${styles.sectionBody}`}>
             <details className={styles.previewMobile}>
               <summary className={styles.previewMobileSummary}>
-                Ver prévia da home
+                Ver prévia
               </summary>
               <div className={styles.previewMobileBody}>{preview}</div>
             </details>
@@ -167,10 +154,8 @@ export function VitrinePanel({
 
               {layoutDraft ? (
                 <p className="admin-alert admin-alert--warn" role="status">
-                  Modelo em rascunho. A prévia e as áreas abaixo já mostram o
-                  novo arranjo, mas você precisa clicar em <strong>Salvar</strong>{" "}
-                  para publicar. Enquanto isso, só é possível editar banners
-                  compatíveis com o modelo ainda publicado (
+                  Modelo em rascunho — clique em <strong>Salvar</strong> para
+                  publicar. Banners editáveis só os do modelo ainda publicado (
                   {
                     SITE_LAYOUT_OPTIONS.find((o) => o.id === baselineLayout)
                       ?.nome
@@ -190,11 +175,10 @@ export function VitrinePanel({
           <div>
             <h2 className="admin-form__section-title">
               Áreas de imagem
-              <FieldHint text="Cada card numerado corresponde a um marcador na prévia. Ao escolher a imagem, ela é salva automaticamente. Link e texto do botão pedem um clique em Salvar detalhes." />
+              <FieldHint text="Cada card numerado corresponde a um marcador na prévia. Imagem salva ao escolher o arquivo. Link e texto do botão pedem Salvar detalhes." />
             </h2>
             <p className="admin-form__section-desc">
-              As áreas mudam conforme o modelo selecionado. Use a prévia para
-              entender onde cada uma aparece na loja.
+              Áreas mudam com o modelo. Use a prévia para localizar cada uma.
             </p>
           </div>
           <p className={styles.bannersAutosave}>Imagens salvam ao enviar</p>

@@ -116,7 +116,7 @@ export function WhatsAppPanel({
     {
       id: "menu",
       title: "Menu do celular",
-      desc: "Atalho dentro do menu lateral.",
+      desc: "Atalho no menu lateral.",
       Icon: Menu,
       active: menuActive,
       hint: !waEnabled
@@ -131,7 +131,7 @@ export function WhatsAppPanel({
     {
       id: "rodape",
       title: "Rodapé",
-      desc: "Ícone social no rodapé de todas as páginas.",
+      desc: "Ícone social no rodapé.",
       Icon: MessageCircle,
       preview: "home",
       active: waEnabled,
@@ -139,14 +139,14 @@ export function WhatsAppPanel({
     {
       id: "sobre",
       title: "Página Sobre",
-      desc: "Botão junto aos contatos da loja.",
+      desc: "Botão junto aos contatos.",
       Icon: Info,
       active: waEnabled,
     },
     {
       id: "produto",
       title: "Página do produto",
-      desc: "“Tenho interesse” com detalhes do item.",
+      desc: "“Tenho interesse” com o item.",
       Icon: Package,
       preview: "produto",
       active: waEnabled,
@@ -154,7 +154,7 @@ export function WhatsAppPanel({
     {
       id: "carrinho",
       title: "Carrinho",
-      desc: "Envia o pedido com vários produtos.",
+      desc: "Pedido com vários produtos.",
       Icon: ShoppingBag,
       preview: "carrinho",
       active: waEnabled && cartEnabled,
@@ -180,22 +180,6 @@ export function WhatsAppPanel({
         .join(" ")}
       aria-busy={disabled || undefined}
     >
-      <div className={styles.intro}>
-        <span className={styles.introIcon} aria-hidden>
-          <MessageCircle size={18} strokeWidth={2.25} />
-        </span>
-        <div className={styles.introBody}>
-          <p className={styles.introTitle}>
-            Configure o WhatsApp como o cliente vê na loja
-          </p>
-          <p className={styles.introText}>
-            Cada bloco abaixo mostra o que controla e onde aparece. À direita
-            (ou em “Ver exemplo” no celular) você acompanha a mensagem e uma
-            miniatura da loja.
-          </p>
-        </div>
-      </div>
-
       {/* ── 1. Canal ── */}
       <section className="admin-form__section">
         <header className={["admin-form__section-header", styles.sectionHeader].join(" ")}>
@@ -211,8 +195,7 @@ export function WhatsAppPanel({
                 <h2 className="admin-form__section-title">Seu número</h2>
               </div>
               <p className="admin-form__section-desc">
-                É o celular que recebe as conversas. Se desligar o botão, os
-                atalhos de WhatsApp somem da loja.
+                Celular que recebe as conversas. Desligado, some da loja.
               </p>
             </div>
           </div>
@@ -278,9 +261,6 @@ export function WhatsAppPanel({
             <span className="wa-settings__field-title">
               Seu número (DDD + celular)
             </span>
-            <span className="wa-settings__field-help">
-              Use o celular com WhatsApp Business ou pessoal da loja.
-            </span>
             <input
               className="input"
               inputMode="tel"
@@ -319,8 +299,7 @@ export function WhatsAppPanel({
                 </h2>
               </div>
               <p className="admin-form__section-desc">
-                Toque em um card para ver a miniatura daquela tela. Os cards
-                apagados indicam o que está desligado agora.
+                Toque num card para ver a miniatura. Apagados = desligados.
               </p>
             </div>
           </div>
@@ -432,8 +411,7 @@ export function WhatsAppPanel({
                 </h2>
               </div>
               <p className="admin-form__section-desc">
-                Opcional: na primeira vez, o cliente informa o nome e um contato
-                (e-mail ou celular). Depois o app abre com uma saudação.
+                Opcional: pedir nome e contato antes de abrir o app.
               </p>
             </div>
           </div>
@@ -500,12 +478,7 @@ export function WhatsAppPanel({
                   </div>
                 </div>
               </div>
-            ) : (
-              <p className={styles.fieldHelp}>
-                Com esta opção desligada, o aplicativo abre na hora, sem pedir
-                dados.
-              </p>
-            )}
+            ) : null}
           </div>
         </div>
       </section>
@@ -525,8 +498,7 @@ export function WhatsAppPanel({
                 <h2 className="admin-form__section-title">Mensagem geral</h2>
               </div>
               <p className="admin-form__section-desc">
-                Texto pronto quando o cliente clica no WhatsApp da home, do
-                rodapé, do menu ou da página Sobre — sem produto específico.
+                Texto ao clicar no WhatsApp sem produto específico.
               </p>
             </div>
           </div>
@@ -543,7 +515,7 @@ export function WhatsAppPanel({
             }
             storeName={storeName}
             phoneLabel={hasPhone ? phoneDisplay : undefined}
-            mobileSummary="Ver mensagem e local"
+            mobileSummary="Ver prévia"
             asideExtra={
               <WhatsAppStorePreview
                 storeName={storeName}
@@ -557,10 +529,6 @@ export function WhatsAppPanel({
               <label className="admin-form__field">
                 <span className="wa-settings__field-title">
                   Quando clicam no WhatsApp do site
-                </span>
-                <span className="wa-settings__field-help">
-                  Aparece já escrita no aplicativo — por exemplo no rodapé ou na
-                  home.
                 </span>
                 <textarea
                   className="textarea"
@@ -600,8 +568,7 @@ export function WhatsAppPanel({
                 </h2>
               </div>
               <p className="admin-form__section-desc">
-                O nome, tamanho, cor e link entram sozinhos. Você só escolhe o
-                formato e o texto em volta.
+                Nome, tamanho, cor e link entram sozinhos — você define o formato.
               </p>
             </div>
           </div>
@@ -644,8 +611,7 @@ export function WhatsAppPanel({
                 </h2>
               </div>
               <p className="admin-form__section-desc">
-                Quando o cliente monta vários produtos e envia um único WhatsApp
-                pela página do carrinho.
+                Vários produtos em um único WhatsApp pelo carrinho.
               </p>
             </div>
           </div>
