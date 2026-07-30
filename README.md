@@ -117,9 +117,9 @@ Há scripts opcionais de medição de leitura (`baseline:read`, `phase6:verify`)
 
 ### Lojas (template do repositório base)
 
-Cada loja é um repositório criado via **Use this template**. O cliente edita só `data/`; o workflow **Sync upstream** faz merge diário do base (`-X ours`) direto na `main` e a Vercel redeploya.
+Cada loja é um repositório criado via **Use this template**. O cliente edita só `data/`; o workflow **Sync upstream** aplica o código do base na `main` (preservando `data/`) e a Vercel redeploya. Cadastre `SYNC_TOKEN` na loja para o sync também atualizar `.github/workflows/`.
 
-Passo a passo (template, Actions, Vercel, `SYNC_TOKEN` opcional): **[docs/configurar-template-loja.md](docs/configurar-template-loja.md)**.
+Passo a passo (template, Actions, Vercel, `SYNC_TOKEN`): **[docs/configurar-template-loja.md](docs/configurar-template-loja.md)**.
 
 ---
 

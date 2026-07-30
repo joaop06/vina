@@ -1,6 +1,6 @@
 # Configurar loja a partir do template
 
-Cada loja é um repositório independente criado a partir do template [`joaop06/vina`](https://github.com/joaop06/vina). O cliente edita **somente** a pasta `data/`. O código vem do repositório base via merge automático.
+Cada loja é um repositório independente criado a partir do template [`joaop06/vina`](https://github.com/joaop06/vina). O cliente edita **somente** a pasta `data/`. O código vem do repositório base via sync automático.
 
 ## 1. Criar o repositório
 
@@ -29,9 +29,11 @@ Cada loja é um repositório independente criado a partir do template [`joaop06/
 | `JWT_SECRET` | Segredo longo (≥ 32 caracteres) |
 | `NEXT_PUBLIC_SITE_URL` | URL pública do site |
 
-## 4. (Opcional) `SYNC_TOKEN`
+## 4. `SYNC_TOKEN` (recomendado)
 
-Necessário **somente** se o workflow precisar atualizar a si mesmo (mudanças em `.github/workflows/`).
+O sync aplica a árvore do repo base como fonte da verdade do código — inclusive `.github/workflows/`. O `GITHUB_TOKEN` padrão do Actions **não pode** fazer push de alterações nessa pasta. Sem `SYNC_TOKEN`, o job sincroniza código e `data/` normalmente, mas **falha** assim que o base alterar o próprio workflow (ou qualquer arquivo em `.github/workflows/`).
+
+Cadastre o secret em toda loja em produção:
 
 1. Gere um PAT **fine-grained** (Settings → Developer settings → Personal access tokens).
 2. Conceda acesso aos repositórios de loja com:
@@ -41,7 +43,7 @@ Necessário **somente** se o workflow precisar atualizar a si mesmo (mudanças e
    - Nome: `SYNC_TOKEN`
    - Valor: o PAT
 
-Sem `SYNC_TOKEN`, o workflow usa o `GITHUB_TOKEN` padrão — suficiente para merge/push de código e dados fora de `.github/workflows/`.
+O workflow usa `secrets.SYNC_TOKEN` quando existe; senão cai no `GITHUB_TOKEN`.
 
 **Segurança:** um PAT cadastrado no repo da loja dá poder de escrita com a identidade do dono do token. Use fine-grained, restrito aos repositórios necessários e com escopo mínimo.
 
@@ -53,21 +55,23 @@ O cliente edita os JSONs (e mídia) em `data/` com os dados da loja. **Nada de c
 
 | Gatilho | Quando |
 |---------|--------|
-| Cron | Diariamente às 06:00 UTC (03:00 em Brasília) |
+| Cron | A cada 10 minutos |
 | Manual | **Actions → Sync upstream (auto-merge) → Run workflow** |
 
 Fluxo:
 
 1. Você corrige/melhora algo e faz push na `main` do repo base.
 2. No horário do cron (ou no disparo manual), o workflow da loja busca o upstream.
-3. Faz `git merge upstream/main --no-edit -X ours` e push na `main` da loja.
+3. Aplica a árvore de `upstream/main` no código, restaura `data/` da loja e faz push na `main` (se houver mudança).
 4. A Vercel detecta o push e faz o redeploy.
+
+Repos criados via **Use this template** não compartilham histórico Git com o base. Por isso o sync **não usa merge**: usa `git read-tree` para aplicar o código do upstream e devolve `data/` ao estado do cliente.
 
 ## 7. Limitações
 
-- **`-X ours` é silencioso:** se o cliente editar um arquivo de código que você também alterou, a versão dele prevalece naquele arquivo — sem aviso. Mitigação: o cliente só edita `data/`.
+- **Código do base sempre prevalece:** se o cliente editar um arquivo fora de `data/`, a próxima sync sobrescreve com a versão do upstream. Mitigação: o cliente só edita `data/`.
 - **Cron não é exato:** o GitHub Actions pode atrasar alguns minutos; use `workflow_dispatch` para forçar.
-- **Auto-atualização do workflow:** só com `SYNC_TOKEN` (PAT com escopo Workflows).
+- **Atualização de workflows:** exige `SYNC_TOKEN` (PAT com escopo Workflows). Sem ele, mudanças em `.github/workflows/` no base quebram o push do sync.
 - **Histórico divergente:** oriente o cliente a **nunca** fazer force-push na `main`.
 
 ## 8. Checklist
@@ -77,6 +81,6 @@ Fluxo:
 | Marcar o repo base como Template repository | Settings do `joaop06/vina` |
 | Cliente cria repo via template | Conta do cliente |
 | Habilitar Actions + Read and write permissions | Repo da loja |
-| (Opcional) Cadastrar `SYNC_TOKEN` | Secrets do repo da loja |
+| Cadastrar `SYNC_TOKEN` | Secrets do repo da loja |
 | Conectar à Vercel (Production Branch = `main`) | Conta do cliente |
 | Preencher `data/` com os dados reais | Repo da loja |
