@@ -2,7 +2,7 @@ name: Sync upstream (auto-merge)
 
 on:
   schedule:
-    - cron: "17 * * * *" # 1× por hora, minuto :17 (fora do pico :00/:15/:30)
+    - cron: "14 * * * *" # 1× por hora, minuto :14 (fora do pico :00/:15/:30)
   workflow_dispatch: # permite disparo manual pelo botão "Run workflow"
 
 permissions:
