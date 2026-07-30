@@ -23,7 +23,7 @@ export function MetaProgress({
         <div className={styles.metaBody}>
           <p className={styles.metaEmptyText}>
             Nenhuma meta mensal definida.{" "}
-            <Link href="/admin/personalizacao?tab=painel">Definir meta</Link>
+            <Link href="/admin/personalizacao?tab=geral">Definir meta</Link>
           </p>
         </div>
       </div>
@@ -39,7 +39,7 @@ export function MetaProgress({
           <span className={styles.metaTitle}>
             Meta de receita (proporcional ao período)
           </span>
-          <Link className={styles.metaLink} href="/admin/personalizacao?tab=painel">
+          <Link className={styles.metaLink} href="/admin/personalizacao?tab=geral">
             Ajustar meta
           </Link>
         </div>

@@ -26,8 +26,8 @@ import {
   SITE_CONFIG_TAB_PATHS,
   siteConfigMetaSchema,
   siteConfigTabsToPersist,
-  siteIdentidadeFragmentSchema,
-  siteIdentidadeUpdateSchema,
+  siteGeralFragmentSchema,
+  siteGeralUpdateSchema,
   splitSiteConfig,
   type SiteConfigFragments,
   type SiteConfigMeta,
@@ -222,9 +222,9 @@ export const getSiteBranding = cache(async (): Promise<SiteBranding> => {
     };
   }
 
-  const raw = await readJson<unknown>(SITE_CONFIG_TAB_PATHS.identidade);
+  const raw = await readJson<unknown>(SITE_CONFIG_TAB_PATHS.geral);
   if (raw) {
-    const parsed = siteIdentidadeFragmentSchema.safeParse(raw);
+    const parsed = siteGeralFragmentSchema.safeParse(raw);
     if (parsed.success) {
       return {
         nomeLoja: parsed.data.nomeLoja,
@@ -348,10 +348,10 @@ export async function updateSiteConfig(
     navegacao: rest.navegacao
       ? siteNavegacaoSchema.parse(rest.navegacao)
       : (current.navegacao ?? DEFAULT_NAVEGACAO),
-    painel: {
-      ...(current.painel ?? { metaReceitaMensal: null }),
-      ...(rest.painel ?? {}),
-    },
+    metaReceitaMensal:
+      rest.metaReceitaMensal !== undefined
+        ? rest.metaReceitaMensal
+        : (current.metaReceitaMensal ?? null),
     logo,
     versao: expectedVersao + 1,
     atualizadoEm: new Date().toISOString(),
@@ -409,8 +409,8 @@ export async function updateSiteConfigTabs(
     touched.add(patch.tab);
 
     switch (patch.tab) {
-      case "identidade": {
-        const update = siteIdentidadeUpdateSchema.parse(patch.data);
+      case "geral": {
+        const update = siteGeralUpdateSchema.parse(patch.data);
         const { logo: logoInput, ...base } = update;
         let logo = next.logo ?? null;
         if (logoInput === null) {
@@ -436,6 +436,7 @@ export async function updateSiteConfigTabs(
           assinatura: base.assinatura,
           slogan: base.slogan,
           cores: base.cores,
+          metaReceitaMensal: base.metaReceitaMensal ?? null,
           logo,
         };
         break;
@@ -457,11 +458,6 @@ export async function updateSiteConfigTabs(
           endereco: syncEnderecoTexto(s.endereco),
           telefones: s.telefones,
           horarios: s.horarios,
-          textos: {
-            ...next.textos,
-            sobre: s.textos.sobre,
-            trocas: s.textos.trocas,
-          },
         };
         break;
       }
@@ -500,14 +496,6 @@ export async function updateSiteConfigTabs(
           ...next,
           tema: s.tema,
           seo: s.seo,
-        };
-        break;
-      }
-      case "painel": {
-        const s = parseTabFragment("painel", patch.data);
-        next = {
-          ...next,
-          painel: s.painel,
         };
         break;
       }

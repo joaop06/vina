@@ -36,22 +36,34 @@ export const bannerImageInputSchema = z
     }
   });
 
-/** Relative storefront path (`/catalogo`) or absolute http(s) URL. */
+/**
+ * Relative storefront path (`/catalogo`) or absolute http(s) URL.
+ * `null`/empty clears the field on update; omit the key to leave unchanged.
+ */
 export const bannerHrefSchema = z
   .union([z.string().max(500), z.null(), z.undefined()])
   .transform((v) => {
-    if (v == null) return undefined;
+    if (v == null) return null;
     const t = v.trim();
-    return t ? t : undefined;
+    return t ? t : null;
   })
   .refine(
     (val) =>
-      val === undefined ||
+      val === null ||
       val.startsWith("/") ||
       val.startsWith("http://") ||
       val.startsWith("https://"),
     { message: "Use um caminho começando com / ou uma URL http(s)" },
   );
+
+/** Optional CTA label; null/empty clears the field on update. */
+export const bannerCtaTextoSchema = z
+  .union([z.string().max(80), z.null(), z.undefined()])
+  .transform((v) => {
+    if (v == null) return null;
+    const t = v.trim();
+    return t ? t : null;
+  });
 
 export const bannerSchema = z.object({
   id: uuidSchema,
@@ -71,7 +83,7 @@ export const bannerCreateSchema = z.object({
   ativo: z.boolean().optional(),
   ordem: z.number().int().optional(),
   href: bannerHrefSchema,
-  ctaTexto: z.string().max(80).optional(),
+  ctaTexto: bannerCtaTextoSchema,
   imagem: bannerImageInputSchema,
 });
 

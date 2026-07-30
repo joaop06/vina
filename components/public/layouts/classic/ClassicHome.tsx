@@ -6,7 +6,7 @@ import { ProductCard } from "@/components/public/ProductCard";
 import { WhatsAppButton } from "@/components/public/WhatsAppButton";
 import { mediaUrl } from "@/src/lib/front/format";
 import { IMAGE_SIZES } from "@/src/lib/front/media-image";
-import { pickBanner } from "@/src/lib/front/media";
+import { bannerCtaTexto, bannerHref, pickBanner } from "@/src/lib/front/media";
 import type { HomeProps } from "../types";
 import styles from "./classic.module.css";
 
@@ -20,6 +20,8 @@ export function ClassicHome({
 }: HomeProps) {
   const hero = pickBanner(banners, "hero");
   const heroImg = mediaUrl(hero?.imagem.path);
+  const heroLink = bannerHref(hero);
+  const heroCta = bannerCtaTexto(hero, site.textos.home.verColecao);
   const showFallback =
     destaques.length === 0 && novos.length === 0 && vitrineFallback.length > 0;
   const showWa = site.whatsapp.mostrar;
@@ -52,8 +54,8 @@ export function ClassicHome({
             <h1 className={styles.heroTitle}>{site.nomeLoja}</h1>
             <p className={styles.heroCopy}>{site.slogan}</p>
             <div className={styles.heroCtas}>
-              <Link className={`btn ${styles.heroBtnPrimary}`} href="/catalogo">
-                {home.verColecao}
+              <Link className={`btn ${styles.heroBtnPrimary}`} href={heroLink}>
+                {heroCta}
               </Link>
               {showWa ? (
                 <WhatsAppButton

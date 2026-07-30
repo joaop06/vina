@@ -8,6 +8,7 @@ import { CACHE_TAGS } from "@/src/lib/cache-tags";
 import { getDataBackend } from "@/src/lib/env";
 import {
   formatBytes,
+  isReadMetricsEnabled,
   runWithReadMetrics,
   toPublicReadMetrics,
   type ReadMetricsSnapshot,
@@ -170,10 +171,10 @@ export async function GET(req: NextRequest) {
   try {
     await requireAdmin();
 
-    if (process.env.READ_METRICS_DIAGNOSTICS === "0") {
+    if (!isReadMetricsEnabled()) {
       throw new AppError(
         "FORBIDDEN",
-        "Diagnostics desabilitado (READ_METRICS_DIAGNOSTICS=0)",
+        "Diagnostics desabilitado (READ_METRICS=0)",
         403,
       );
     }

@@ -99,7 +99,7 @@ export const siteLogoInputSchema = z
     }
   });
 
-/** Lift legacy `whatsapp.mostrarCarrinho` to root before parse. */
+/** Lift legacy `whatsapp.mostrarCarrinho` / `painel.metaReceitaMensal` to root before parse. */
 export function migrateSiteConfigInput(raw: unknown): unknown {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return raw;
   let o = { ...(raw as Record<string, unknown>) };
@@ -112,6 +112,14 @@ export function migrateSiteConfigInput(raw: unknown): unknown {
     delete waRecord.mostrarCarrinho;
     o.whatsapp = waRecord;
   }
+  const painel = o.painel;
+  if (painel && typeof painel === "object" && !Array.isArray(painel)) {
+    const painelRecord = painel as Record<string, unknown>;
+    if ("metaReceitaMensal" in painelRecord) {
+      o.metaReceitaMensal = painelRecord.metaReceitaMensal;
+    }
+  }
+  delete o.painel;
   o = migrateSitePersonalizationInput(o) as Record<string, unknown>;
   return o;
 }
@@ -200,11 +208,8 @@ const siteConfigCoreSchema = z.object({
   seo: siteSeoSchema,
   /** Independent header vs drawer chrome + ordered nav items. */
   navegacao: siteNavegacaoSchema.default(DEFAULT_NAVEGACAO),
-  painel: z
-    .object({
-      metaReceitaMensal: z.number().min(0).nullable().default(null),
-    })
-    .default({ metaReceitaMensal: null }),
+  /** Monthly revenue goal shown on the admin dashboard (Negócio). */
+  metaReceitaMensal: z.number().min(0).nullable().default(null),
   atualizadoEm: isoDateSchema,
 });
 

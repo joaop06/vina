@@ -177,6 +177,8 @@ export async function createBanner(
   const imagem = withPosicaoAlt(resolved, input.posicao);
   const id = crypto.randomUUID();
   const now = new Date().toISOString();
+  const ctaTexto = input.ctaTexto ?? undefined;
+  const href = input.href ?? undefined;
   const banner: Banner = {
     id,
     versao: 1,
@@ -184,7 +186,8 @@ export async function createBanner(
     ordem: nextOrdem,
     ativo: input.ativo ?? true,
     imagem,
-    ...(input.href ? { href: input.href } : {}),
+    ...(href ? { href } : {}),
+    ...(ctaTexto ? { ctaTexto } : {}),
     criadoEm: now,
     atualizadoEm: now,
   };
@@ -229,7 +232,13 @@ export async function updateBanner(
     });
   }
 
-  const { versao: _ignoredVersao, imagem: inputImagem, href, ...rest } = input;
+  const {
+    versao: _ignoredVersao,
+    imagem: inputImagem,
+    href,
+    ctaTexto,
+    ...rest
+  } = input;
   void _ignoredVersao;
 
   let imagem = current.imagem;
@@ -258,6 +267,11 @@ export async function updateBanner(
   if (href !== undefined) {
     if (href) updated.href = href;
     else delete updated.href;
+  }
+
+  if (ctaTexto !== undefined) {
+    if (ctaTexto) updated.ctaTexto = ctaTexto;
+    else delete updated.ctaTexto;
   }
 
   bannerSchema.parse(updated);

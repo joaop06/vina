@@ -37,15 +37,37 @@ describe("site-config-tabs compose/split", () => {
     );
   });
 
+  it("reads legacy Sobre/Trocas from Contato and writes them under Textos", () => {
+    const fragments = splitSiteConfig(DEFAULT_SITE_CONFIG);
+    fragments.contato.textos = {
+      sobre: "História preservada",
+      trocas: "Política preservada",
+    };
+    delete fragments.textos.textos.sobre;
+    delete fragments.textos.textos.trocas;
+
+    const legacy = siteConfigSchema.parse(composeSiteConfigRaw(fragments));
+    assert.equal(legacy.textos.sobre, "História preservada");
+    assert.equal(legacy.textos.trocas, "Política preservada");
+
+    const migrated = splitSiteConfig(legacy);
+    assert.equal(migrated.contato.textos, undefined);
+    assert.equal(migrated.textos.textos.sobre, "História preservada");
+    assert.equal(migrated.textos.textos.trocas, "Política preservada");
+  });
+
   it("mergeTabIntoConfig updates versao from meta", () => {
     const next = mergeTabIntoConfig(
       DEFAULT_SITE_CONFIG,
-      "painel",
-      { painel: { metaReceitaMensal: 1000 } },
+      "geral",
+      {
+        ...extractTabSlice(DEFAULT_SITE_CONFIG, "geral"),
+        metaReceitaMensal: 1000,
+      },
       { versao: 9, atualizadoEm: "2026-07-01T00:00:00.000Z" },
     );
     assert.equal(next.versao, 9);
-    assert.equal(next.painel.metaReceitaMensal, 1000);
+    assert.equal(next.metaReceitaMensal, 1000);
   });
 
   it("preserves meta.versao when compose falls back to defaults", () => {
@@ -54,8 +76,8 @@ describe("site-config-tabs compose/split", () => {
       versao: 42,
       atualizadoEm: "2026-07-28T12:00:00.000Z",
     };
-    // Corrupt identidade so composeSiteConfigRaw fails siteConfigSchema.
-    (fragments.identidade as { nomeLoja: string }).nomeLoja = "";
+    // Corrupt geral so composeSiteConfigRaw fails siteConfigSchema.
+    (fragments.geral as { nomeLoja: string }).nomeLoja = "";
     const picked = pickSiteConfigSource({ legacy: null, fragments });
     assert.equal(picked.versao, 42);
     assert.equal(picked.atualizadoEm, "2026-07-28T12:00:00.000Z");
@@ -103,18 +125,30 @@ describe("pickSiteConfigSource", () => {
     const picked = pickSiteConfigSource({ legacy: null, fragments: null });
     assert.equal(picked.nomeLoja, DEFAULT_SITE_CONFIG.nomeLoja);
   });
+
+  it("lifts legacy painel.metaReceitaMensal into root on parse", () => {
+    const parsed = siteConfigSchema.parse({
+      ...DEFAULT_SITE_CONFIG,
+      painel: { metaReceitaMensal: 2500 },
+    });
+    assert.equal(parsed.metaReceitaMensal, 2500);
+    assert.equal(
+      (parsed as { painel?: unknown }).painel,
+      undefined,
+    );
+  });
 });
 
 describe("siteConfigTabsToPersist", () => {
   it("writes only touched tabs when storage is complete", () => {
-    const tabs = siteConfigTabsToPersist(["identidade"], []);
-    assert.deepEqual(tabs, ["identidade"]);
+    const tabs = siteConfigTabsToPersist(["geral"], []);
+    assert.deepEqual(tabs, ["geral"]);
   });
 
   it("heals missing tabs alongside the patched tab without listing valid siblings", () => {
-    const missing = SITE_CONFIG_TAB_IDS.filter((t) => t !== "identidade");
-    const tabs = siteConfigTabsToPersist(["identidade"], missing);
-    assert.ok(tabs.includes("identidade"));
+    const missing = SITE_CONFIG_TAB_IDS.filter((t) => t !== "geral");
+    const tabs = siteConfigTabsToPersist(["geral"], missing);
+    assert.ok(tabs.includes("geral"));
     for (const t of missing) assert.ok(tabs.includes(t));
     assert.equal(tabs.length, SITE_CONFIG_TAB_IDS.length);
   });

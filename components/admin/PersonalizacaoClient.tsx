@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AdminPageActions } from "@/components/admin/AdminPageActions";
 import { useAdminBusy } from "@/components/admin/AdminBusy";
@@ -45,14 +45,26 @@ import {
   type SiteConfigTabId,
 } from "@/src/schemas/site-config-tabs";
 
+// Stable IDs avoid React 19 useId prefix differences between Next.js SSR and hydration.
+const TABS_ID = "admin-personalizacao";
+const FORM_IDS: Record<ConfiguracoesTabId, string> = {
+  geral: "admin-personalizacao-form-geral",
+  contato: "admin-personalizacao-form-contato",
+  whatsapp: "admin-personalizacao-form-whatsapp",
+  vitrine: "admin-personalizacao-form-vitrine",
+  navegacao: "admin-personalizacao-form-navegacao",
+  textos: "admin-personalizacao-form-textos",
+  tema: "admin-personalizacao-form-tema",
+};
+
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-const IdentidadePanel = dynamic(
+const GeralPanel = dynamic(
   () =>
-    import("@/components/admin/configuracoes/IdentidadePanel").then(
-      (m) => m.IdentidadePanel,
+    import("@/components/admin/configuracoes/GeralPanel").then(
+      (m) => m.GeralPanel,
     ),
   { ssr: false },
 );
@@ -98,13 +110,6 @@ const TemaAvancadoPanel = dynamic(
     ),
   { ssr: false },
 );
-const PainelPanel = dynamic(
-  () =>
-    import("@/components/admin/configuracoes/PainelPanel").then(
-      (m) => m.PainelPanel,
-    ),
-  { ssr: false },
-);
 
 function snapshotCommitted(
   config: SiteConfig,
@@ -138,7 +143,7 @@ function tabPayload(
   logoDraft: ImageMeta | null,
 ): unknown {
   const slice = extractTabSlice(config, tab);
-  if (tab === "identidade") {
+  if (tab === "geral") {
     const logoPayload = logoDraft
       ? logoDraft.file
         ? {
@@ -161,6 +166,7 @@ function tabPayload(
       slogan: config.slogan,
       cores: config.cores,
       logo: logoPayload,
+      metaReceitaMensal: config.metaReceitaMensal ?? null,
     };
   }
   if (tab === "whatsapp") {
@@ -189,10 +195,6 @@ function tabPayload(
         mostrarCelular: Boolean(config.telefones.mostrarCelular),
       },
       horarios: config.horarios,
-      textos: {
-        sobre: config.textos.sobre,
-        trocas: config.textos.trocas,
-      },
     };
   }
   return slice;
@@ -216,15 +218,14 @@ export function PersonalizacaoClient({
   const [tab, setTab] = useState<ConfiguracoesTabId>(() =>
     parseConfigTab(initialTab),
   );
-  const tabsId = useId();
-  const identidadeFormId = useId();
-  const contatoFormId = useId();
-  const whatsappFormId = useId();
-  const vitrineFormId = useId();
-  const navegacaoFormId = useId();
-  const textosFormId = useId();
-  const temaFormId = useId();
-  const painelFormId = useId();
+  const tabsId = TABS_ID;
+  const geralFormId = FORM_IDS.geral;
+  const contatoFormId = FORM_IDS.contato;
+  const whatsappFormId = FORM_IDS.whatsapp;
+  const vitrineFormId = FORM_IDS.vitrine;
+  const navegacaoFormId = FORM_IDS.navegacao;
+  const textosFormId = FORM_IDS.textos;
+  const temaFormId = FORM_IDS.tema;
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const allowLeaveRef = useRef(false);
 
@@ -292,9 +293,7 @@ export function PersonalizacaoClient({
               ? textosFormId
               : tab === "tema"
                 ? temaFormId
-                : tab === "painel"
-                  ? painelFormId
-                  : identidadeFormId;
+                : geralFormId;
 
   const ensureTabLoaded = useCallback(
     async (next: ConfiguracoesTabId) => {
@@ -318,8 +317,8 @@ export function PersonalizacaoClient({
             }),
           );
           const logo =
-            next === "identidade" ? logoFromConfig(merged) : logoDraft;
-          if (next === "identidade") {
+            next === "geral" ? logoFromConfig(merged) : logoDraft;
+          if (next === "geral") {
             setLogoDraft(logoFromConfig(merged));
           }
           setBaselineByTab((baseline) => ({
@@ -368,6 +367,11 @@ export function PersonalizacaoClient({
       await ensureTabLoaded(next);
       // Contato preview uses whatsapp.telefone when usarWhatsappComoCelular.
       if (next === "contato") await ensureTabLoaded("whatsapp");
+      // WhatsApp surfaces depend on carrinho (Geral) and menu drawer (Navegação).
+      if (next === "whatsapp") {
+        await ensureTabLoaded("geral");
+        await ensureTabLoaded("navegacao");
+      }
     })().catch((err) => {
       toastMutationError(err, { id: "load-config-tab" });
     });
@@ -381,11 +385,25 @@ export function PersonalizacaoClient({
     }
   }, [ensureTabLoaded, initialTab]);
 
+  useEffect(() => {
+    if (initialTab !== "whatsapp") return;
+    void (async () => {
+      if (!loadedTabsRef.current.has("geral")) {
+        await ensureTabLoaded("geral");
+      }
+      if (!loadedTabsRef.current.has("navegacao")) {
+        await ensureTabLoaded("navegacao");
+      }
+    })().catch((err) => {
+      toastMutationError(err, { id: "load-config-tab" });
+    });
+  }, [ensureTabLoaded, initialTab]);
+
   async function syncVersaoFromServer() {
     const syncTab =
       [...loadedTabsRef.current][0] ??
       (tab as SiteConfigTabId) ??
-      "identidade";
+      "geral";
     const res = await fetch(`/api/v1/admin/site-config?tab=${syncTab}`);
     const data = (await res.json()) as SiteConfigTabApiResponse & {
       error?: { message?: string };
@@ -427,7 +445,7 @@ export function PersonalizacaoClient({
 
   // Live theme preview; restore committed theme on unmount.
   useEffect(() => {
-    if (!loadedTabs.has("identidade") && !loadedTabs.has("vitrine")) return;
+    if (!loadedTabs.has("geral") && !loadedTabs.has("vitrine")) return;
     applySiteTheme({
       cores: { ...config.cores, primaria: colorPickerValue },
       layout: selectedLayout,
@@ -572,7 +590,7 @@ export function PersonalizacaoClient({
         ? [{ id: logoDraft.id, file: logoDraft.file }]
         : [];
       const hasUploads =
-        tabsToSave.includes("identidade") && pendingFiles.length > 0;
+        tabsToSave.includes("geral") && pendingFiles.length > 0;
 
       await runMutation(
         {
@@ -772,13 +790,13 @@ export function PersonalizacaoClient({
             <div
               className="dash-tabs__panel"
               role="tabpanel"
-              id={`${tabsId}-panel-identidade`}
-              aria-labelledby={`${tabsId}-tab-identidade`}
-              hidden={tab !== "identidade"}
+              id={`${tabsId}-panel-geral`}
+              aria-labelledby={`${tabsId}-tab-geral`}
+              hidden={tab !== "geral"}
             >
-              {tab === "identidade" ? (
-                <IdentidadePanel
-                  formId={identidadeFormId}
+              {tab === "geral" ? (
+                <GeralPanel
+                  formId={geralFormId}
                   config={config}
                   logoDraft={logoDraft}
                   disabled={saving}
@@ -821,7 +839,9 @@ export function PersonalizacaoClient({
                   disabled={saving}
                   onSubmit={save}
                   onConfigChange={onConfigChange}
-                  onOpenIdentidadeTab={() => selectTab("identidade")}
+                  onOpenGeralTab={() => selectTab("geral")}
+                  onOpenNavegacaoTab={() => selectTab("navegacao")}
+                  navegacaoLoaded={loadedTabs.has("navegacao")}
                 />
               ) : null}
             </div>
@@ -894,24 +914,6 @@ export function PersonalizacaoClient({
               {tab === "tema" ? (
                 <TemaAvancadoPanel
                   formId={temaFormId}
-                  config={config}
-                  disabled={saving}
-                  onSubmit={save}
-                  onConfigChange={onConfigChange}
-                />
-              ) : null}
-            </div>
-
-            <div
-              className="dash-tabs__panel"
-              role="tabpanel"
-              id={`${tabsId}-panel-painel`}
-              aria-labelledby={`${tabsId}-tab-painel`}
-              hidden={tab !== "painel"}
-            >
-              {tab === "painel" ? (
-                <PainelPanel
-                  formId={painelFormId}
                   config={config}
                   disabled={saving}
                   onSubmit={save}

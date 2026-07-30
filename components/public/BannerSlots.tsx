@@ -1,10 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Banner } from "@/src/schemas/banner";
-import { DEFAULT_BANNER_CTA } from "@/src/config/store-copy-defaults";
 import { mediaUrl } from "@/src/lib/front/format";
 import { IMAGE_SIZES } from "@/src/lib/front/media-image";
-import { pickBanner } from "@/src/lib/front/media";
+import {
+  bannerCtaTexto,
+  bannerHref,
+  pickBanner,
+} from "@/src/lib/front/media";
 
 type Props = {
   banners: Banner[];
@@ -21,7 +24,7 @@ export function BannerFaixa({
   const banner = pickBanner(banners, "faixa");
   const src = mediaUrl(banner?.imagem.path);
   if (!banner || !src) return null;
-  const href = banner.href || "/catalogo";
+  const href = bannerHref(banner);
 
   return (
     <section className={className} aria-label={storeName}>
@@ -47,8 +50,8 @@ export function BannerPromo({
   const banner = pickBanner(banners, "promo");
   const src = mediaUrl(banner?.imagem.path);
   if (!banner || !src) return null;
-  const href = banner.href || "/catalogo";
-  const ctaLabel = banner.ctaTexto?.trim() || DEFAULT_BANNER_CTA;
+  const href = bannerHref(banner);
+  const ctaLabel = bannerCtaTexto(banner);
 
   return (
     <section className={className} aria-label={storeName}>

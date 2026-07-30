@@ -5,16 +5,15 @@ Configuração canônica: arquivos em `data/configuracoes/` segmentados por aba 
 | Arquivo | Aba / conteúdo |
 |---------|----------------|
 | `meta.json` | `versao`, `atualizadoEm` |
-| `identidade.json` | marca, cores, logo |
+| `geral.json` | marca, cores, logo, meta de receita do dashboard |
 | `whatsapp.json` | templates WA + `comportamento` |
 | `contato.json` | Instagram, endereço, telefones, horários, `textos.sobre`/`trocas` |
 | `vitrine.json` | `layout` + limites `vitrine` |
 | `navegacao.json` | `navegacao` |
 | `textos.json` | restante de `textos.*` + `rotulos` |
 | `tema.json` | `tema`, `seo` |
-| `painel.json` | meta de receita do dashboard |
 
-A migration `2026-07-split-site-config-by-tab` converte o legado `site.json` monolítico nesses fragmentos.
+A migration `2026-07-split-site-config-by-tab` converte o legado `site.json` monolítico nesses fragmentos. A migration `2026-07-merge-geral-config-tab` une os legados `identidade.json` + `painel.json` em `geral.json`.
 
 Fragments são a fonte canônica quando `meta.json` + abas existem. O monolito `site.json` só é lido se os fragmentos ainda não tiverem sido migrados. Qualquer save bem-sucedido no admin **remove** `site.json` residual no mesmo commit.
 
@@ -26,7 +25,7 @@ Após salvar no admin, `revalidateStorefront("site-config", …)` invalida a Dat
 
 Checklist rápido pós-save:
 
-- Identidade (nome/cores/logo) → header/footer/CSS vars em `/`
+- Geral (nome/cores/logo/meta) → header/footer/CSS vars em `/` e progresso no Painel
 - WhatsApp → CTA home, header, PDP
 - Contato / textos sobre → `/sobre`
 - `mostrarCarrinho` → `/carrinho` (404 se desligado)
@@ -53,12 +52,13 @@ Checklist rápido pós-save:
 | `vitrine.*` | Home limits, catálogo page size | Idem |
 | `navegacao` | Header, drawer, topbar | `PublicMobileNav` @768 |
 | `banners` + `ctaTexto` | Home banners | Imagens fluidas |
+| `metaReceitaMensal` | Progresso de meta no Painel (aba Negócio) | Admin |
 
 ## Scripts de governança
 
 - `npm run seed:validate` — valida fragmentos de config e catálogo.
 - `npm run check:store-copy` — falha se strings vitrine conhecidas aparecerem em TSX sem usar `store-copy` / `site.textos` (ver `scripts/check-store-copy.ts`).
-- `npm run data:migrate` — aplica migrations JSON pendentes (mesma ordem do boot). A migration inicial `2026-07-production-baseline` converte o modelo de produção; `2026-07-split-site-config-by-tab` fatia `site.json`. Ledger em `configuracoes/migrations.json`.
+- `npm run data:migrate` — aplica migrations JSON pendentes (mesma ordem do boot). A migration inicial `2026-07-production-baseline` converte o modelo de produção; `2026-07-split-site-config-by-tab` fatia `site.json`; `2026-07-merge-geral-config-tab` une Identidade+Painel em Geral. Ledger em `configuracoes/migrations.json`.
 
 ## Variantes de produto
 

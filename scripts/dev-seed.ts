@@ -595,13 +595,13 @@ function generateDailyAnalytics(
 
 async function updateSiteMeta(orders: Order[]) {
   const metaPath = path.join(DATA_DEV, "configuracoes/meta.json");
-  const painelPath = path.join(DATA_DEV, "configuracoes/painel.json");
+  const geralPath = path.join(DATA_DEV, "configuracoes/geral.json");
   const metaRaw = JSON.parse(await fs.readFile(metaPath, "utf8")) as {
     versao: number;
     atualizadoEm: string;
   };
-  const painelRaw = JSON.parse(await fs.readFile(painelPath, "utf8")) as {
-    painel?: { metaReceitaMensal: number | null };
+  const geralRaw = JSON.parse(await fs.readFile(geralPath, "utf8")) as {
+    metaReceitaMensal?: number | null;
   };
   const today = dateInSaoPaulo();
   const monthStart = startOfMonthDateOnly(today);
@@ -615,9 +615,9 @@ async function updateSiteMeta(orders: Order[]) {
   const meta = receitaMes > 0 ? Math.round(receitaMes * 1.1) : 50000;
   metaRaw.versao = (metaRaw.versao ?? 1) + 1;
   metaRaw.atualizadoEm = new Date().toISOString();
-  painelRaw.painel = { metaReceitaMensal: meta };
+  geralRaw.metaReceitaMensal = meta;
   await fs.writeFile(metaPath, `${JSON.stringify(metaRaw, null, 2)}\n`);
-  await fs.writeFile(painelPath, `${JSON.stringify(painelRaw, null, 2)}\n`);
+  await fs.writeFile(geralPath, `${JSON.stringify(geralRaw, null, 2)}\n`);
 }
 
 function validateSamples(
@@ -752,7 +752,7 @@ async function main() {
     "analytics",
   );
 
-  console.log("Atualizando meta do painel…");
+  console.log("Atualizando meta de receita…");
   await updateSiteMeta(orders);
 
   validateSamples(categories, products, clients, orders);

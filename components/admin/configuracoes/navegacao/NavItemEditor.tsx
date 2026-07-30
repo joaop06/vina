@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useState } from "react";
+import { GripVertical, MapPinned, X } from "lucide-react";
+import { FieldHint } from "@/components/admin/FieldHint";
 import { listRootCategories } from "@/src/lib/navigation";
 import type { NavSurfaceKey } from "@/src/lib/navigation-admin";
 import { navItemKindLabel } from "@/src/lib/navigation-admin";
@@ -10,7 +12,7 @@ import {
   type NavItem,
 } from "@/src/schemas/navigation";
 import type { Category } from "@/src/schemas/category";
-import { FieldHint } from "@/components/admin/FieldHint";
+import styles from "./NavegacaoEditor.module.css";
 
 function moveItem<T>(list: T[], from: number, to: number): T[] {
   if (to < 0 || to >= list.length || from === to) return list;
@@ -59,7 +61,8 @@ function CategoriasEditor({
   }
 
   return (
-    <div className="admin-nav-v2__cats">
+    <div className={styles.fieldGroup}>
+      <p className={styles.fieldGroupTitle}>Categorias exibidas</p>
       <label className="admin-switch" data-disabled={disabled ? "true" : undefined}>
         <span>Mostrar subcategorias</span>
         <input
@@ -73,17 +76,18 @@ function CategoriasEditor({
         />
         <span className="admin-switch__track" aria-hidden="true" />
       </label>
-      <div className="admin-nav-v2__cats-hint">
-        Desmarque para esconder; arraste para mudar a ordem.
+      <p className={styles.catsHint}>
+        Desmarque uma categoria para escondê-la. Arraste pelo ícone para mudar a
+        ordem.
         <FieldHint text="Por padrão, todas as categorias-raiz aparecem na ordem do catálogo." />
-      </div>
-      <ul className="admin-nav-v2__cat-list">
+      </p>
+      <ul className={styles.catList}>
         {orderedRoots.map((cat, index) => (
           <li
             key={cat.id}
             className={[
-              "admin-nav-v2__cat-row",
-              dragIndex === index ? "is-dragging" : "",
+              styles.catRow,
+              dragIndex === index ? styles.rowDragging : "",
             ]
               .filter(Boolean)
               .join(" ")}
@@ -99,10 +103,10 @@ function CategoriasEditor({
               setDragIndex(null);
             }}
           >
-            <span className="admin-nav-v2__drag" aria-hidden="true">
-              ⋮⋮
+            <span className={styles.drag} aria-hidden="true">
+              <GripVertical size={14} strokeWidth={1.75} />
             </span>
-            <label className="admin-nav-v2__cat-check">
+            <label className={styles.catCheck}>
               <input
                 type="checkbox"
                 checked
@@ -114,8 +118,11 @@ function CategoriasEditor({
           </li>
         ))}
         {unselected.map((cat) => (
-          <li key={cat.id} className="admin-nav-v2__cat-row is-muted">
-            <label className="admin-nav-v2__cat-check">
+          <li
+            key={cat.id}
+            className={`${styles.catRow} ${styles.catRowMuted}`}
+          >
+            <label className={styles.catCheck}>
               <input
                 type="checkbox"
                 checked={false}
@@ -128,14 +135,17 @@ function CategoriasEditor({
         ))}
       </ul>
       {roots.length === 0 ? (
-        <p className="admin-nav-v2__cats-empty">Nenhuma categoria ativa.</p>
+        <p className={styles.catsEmpty}>Nenhuma categoria ativa.</p>
       ) : null}
-      <details className="admin-nav-v2__advanced">
+      <details className={styles.advanced}>
         <summary>Mais opções</summary>
-        <div className="admin-nav-v2__advanced-body">
+        <div className={styles.advancedBody}>
           {surfaceKey === "header" ? (
-            <label className="admin-nav-v2__cats-max">
-              <span>Limitar quantidade no cabeçalho</span>
+            <label className={styles.catsMax}>
+              <span>
+                Limitar quantidade no cabeçalho
+                <FieldHint text="Útil se houver muitas categorias e o cabeçalho ficar apertado." />
+              </span>
               <input
                 className="input"
                 type="number"
@@ -157,8 +167,9 @@ function CategoriasEditor({
               />
             </label>
           ) : (
-            <p className="admin-nav-v2__cats-hint">
-              No menu do celular não há limite de categorias na barra superior.
+            <p className={styles.catsHint}>
+              No menu do celular não há limite de categorias — todas as
+              selecionadas aparecem na lista.
             </p>
           )}
           <button
@@ -197,23 +208,34 @@ export function NavItemEditor({
 
   return (
     <div
-      className="admin-nav-v2__item-editor"
+      className={styles.itemEditor}
       role="region"
       aria-labelledby={titleId}
     >
-      <div className="admin-nav-v2__item-editor-head">
-        <h4 id={titleId} className="admin-nav-v2__item-editor-title">
+      <div className={styles.itemEditorHead}>
+        <h4 id={titleId} className={styles.itemEditorTitle}>
           Editar: {navItemLabel(item)}
         </h4>
         <button
           type="button"
-          className="btn btn-ghost btn-sm"
+          className={styles.iconBtn}
           disabled={disabled}
+          aria-label="Fechar edição"
           onClick={onClose}
         >
-          Fechar
+          <X size={18} strokeWidth={1.75} />
         </button>
       </div>
+
+      <p className={styles.where}>
+        <span className={styles.whereMark} aria-hidden>
+          <MapPinned size={12} strokeWidth={2} />
+        </span>
+        {surfaceKey === "header"
+          ? "Aparece na barra do topo no computador"
+          : "Aparece na lista do menu do celular"}
+      </p>
+
       {item.tipo === "link" ? (
         <label className="admin-form__span">
           <span className="admin-field-label">Nome no menu (opcional)</span>
@@ -232,7 +254,7 @@ export function NavItemEditor({
         </label>
       ) : null}
       {item.tipo === "custom" ? (
-        <div className="admin-nav-v2__custom-fields">
+        <div className={styles.customFields}>
           <label className="admin-form__span">
             <span className="admin-field-label">Nome no menu</span>
             <input
@@ -279,45 +301,7 @@ export function NavItemEditor({
           onChange={(next) => onChange(next)}
         />
       ) : null}
-      <p className="admin-nav-v2__item-kind">{navItemKindLabel(item)}</p>
+      <p className={styles.itemKind}>{navItemKindLabel(item)}</p>
     </div>
-  );
-}
-
-export function NavItemEditorDialog({
-  open,
-  item,
-  surfaceKey,
-  categories,
-  disabled,
-  onChange,
-  onClose,
-}: Props & { open: boolean }) {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    const el = dialogRef.current;
-    if (!el) return;
-    if (open && !el.open) el.showModal();
-    if (!open && el.open) el.close();
-  }, [open]);
-
-  if (!open) return null;
-
-  return (
-    <dialog
-      ref={dialogRef}
-      className="admin-nav-v2__dialog"
-      onClose={onClose}
-    >
-      <NavItemEditor
-        item={item}
-        surfaceKey={surfaceKey}
-        categories={categories}
-        disabled={disabled}
-        onChange={onChange}
-        onClose={onClose}
-      />
-    </dialog>
   );
 }

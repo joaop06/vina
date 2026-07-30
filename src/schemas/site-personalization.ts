@@ -185,16 +185,36 @@ export const siteFonteIdSchema = z.enum([
   "system",
 ]);
 
+/** Hex color: #RGB or #RRGGBB (case-insensitive). */
+export const siteHexColorSchema = z
+  .string()
+  .regex(/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/, "Use uma cor hexadecimal (#RGB ou #RRGGBB)");
+
+/**
+ * Container max-width: number with optional unit px|rem|em|%.
+ * Examples: 1120px, 90%, 70rem
+ */
+export const siteContainerWidthSchema = z
+  .string()
+  .min(1)
+  .max(20)
+  .regex(
+    /^\d+(\.\d+)?(px|rem|em|%)?$/i,
+    "Use um valor como 1120px, 90% ou 70rem",
+  );
+
 export const siteTemaSchema = z
   .object({
     raio: z.number().min(0).max(32),
-    larguraContainer: z.string().min(1).max(20),
-    corWhatsapp: z.string().min(1),
-    corInstagram: z.string().min(1),
+    larguraContainer: siteContainerWidthSchema,
+    corWhatsapp: siteHexColorSchema,
+    corInstagram: siteHexColorSchema,
     fonteCorpo: siteFonteIdSchema,
     fonteDisplay: siteFonteIdSchema,
   })
   .default({ ...DEFAULT_SITE_TEMA });
+
+export type SiteFonteId = z.infer<typeof siteFonteIdSchema>;
 
 export const siteSeoSchema = z
   .object({

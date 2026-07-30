@@ -74,7 +74,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   horarios: "Seg–Sex 9h–18h · Sáb 9h–13h",
   textos: {
     sobre:
-      "Apresente sua loja aqui. Edite este texto em Admin → Personalização → Identidade.",
+      "Apresente sua loja aqui. Edite este texto em Admin → Personalização → Geral.",
     trocas:
       "Consulte nossa equipe pelo WhatsApp para trocas e devoluções.",
     paginas: { ...DEFAULT_SITE_TEXTOS_PAGINAS },
@@ -95,6 +95,6 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   tema: { ...DEFAULT_SITE_TEMA },
   seo: { ...DEFAULT_SITE_SEO },
   navegacao: DEFAULT_NAVEGACAO,
-  painel: { metaReceitaMensal: null },
+  metaReceitaMensal: null,
   atualizadoEm: "2026-01-01T00:00:00.000Z",
 };
