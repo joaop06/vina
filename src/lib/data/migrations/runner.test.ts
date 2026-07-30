@@ -145,7 +145,7 @@ describe("migrationSplitSiteConfigByTab", () => {
     const result = await migrationSplitSiteConfigByTab.run(ctx);
     assert.ok(result.changes.some((c) => c.path === SITE_CONFIG_META_PATH));
     assert.ok(
-      result.changes.some((c) => c.path === SITE_CONFIG_TAB_PATHS.identidade),
+      result.changes.some((c) => c.path === SITE_CONFIG_TAB_PATHS.geral),
     );
     assert.ok(
       result.changes.some(
@@ -177,5 +177,112 @@ describe("migrationSplitSiteConfigByTab", () => {
     const result = await migrationSplitSiteConfigByTab.run(ctx);
     assert.equal(result.changes.length, 0);
     assert.equal(result.stats.skipped, "already-split");
+  });
+});
+
+describe("migrationMergeGeralConfigTab", () => {
+  it("merges identidade + painel into geral and deletes legacy", async () => {
+    const { migrationMergeGeralConfigTab } = await import(
+      "@/src/lib/data/migrations/migrations/2026-07-merge-geral-config-tab"
+    );
+    const { SITE_CONFIG_TAB_PATHS } = await import(
+      "@/src/schemas/site-config-tabs"
+    );
+
+    const files = new Map<string, unknown>([
+      [
+        "configuracoes/identidade.json",
+        {
+          nomeLoja: "Loja migrada",
+          mostrarNomeComLogo: false,
+          mostrarCarrinho: true,
+          assinatura: "Assinatura",
+          slogan: "Slogan",
+          cores: {
+            primaria: "#111111",
+            secundaria: "#111111",
+            fundo: "#FFFFFF",
+            fundoNeutro: "#F5F5F5",
+            borda: "#E5E5E5",
+          },
+          logo: null,
+        },
+      ],
+      [
+        "configuracoes/painel.json",
+        { painel: { metaReceitaMensal: 42000 } },
+      ],
+    ]);
+    const ctx: MigrationContext = {
+      trigger: "cli",
+      dryRun: true,
+      readJson: async <T>(relativePath: string) =>
+        files.has(relativePath) ? (files.get(relativePath) as T) : null,
+      listJsonDir: async () => [],
+    };
+    const result = await migrationMergeGeralConfigTab.run(ctx);
+    const geralWrite = result.changes.find(
+      (c) => c.path === SITE_CONFIG_TAB_PATHS.geral && "content" in c,
+    );
+    assert.ok(geralWrite && "content" in geralWrite);
+    const geral = JSON.parse(geralWrite.content as string) as {
+      nomeLoja: string;
+      metaReceitaMensal: number | null;
+    };
+    assert.equal(geral.nomeLoja, "Loja migrada");
+    assert.equal(geral.metaReceitaMensal, 42000);
+    assert.ok(
+      result.changes.some(
+        (c) =>
+          c.path === "configuracoes/identidade.json" &&
+          "delete" in c &&
+          c.delete === true,
+      ),
+    );
+    assert.ok(
+      result.changes.some(
+        (c) =>
+          c.path === "configuracoes/painel.json" &&
+          "delete" in c &&
+          c.delete === true,
+      ),
+    );
+  });
+
+  it("is a no-op when already merged", async () => {
+    const { migrationMergeGeralConfigTab } = await import(
+      "@/src/lib/data/migrations/migrations/2026-07-merge-geral-config-tab"
+    );
+    const files = new Map<string, unknown>([
+      [
+        "configuracoes/geral.json",
+        {
+          nomeLoja: "Já geral",
+          mostrarNomeComLogo: false,
+          mostrarCarrinho: true,
+          assinatura: "A",
+          slogan: "S",
+          cores: {
+            primaria: "#111111",
+            secundaria: "#111111",
+            fundo: "#FFFFFF",
+            fundoNeutro: "#F5F5F5",
+            borda: "#E5E5E5",
+          },
+          logo: null,
+          metaReceitaMensal: null,
+        },
+      ],
+    ]);
+    const ctx: MigrationContext = {
+      trigger: "cli",
+      dryRun: true,
+      readJson: async <T>(relativePath: string) =>
+        files.has(relativePath) ? (files.get(relativePath) as T) : null,
+      listJsonDir: async () => [],
+    };
+    const result = await migrationMergeGeralConfigTab.run(ctx);
+    assert.equal(result.changes.length, 0);
+    assert.equal(result.stats.skipped, "already-merged");
   });
 });

@@ -285,52 +285,6 @@ export function ContatoPanel({
         </div>
       </section>
 
-      <section className="admin-form__section">
-        <header className="admin-form__section-header">
-          <h2 className="admin-form__section-title">Textos da loja</h2>
-          <p className="admin-form__section-desc">
-            Conteúdos das páginas Sobre e Trocas na vitrine.
-          </p>
-        </header>
-        <div className="admin-form__section-body">
-          <label className="admin-form__span">
-            <span className="admin-field-label">
-              Texto Sobre
-              <FieldHint text="Conteúdo da página Sobre na vitrine." />
-            </span>
-            <textarea
-              className="textarea"
-              rows={5}
-              disabled={disabled}
-              value={config.textos.sobre}
-              onChange={(e) =>
-                onConfigChange({
-                  ...config,
-                  textos: { ...config.textos, sobre: e.target.value },
-                })
-              }
-            />
-          </label>
-          <label className="admin-form__span">
-            <span className="admin-field-label">
-              Texto Trocas
-              <FieldHint text="Política de trocas e devoluções exibida na vitrine." />
-            </span>
-            <textarea
-              className="textarea"
-              rows={5}
-              disabled={disabled}
-              value={config.textos.trocas}
-              onChange={(e) =>
-                onConfigChange({
-                  ...config,
-                  textos: { ...config.textos, trocas: e.target.value },
-                })
-              }
-            />
-          </label>
-        </div>
-      </section>
     </form>
   );
 }

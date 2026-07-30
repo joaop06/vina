@@ -3,11 +3,19 @@
 import { useEffect, useState } from "react";
 import { FieldHint } from "@/components/admin/FieldHint";
 import { ImageField, type ImageMeta } from "@/components/admin/ImageField";
+import { ColorField } from "@/components/admin/configuracoes/ColorField";
 import {
   expandHexIfComplete,
   normalizeHexForPicker,
 } from "@/components/admin/configuracoes/siteTheme";
+import { DashIcon, dashIcons } from "@/components/admin/dashboard/icons";
+import {
+  formatBrl,
+  maskBrlInput,
+  parseBrlInput,
+} from "@/src/lib/front/format";
 import type { SiteConfig } from "@/src/schemas/site-config";
+import styles from "./GeralPanel.module.css";
 
 type ColorKey = keyof SiteConfig["cores"];
 
@@ -43,74 +51,58 @@ const COLOR_FIELDS: Array<{
   },
 ];
 
-function ColorField({
-  label,
-  hint,
-  value,
-  disabled,
-  onCommit,
-}: {
-  label: string;
-  hint: string;
-  value: string;
-  disabled?: boolean;
-  onCommit: (hex: string) => void;
-}) {
-  const [hexDraft, setHexDraft] = useState(value);
-  const pickerValue = normalizeHexForPicker(value);
+function MetaPreview({ mensal }: { mensal: number | null }) {
+  if (mensal == null || mensal <= 0) {
+    return (
+      <aside className={styles.preview} aria-live="polite">
+        <p className={styles.previewLabel}>Pré-visualização no Painel</p>
+        <p className={styles.previewEmpty}>
+          Sem meta definida, o bloco de progresso não aparece na aba Negócio.
+        </p>
+      </aside>
+    );
+  }
 
-  useEffect(() => {
-    setHexDraft(value);
-  }, [value]);
+  const diasNoMes = 30;
+  const diasExemplo = 15;
+  const proporcional = (mensal * diasExemplo) / diasNoMes;
+  const receitaExemplo = proporcional * 0.68;
+  const pct = Math.min((receitaExemplo / proporcional) * 100, 100);
 
   return (
-    <label className="admin-form__field admin-config-color">
-      <span className="admin-field-label">
-        {label}
-        <FieldHint text={hint} />
-      </span>
-      <div className="admin-color-field">
-        <input
-          type="color"
-          className="admin-color-field__swatch"
-          value={pickerValue}
-          disabled={disabled}
-          onChange={(e) => {
-            const nextPicker = e.target.value.toLowerCase();
-            if (nextPicker === pickerValue) return;
-            const next = nextPicker.toUpperCase();
-            setHexDraft(next);
-            onCommit(next);
-          }}
-          aria-label={`Selecionar ${label.toLowerCase()}`}
-        />
-        <input
-          className="input"
-          value={hexDraft}
-          spellCheck={false}
-          disabled={disabled}
-          onChange={(e) => {
-            const raw = e.target.value;
-            setHexDraft(raw);
-            const expanded = expandHexIfComplete(raw);
-            if (expanded) onCommit(expanded);
-          }}
-          onBlur={() => {
-            const expanded = expandHexIfComplete(hexDraft);
-            if (expanded) {
-              setHexDraft(expanded);
-              onCommit(expanded);
-            } else {
-              setHexDraft(value);
-            }
-          }}
-        />
+    <aside className={styles.preview} aria-live="polite">
+      <p className={styles.previewLabel}>Pré-visualização no Painel</p>
+      <div className={styles.previewCard}>
+        <DashIcon icon={dashIcons.meta} className={styles.previewIcon} />
+        <div className={styles.previewBody}>
+          <p className={styles.previewTitle}>
+            Meta de receita (proporcional ao período)
+          </p>
+          <div
+            className={styles.previewBar}
+            role="img"
+            aria-label={`Exemplo: ${pct.toFixed(0)}% da meta proporcional`}
+          >
+            <div
+              className={styles.previewFill}
+              style={{ width: `${pct}%` }}
+            />
+          </div>
+          <p className={styles.previewDetail}>
+            <strong>{formatBrl(receitaExemplo)}</strong> de{" "}
+            {formatBrl(proporcional)} ({pct.toFixed(0)}%) · meta mensal{" "}
+            {formatBrl(mensal)}
+          </p>
+        </div>
       </div>
-    </label>
+      <p className={styles.previewNote}>
+        Valores ilustrativos para um período de 15 dias no mês.
+      </p>
+    </aside>
   );
 }
 
-export function IdentidadePanel({
+export function GeralPanel({
   formId,
   config,
   logoDraft,
@@ -127,6 +119,15 @@ export function IdentidadePanel({
   onConfigChange: (next: SiteConfig) => void;
   onLogoChange: (next: ImageMeta | null) => void;
 }) {
+  const meta = config.metaReceitaMensal ?? null;
+  const [metaDraft, setMetaDraft] = useState(
+    meta != null ? formatBrl(meta) : "",
+  );
+
+  useEffect(() => {
+    setMetaDraft(meta != null ? formatBrl(meta) : "");
+  }, [meta]);
+
   function setColor(key: ColorKey, hex: string) {
     const current = config.cores[key];
     if (current === hex) return;
@@ -139,6 +140,14 @@ export function IdentidadePanel({
     onConfigChange({
       ...config,
       cores: { ...config.cores, [key]: hex },
+    });
+  }
+
+  function commitMeta(raw: string) {
+    const parsed = parseBrlInput(raw);
+    onConfigChange({
+      ...config,
+      metaReceitaMensal: parsed,
     });
   }
 
@@ -316,6 +325,49 @@ export function IdentidadePanel({
               onCommit={(hex) => setColor(field.key, hex)}
             />
           ))}
+        </div>
+      </section>
+
+      <section className="admin-form__section">
+        <header className="admin-form__section-header">
+          <h2 className="admin-form__section-title">Meta de receita</h2>
+          <p className="admin-form__section-desc">
+            Valor mensal usado no Painel admin (aba Negócio). O progresso é
+            calculado de forma proporcional ao número de dias do período
+            selecionado em relação ao mês calendário.
+          </p>
+        </header>
+        <div className="admin-form__section-body">
+          <div className={styles.layout}>
+            <label className={`admin-form__field ${styles.field}`}>
+              <span className="admin-field-label">
+                Meta mensal (R$)
+                <FieldHint text="Deixe vazio para não exibir meta no Painel." />
+              </span>
+              <input
+                type="text"
+                inputMode="decimal"
+                autoComplete="off"
+                className="input"
+                placeholder="R$ 0,00"
+                value={metaDraft}
+                disabled={disabled}
+                onChange={(e) => {
+                  const masked = maskBrlInput(e.target.value);
+                  setMetaDraft(masked);
+                  commitMeta(masked);
+                }}
+                onBlur={() => {
+                  if (!metaDraft.trim()) {
+                    commitMeta("");
+                    return;
+                  }
+                  commitMeta(metaDraft);
+                }}
+              />
+            </label>
+            <MetaPreview mensal={meta} />
+          </div>
         </div>
       </section>
     </form>

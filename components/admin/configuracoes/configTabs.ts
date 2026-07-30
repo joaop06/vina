@@ -1,12 +1,11 @@
 export type ConfiguracoesTabId =
-  | "identidade"
+  | "geral"
   | "contato"
   | "whatsapp"
   | "vitrine"
   | "navegacao"
   | "textos"
-  | "tema"
-  | "painel";
+  | "tema";
 
 export const CONFIGURACOES_TABS: Array<{
   id: ConfiguracoesTabId;
@@ -15,8 +14,8 @@ export const CONFIGURACOES_TABS: Array<{
   shortLabel?: string;
 }> = [
     {
-      id: "identidade",
-      label: "Identidade",
+      id: "geral",
+      label: "Geral",
     },
     {
       id: "whatsapp",
@@ -45,10 +44,6 @@ export const CONFIGURACOES_TABS: Array<{
       id: "tema",
       label: "Tema",
     },
-    {
-      id: "painel",
-      label: "Painel",
-    },
   ];
 
 /** Map legacy `?tab=` values and current ids to a canonical tab. */
@@ -59,8 +54,7 @@ export function parseConfigTab(value: string | undefined): ConfiguracoesTabId {
     value === "navegacao" ||
     value === "textos" ||
     value === "tema" ||
-    value === "identidade" ||
-    value === "painel"
+    value === "geral"
   ) {
     return value;
   }
@@ -71,15 +65,20 @@ export function parseConfigTab(value: string | undefined): ConfiguracoesTabId {
   ) {
     return "vitrine";
   }
-  // Legacy Personalização tab
-  if (value === "personalização" || value === "personalizacao") {
-    return "identidade";
+  // Legacy Identidade / Painel tabs and Personalização alias
+  if (
+    value === "identidade" ||
+    value === "painel" ||
+    value === "personalização" ||
+    value === "personalizacao"
+  ) {
+    return "geral";
   }
-  return "identidade";
+  return "geral";
 }
 
 export function configTabHref(tab: ConfiguracoesTabId): string {
-  return tab === "identidade"
+  return tab === "geral"
     ? "/admin/personalizacao"
     : `/admin/personalizacao?tab=${tab}`;
 }

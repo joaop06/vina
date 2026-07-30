@@ -34,14 +34,13 @@ import {
 
 /** Tab ids aligned with admin Configurações UI. */
 export const SITE_CONFIG_TAB_IDS = [
-  "identidade",
+  "geral",
   "whatsapp",
   "contato",
   "vitrine",
   "navegacao",
   "textos",
   "tema",
-  "painel",
 ] as const;
 
 export type SiteConfigTabId = (typeof SITE_CONFIG_TAB_IDS)[number];
@@ -51,14 +50,13 @@ export const siteConfigTabIdSchema = z.enum(SITE_CONFIG_TAB_IDS);
 export const SITE_CONFIG_META_PATH = "configuracoes/meta.json";
 
 export const SITE_CONFIG_TAB_PATHS: Record<SiteConfigTabId, string> = {
-  identidade: "configuracoes/identidade.json",
+  geral: "configuracoes/geral.json",
   whatsapp: "configuracoes/whatsapp.json",
   contato: "configuracoes/contato.json",
   vitrine: "configuracoes/vitrine.json",
   navegacao: "configuracoes/navegacao.json",
   textos: "configuracoes/textos.json",
   tema: "configuracoes/tema.json",
-  painel: "configuracoes/painel.json",
 };
 
 export const SITE_CONFIG_FRAGMENT_PATHS = [
@@ -82,7 +80,7 @@ export const siteConfigMetaSchema = z.object({
   atualizadoEm: isoDateSchema,
 });
 
-export const siteIdentidadeFragmentSchema = z.object({
+export const siteGeralFragmentSchema = z.object({
   nomeLoja: z.string().min(1),
   mostrarNomeComLogo: z.boolean().default(false),
   mostrarCarrinho: z.boolean().default(true),
@@ -96,10 +94,11 @@ export const siteIdentidadeFragmentSchema = z.object({
     borda: z.string(),
   }),
   logo: siteLogoSchema.nullable().optional(),
+  metaReceitaMensal: z.number().min(0).nullable().default(null),
 });
 
-/** Identidade write payload — logo may be pending upload. */
-export const siteIdentidadeUpdateSchema = siteIdentidadeFragmentSchema
+/** Geral write payload — logo may be pending upload. */
+export const siteGeralUpdateSchema = siteGeralFragmentSchema
   .omit({ logo: true })
   .extend({
     logo: siteLogoInputSchema.nullable().optional(),
@@ -159,10 +158,13 @@ export const siteContatoFragmentSchema = z.object({
       mostrarCelular: true,
     }),
   horarios: z.string(),
-  textos: z.object({
-    sobre: z.string(),
-    trocas: z.string(),
-  }),
+  /** Legacy owner of institutional copy; kept readable during migration. */
+  textos: z
+    .object({
+      sobre: z.string(),
+      trocas: z.string(),
+    })
+    .optional(),
 });
 
 export const siteVitrineFragmentSchema = z.object({
@@ -176,6 +178,9 @@ export const siteNavegacaoFragmentSchema = z.object({
 
 export const siteTextosFragmentSchema = z.object({
   textos: z.object({
+    /** Optional when reading fragments created before copy moved from Contato. */
+    sobre: z.string().optional(),
+    trocas: z.string().optional(),
     paginas: siteTextosPaginasSchema,
     home: siteTextosHomeSchema,
     catalogo: siteTextosCatalogoSchema,
@@ -193,44 +198,33 @@ export const siteTemaFragmentSchema = z.object({
   seo: siteSeoSchema,
 });
 
-export const sitePainelFragmentSchema = z.object({
-  painel: z
-    .object({
-      metaReceitaMensal: z.number().min(0).nullable().default(null),
-    })
-    .default({ metaReceitaMensal: null }),
-});
-
 export const SITE_CONFIG_TAB_SCHEMAS = {
-  identidade: siteIdentidadeFragmentSchema,
+  geral: siteGeralFragmentSchema,
   whatsapp: siteWhatsappFragmentSchema,
   contato: siteContatoFragmentSchema,
   vitrine: siteVitrineFragmentSchema,
   navegacao: siteNavegacaoFragmentSchema,
   textos: siteTextosFragmentSchema,
   tema: siteTemaFragmentSchema,
-  painel: sitePainelFragmentSchema,
 } as const;
 
 export type SiteConfigMeta = z.infer<typeof siteConfigMetaSchema>;
-export type SiteIdentidadeFragment = z.infer<typeof siteIdentidadeFragmentSchema>;
+export type SiteGeralFragment = z.infer<typeof siteGeralFragmentSchema>;
 export type SiteWhatsappFragment = z.infer<typeof siteWhatsappFragmentSchema>;
 export type SiteContatoFragment = z.infer<typeof siteContatoFragmentSchema>;
 export type SiteVitrineFragment = z.infer<typeof siteVitrineFragmentSchema>;
 export type SiteNavegacaoFragment = z.infer<typeof siteNavegacaoFragmentSchema>;
 export type SiteTextosFragment = z.infer<typeof siteTextosFragmentSchema>;
 export type SiteTemaFragment = z.infer<typeof siteTemaFragmentSchema>;
-export type SitePainelFragment = z.infer<typeof sitePainelFragmentSchema>;
 
 export type SiteConfigTabFragment = {
-  identidade: SiteIdentidadeFragment;
+  geral: SiteGeralFragment;
   whatsapp: SiteWhatsappFragment;
   contato: SiteContatoFragment;
   vitrine: SiteVitrineFragment;
   navegacao: SiteNavegacaoFragment;
   textos: SiteTextosFragment;
   tema: SiteTemaFragment;
-  painel: SitePainelFragment;
 };
 
 export type SiteConfigFragments = {
@@ -244,7 +238,7 @@ export function splitSiteConfig(config: SiteConfig): SiteConfigFragments {
       versao: config.versao,
       atualizadoEm: config.atualizadoEm,
     },
-    identidade: {
+    geral: {
       nomeLoja: config.nomeLoja,
       mostrarNomeComLogo: config.mostrarNomeComLogo,
       mostrarCarrinho: config.mostrarCarrinho,
@@ -252,6 +246,7 @@ export function splitSiteConfig(config: SiteConfig): SiteConfigFragments {
       slogan: config.slogan,
       cores: config.cores,
       logo: config.logo ?? null,
+      metaReceitaMensal: config.metaReceitaMensal ?? null,
     },
     whatsapp: {
       whatsapp: config.whatsapp,
@@ -262,10 +257,6 @@ export function splitSiteConfig(config: SiteConfig): SiteConfigFragments {
       endereco: config.endereco,
       telefones: config.telefones,
       horarios: config.horarios,
-      textos: {
-        sobre: config.textos.sobre,
-        trocas: config.textos.trocas,
-      },
     },
     vitrine: {
       layout: config.layout,
@@ -276,6 +267,8 @@ export function splitSiteConfig(config: SiteConfig): SiteConfigFragments {
     },
     textos: {
       textos: {
+        sobre: config.textos.sobre,
+        trocas: config.textos.trocas,
         paginas: config.textos.paginas,
         home: config.textos.home,
         catalogo: config.textos.catalogo,
@@ -291,20 +284,17 @@ export function splitSiteConfig(config: SiteConfig): SiteConfigFragments {
       tema: config.tema,
       seo: config.seo,
     },
-    painel: {
-      painel: config.painel ?? { metaReceitaMensal: null },
-    },
   };
 }
 
 /** Merge on-disk fragments into a raw object suitable for `siteConfigSchema`. */
 export function composeSiteConfigRaw(fragments: SiteConfigFragments): unknown {
-  const { meta, identidade, whatsapp, contato, vitrine, navegacao, textos, tema, painel } =
+  const { meta, geral, whatsapp, contato, vitrine, navegacao, textos, tema } =
     fragments;
   return {
     versao: meta.versao,
     atualizadoEm: meta.atualizadoEm,
-    ...identidade,
+    ...geral,
     ...whatsapp,
     instagram: contato.instagram,
     endereco: contato.endereco,
@@ -314,13 +304,19 @@ export function composeSiteConfigRaw(fragments: SiteConfigFragments): unknown {
     vitrine: vitrine.vitrine,
     navegacao: navegacao.navegacao,
     textos: {
-      ...contato.textos,
+      sobre:
+        textos.textos.sobre ??
+        contato.textos?.sobre ??
+        DEFAULT_SITE_CONFIG.textos.sobre,
+      trocas:
+        textos.textos.trocas ??
+        contato.textos?.trocas ??
+        DEFAULT_SITE_CONFIG.textos.trocas,
       ...textos.textos,
     },
     rotulos: textos.rotulos,
     tema: tema.tema,
     seo: tema.seo,
-    painel: painel.painel,
   };
 }
 
@@ -352,8 +348,8 @@ export function mergeTabIntoConfig(
   if (meta?.atualizadoEm != null) next.atualizadoEm = meta.atualizadoEm;
 
   switch (tab) {
-    case "identidade": {
-      const s = slice as SiteIdentidadeFragment;
+    case "geral": {
+      const s = slice as SiteGeralFragment;
       return {
         ...next,
         nomeLoja: s.nomeLoja,
@@ -363,6 +359,7 @@ export function mergeTabIntoConfig(
         slogan: s.slogan,
         cores: s.cores,
         logo: s.logo ?? null,
+        metaReceitaMensal: s.metaReceitaMensal ?? null,
       };
     }
     case "whatsapp": {
@@ -381,11 +378,15 @@ export function mergeTabIntoConfig(
         endereco: s.endereco,
         telefones: s.telefones,
         horarios: s.horarios,
-        textos: {
-          ...next.textos,
-          sobre: s.textos.sobre,
-          trocas: s.textos.trocas,
-        },
+        ...(s.textos
+          ? {
+              textos: {
+                ...next.textos,
+                sobre: s.textos.sobre,
+                trocas: s.textos.trocas,
+              },
+            }
+          : {}),
       };
     }
     case "vitrine": {
@@ -420,13 +421,6 @@ export function mergeTabIntoConfig(
         ...next,
         tema: s.tema,
         seo: s.seo,
-      };
-    }
-    case "painel": {
-      const s = slice as SitePainelFragment;
-      return {
-        ...next,
-        painel: s.painel,
       };
     }
     default: {

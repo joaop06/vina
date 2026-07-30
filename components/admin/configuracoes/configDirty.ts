@@ -31,9 +31,7 @@ export function normalizeSiteConfig(initial: SiteConfig): SiteConfig {
       mostrarCelular: initial.telefones?.mostrarCelular ?? true,
     },
     instagram: syncInstagram(initial.instagram),
-    painel: {
-      metaReceitaMensal: initial.painel?.metaReceitaMensal ?? null,
-    },
+    metaReceitaMensal: initial.metaReceitaMensal ?? null,
     whatsapp: {
       ...initial.whatsapp,
       mensagemProdutoFormatoItens:
@@ -65,7 +63,7 @@ function tabFingerprintSlice(
   logo: ImageMeta | null,
 ): unknown {
   switch (tab) {
-    case "identidade":
+    case "geral":
       return {
         nomeLoja: config.nomeLoja,
         mostrarNomeComLogo: Boolean(config.mostrarNomeComLogo),
@@ -81,6 +79,7 @@ function tabFingerprintSlice(
               pending: Boolean(logo.file),
             }
           : null,
+        metaReceitaMensal: config.metaReceitaMensal ?? null,
       };
     case "whatsapp":
       return {
@@ -131,10 +130,6 @@ function tabFingerprintSlice(
           mostrarCelular: Boolean(config.telefones.mostrarCelular),
         },
         horarios: config.horarios,
-        textos: {
-          sobre: config.textos.sobre,
-          trocas: config.textos.trocas,
-        },
       };
     case "vitrine":
       return {
@@ -148,6 +143,8 @@ function tabFingerprintSlice(
     case "textos":
       return {
         textos: {
+          sobre: config.textos.sobre,
+          trocas: config.textos.trocas,
           paginas: config.textos.paginas,
           home: config.textos.home,
           catalogo: config.textos.catalogo,
@@ -164,12 +161,6 @@ function tabFingerprintSlice(
         tema: config.tema,
         seo: config.seo,
       };
-    case "painel":
-      return {
-        painel: {
-          metaReceitaMensal: config.painel?.metaReceitaMensal ?? null,
-        },
-      };
     default: {
       const _exhaustive: never = tab;
       return _exhaustive;
@@ -182,14 +173,13 @@ export function configFingerprint(
   config: SiteConfig,
   logo: ImageMeta | null,
   loadedTabs: Iterable<SiteConfigTabId> = [
-    "identidade",
+    "geral",
     "whatsapp",
     "contato",
     "vitrine",
     "navegacao",
     "textos",
     "tema",
-    "painel",
   ],
 ): string {
   const tabs = [...loadedTabs].sort();

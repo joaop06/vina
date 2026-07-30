@@ -13,14 +13,14 @@ export function WhatsAppPanel({
   disabled,
   onSubmit,
   onConfigChange,
-  onOpenIdentidadeTab,
+  onOpenGeralTab,
 }: {
   formId: string;
   config: SiteConfig;
   disabled?: boolean;
   onSubmit: (e: React.FormEvent) => void;
   onConfigChange: (next: SiteConfig) => void;
-  onOpenIdentidadeTab?: () => void;
+  onOpenGeralTab?: () => void;
 }) {
   const cartEnabled = Boolean(config.mostrarCarrinho);
   const mensagemPadraoPreview =
@@ -219,13 +219,13 @@ export function WhatsAppPanel({
                 O carrinho está desabilitado na loja. Os clientes não veem
                 carrinho nem enviam pedido por essa mensagem.
               </p>
-              {onOpenIdentidadeTab ? (
+              {onOpenGeralTab ? (
                 <button
                   type="button"
                   className="btn btn-ghost btn-sm"
-                  onClick={onOpenIdentidadeTab}
+                  onClick={onOpenGeralTab}
                 >
-                  Ativar na aba Identidade
+                  Ativar na aba Geral
                 </button>
               ) : null}
             </div>

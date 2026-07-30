@@ -252,7 +252,7 @@ async function computeDashboardStats(
   );
 
   const meta = computeMetaProgress(
-    siteConfig.painel?.metaReceitaMensal ?? null,
+    siteConfig.metaReceitaMensal ?? null,
     from,
     to,
     core.receita,

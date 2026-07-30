@@ -80,25 +80,11 @@ function envFlag(name: string): boolean | undefined {
   return undefined;
 }
 
-/** Opt-in via READ_METRICS; defaults on in development. */
+/** Controls read metrics, logs, alerts, and diagnostics. Defaults on in development. */
 export function isReadMetricsEnabled(): boolean {
   const flag = envFlag("READ_METRICS");
   if (flag !== undefined) return flag;
   return process.env.NODE_ENV === "development";
-}
-
-export function isReadMetricsLogEnabled(): boolean {
-  if (!isReadMetricsEnabled()) return false;
-  const flag = envFlag("READ_METRICS_LOG");
-  if (flag !== undefined) return flag;
-  return true;
-}
-
-/** Opt-in via READ_ALERTS; defaults to follow READ_METRICS. */
-export function isReadAlertsEnabled(): boolean {
-  const flag = envFlag("READ_ALERTS");
-  if (flag !== undefined) return flag;
-  return isReadMetricsEnabled();
 }
 
 function currentStore(): Store | undefined {
@@ -253,10 +239,8 @@ export async function runWithReadMetrics<T>(
   try {
     const result = await als.run(store, fn);
     const metrics = summarize(store);
-    if (isReadMetricsLogEnabled()) {
+    if (isReadMetricsEnabled()) {
       logReadMetrics(metrics);
-    }
-    if (isReadAlertsEnabled()) {
       const alerts = evaluateReadAlerts(metrics);
       logReadAlerts(alerts, {
         requestId: metrics.requestId,

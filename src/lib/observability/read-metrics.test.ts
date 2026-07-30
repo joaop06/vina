@@ -85,10 +85,8 @@ describe("read-metrics", () => {
   });
 
   it("logs listing context and alerts on filesRead / html thresholds", async () => {
-    const prevAlerts = process.env.READ_ALERTS;
-    const prevLog = process.env.READ_METRICS_LOG;
-    process.env.READ_ALERTS = "0";
-    process.env.READ_METRICS_LOG = "0";
+    const prevMetrics = process.env.READ_METRICS;
+    process.env.READ_METRICS = "0";
     try {
       const { metrics } = await runWithReadMetrics(
         {
@@ -122,16 +120,14 @@ describe("read-metrics", () => {
       assert.ok(alerts.some((a) => a.code === "LISTING_FILES_READ"));
       assert.ok(alerts.some((a) => a.code === "LISTING_HTML_BYTES"));
     } finally {
-      if (prevAlerts === undefined) delete process.env.READ_ALERTS;
-      else process.env.READ_ALERTS = prevAlerts;
-      if (prevLog === undefined) delete process.env.READ_METRICS_LOG;
-      else process.env.READ_METRICS_LOG = prevLog;
+      if (prevMetrics === undefined) delete process.env.READ_METRICS;
+      else process.env.READ_METRICS = prevMetrics;
     }
   });
 
   it("infers indexHit from indices/* reads without entity scans", async () => {
-    const prevLog = process.env.READ_METRICS_LOG;
-    process.env.READ_METRICS_LOG = "0";
+    const prevMetrics = process.env.READ_METRICS;
+    process.env.READ_METRICS = "0";
     try {
       const { metrics } = await runWithReadMetrics(
         { label: "listing", listing: { page: 1, pageSize: 20 } },
@@ -148,8 +144,8 @@ describe("read-metrics", () => {
       );
       assert.equal(metrics.listing?.indexHit, true);
     } finally {
-      if (prevLog === undefined) delete process.env.READ_METRICS_LOG;
-      else process.env.READ_METRICS_LOG = prevLog;
+      if (prevMetrics === undefined) delete process.env.READ_METRICS;
+      else process.env.READ_METRICS = prevMetrics;
     }
   });
 });

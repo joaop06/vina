@@ -4,12 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   useEffect,
-  useId,
   useState,
   useTransition,
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
+
+const PANEL_ID = "admin-sidebar-mobile-panel";
 
 type NavItem = {
   href: string;
@@ -169,7 +170,6 @@ export function AdminSidebar({
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [, startTransition] = useTransition();
-  const panelId = useId();
 
   useEffect(() => setMounted(true), []);
 
@@ -263,7 +263,7 @@ export function AdminSidebar({
             onClick={() => setOpen(false)}
           />
           <div
-            id={panelId}
+            id={PANEL_ID}
             className="admin-sidebar admin-sidebar--drawer"
             role="dialog"
             aria-modal="true"
@@ -298,7 +298,7 @@ export function AdminSidebar({
           type="button"
           className="admin-sidebar__menu-btn"
           aria-expanded={open}
-          aria-controls={panelId}
+          aria-controls={PANEL_ID}
           aria-label={open ? "Fechar menu" : "Abrir menu"}
           onClick={() => setOpen((v) => !v)}
         >
