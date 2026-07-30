@@ -11,6 +11,7 @@ import {
 import type { Banner } from "@/src/schemas/banner";
 import { mediaUrl } from "@/src/lib/front/format";
 import { IMAGE_SIZES } from "@/src/lib/front/media-image";
+import { bannerCtaTexto, bannerHref } from "@/src/lib/front/media";
 import styles from "./gallery.module.css";
 
 const AUTOPLAY_MS = 5500;
@@ -42,6 +43,9 @@ export function GalleryCarousel({
 
   const count = slides.length;
   const safeIndex = count === 0 ? 0 : ((index % count) + count) % count;
+  const activeSlide = count > 0 ? slides[safeIndex] : undefined;
+  const ctaHref = bannerHref(activeSlide, catalogHref);
+  const ctaLabel = bannerCtaTexto(activeSlide, verColecao);
 
   useEffect(() => {
     reduceMotion.current = window.matchMedia(
@@ -147,8 +151,8 @@ export function GalleryCarousel({
         <p className={styles.carouselEyebrow}>{eyebrow}</p>
         <h1 className={styles.carouselTitle}>{title}</h1>
         <p className={styles.carouselText}>{copy}</p>
-        <Link className={`btn ${styles.carouselCta}`} href={catalogHref}>
-          {verColecao}
+        <Link className={`btn ${styles.carouselCta}`} href={ctaHref}>
+          {ctaLabel}
         </Link>
       </div>
 

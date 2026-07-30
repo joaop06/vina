@@ -1,13 +1,15 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAdminBusy } from "@/components/admin/AdminBusy";
 import { useConfirm } from "@/components/admin/ConfirmDialog";
+import { FieldHint } from "@/components/admin/FieldHint";
 import { ImageField, type ImageMeta } from "@/components/admin/ImageField";
 import { LoadingButton } from "@/components/admin/LoadingButton";
 import { mutationFetch, assertMutationOk } from "@/components/admin/mutationFetch";
 import {
   toastMutationError,
+  toastMutationSuccess,
   toastMutationWarning,
 } from "@/components/admin/adminToast";
 import {
@@ -19,8 +21,10 @@ import {
 } from "@/components/admin/uploadClient";
 import {
   getBannerSlotsForLayout,
+  getPublishedSlotCapacity,
   type LayoutBannerSlot,
 } from "@/components/public/layouts/banner-slots";
+import { DEFAULT_BANNER_CTA } from "@/src/config/store-copy-defaults";
 import { mediaUrl } from "@/src/lib/front/format";
 import type { Banner, BannerPosicao } from "@/src/schemas/banner";
 import type { SiteLayoutId } from "@/src/schemas/site-config";
@@ -28,6 +32,11 @@ import type { SiteLayoutId } from "@/src/schemas/site-config";
 type SlotDraft = {
   ativo: boolean;
   imagem: ImageMeta | null;
+};
+
+type LinkDraft = {
+  href: string;
+  ctaTexto: string;
 };
 
 function imageFromBanner(b: Banner): ImageMeta {
@@ -51,15 +60,28 @@ function sortByOrdem(banners: Banner[]): Banner[] {
   return [...banners].sort((a, b) => a.ordem - b.ordem);
 }
 
+function isValidBannerHref(value: string): boolean {
+  const t = value.trim();
+  if (!t) return true;
+  return (
+    t.startsWith("/") || t.startsWith("http://") || t.startsWith("https://")
+  );
+}
+
 export function BannersClient({
   initialItems,
   layout,
+  publishedLayout,
   embedded = false,
+  onItemsChange,
 }: {
   initialItems: Banner[];
   layout: SiteLayoutId;
+  /** Layout already published — capacity validation uses this. */
+  publishedLayout?: SiteLayoutId;
   /** Omit page header when nested inside Configurações tabs. */
   embedded?: boolean;
+  onItemsChange?: (items: Banner[]) => void;
 }) {
   const { confirm } = useConfirm();
   const { runMutation } = useAdminBusy();
@@ -68,7 +90,15 @@ export function BannersClient({
   const [drafts, setDrafts] = useState<
     Partial<Record<BannerPosicao, SlotDraft>>
   >({});
+  const effectivePublished = publishedLayout ?? layout;
+  const layoutDraft = layout !== effectivePublished;
   const slots = useMemo(() => getBannerSlotsForLayout(layout), [layout]);
+
+  useEffect(() => {
+    onItemsChange?.(items);
+    // Notify parent for live preview; intentionally omit onItemsChange identity.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items]);
 
   const byPosicao = useMemo(() => {
     const map = {} as Partial<Record<BannerPosicao, Banner[]>>;
@@ -82,7 +112,9 @@ export function BannersClient({
   async function load() {
     const res = await fetch("/api/v1/admin/banners");
     const data = await res.json();
-    setItems(data.items ?? []);
+    const next = data.items ?? [];
+    setItems(next);
+    return next as Banner[];
   }
 
   function clearDraft(posicao: BannerPosicao) {
@@ -131,6 +163,26 @@ export function BannersClient({
     });
   }
 
+  function slotLock(slot: LayoutBannerSlot): {
+    locked: boolean;
+    reason: string | null;
+    publishedMax: number;
+  } {
+    const publishedMax = getPublishedSlotCapacity(
+      effectivePublished,
+      slot.posicao,
+    );
+    if (publishedMax <= 0) {
+      return {
+        locked: true,
+        publishedMax: 0,
+        reason:
+          "Esta área só fica disponível depois que você salvar o novo modelo.",
+      };
+    }
+    return { locked: false, publishedMax, reason: null };
+  }
+
   async function saveBanner(opts: {
     key: string;
     label: string;
@@ -145,16 +197,16 @@ export function BannersClient({
 
     const imagemPayload = imagem.file
       ? {
-        id: imagem.id,
-        path: "",
-        alt: slotLabel,
-        pending: true as const,
-      }
+          id: imagem.id,
+          path: "",
+          alt: slotLabel,
+          pending: true as const,
+        }
       : {
-        id: imagem.id,
-        path: imagem.path,
-        alt: slotLabel,
-      };
+          id: imagem.id,
+          path: imagem.path,
+          alt: slotLabel,
+        };
 
     const pendingFiles = imagem.file
       ? [{ id: imagem.id, file: imagem.file }]
@@ -168,15 +220,15 @@ export function BannersClient({
         async ({ setProgress }) => {
           const payload = existing
             ? {
-              versao: existing.versao,
-              ativo,
-              imagem: imagemPayload,
-            }
+                versao: existing.versao,
+                ativo,
+                imagem: imagemPayload,
+              }
             : {
-              posicao,
-              ativo,
-              imagem: imagemPayload,
-            };
+                posicao,
+                ativo,
+                imagem: imagemPayload,
+              };
 
           const res = await mutationFetch(
             existing
@@ -294,14 +346,20 @@ export function BannersClient({
   async function addSlides(posicao: BannerPosicao, images: ImageMeta[]) {
     if (!images.length) return;
     const slot = slots.find((s) => s.posicao === posicao);
-    const remaining =
-      (slot?.maxItems ?? images.length) -
-      (byPosicao[posicao] ?? []).length;
+    const publishedMax = getPublishedSlotCapacity(effectivePublished, posicao);
+    const currentCount = (byPosicao[posicao] ?? []).length;
+    const remaining = Math.min(
+      (slot?.maxItems ?? images.length) - currentCount,
+      publishedMax - currentCount,
+    );
     const batch = images.slice(0, Math.max(0, remaining));
     if (!batch.length) {
-      toastMutationWarning(`Limite de ${slot?.maxItems ?? 0} slides atingido.`, {
-        id: "banner-limit",
-      });
+      toastMutationWarning(
+        layoutDraft && publishedMax < (slot?.maxItems ?? 0)
+          ? "Salve o novo modelo antes de adicionar mais slides."
+          : `Limite de ${slot?.maxItems ?? 0} slides atingido.`,
+        { id: "banner-limit" },
+      );
       return;
     }
 
@@ -446,14 +504,20 @@ export function BannersClient({
             : "admin-banner-slots admin-banner-slots--single"
         }
       >
-        {slots.map((slot) =>
-          slot.maxItems > 1 ? (
+        {slots.map((slot, index) => {
+          const lock = slotLock(slot);
+          return slot.maxItems > 1 ? (
             <MultiBannerSlot
               key={slot.posicao}
+              step={index + 1}
               slot={slot}
               items={sortByOrdem(byPosicao[slot.posicao] ?? [])}
               anyBusy={anyBusy}
               busyKey={busyKey}
+              locked={lock.locked}
+              lockReason={lock.reason}
+              publishedMax={lock.publishedMax}
+              layoutDraft={layoutDraft}
               onAdd={(images) => void addSlides(slot.posicao, images)}
               onReplace={(banner, imagem) => {
                 void saveBanner({
@@ -473,6 +537,23 @@ export function BannersClient({
                   "Atualizando status",
                 ).catch(() => undefined)
               }
+              onSaveDetails={(banner, details) =>
+                void patchBanner(
+                  banner,
+                  {
+                    href: details.href.trim() || null,
+                    ctaTexto: details.ctaTexto.trim() || null,
+                  },
+                  `${banner.id}:details`,
+                  "Salvando detalhes",
+                )
+                  .then(() =>
+                    toastMutationSuccess("Detalhes do slide salvos", {
+                      id: "banner-details",
+                    }),
+                  )
+                  .catch(() => undefined)
+              }
               onReorder={(orderedIds) =>
                 void reorderSlides(slot.posicao, orderedIds)
               }
@@ -484,13 +565,23 @@ export function BannersClient({
           ) : (
             <SingleBannerSlot
               key={slot.posicao}
+              step={index + 1}
               slot={slot}
               state={slotState(slot.posicao)}
               draft={drafts[slot.posicao]}
               anyBusy={anyBusy}
               busyKey={busyKey}
+              locked={lock.locked}
+              lockReason={lock.reason}
               onUpdateDraft={updateDraft}
               onCommit={(imagem, ativo) => {
+                if (lock.locked) {
+                  toastMutationWarning(
+                    lock.reason ?? "Salve o modelo antes de editar esta área.",
+                    { id: "banner-locked" },
+                  );
+                  return;
+                }
                 const { primary } = slotState(slot.posicao);
                 void saveBanner({
                   key: `${slot.posicao}:save`,
@@ -503,11 +594,33 @@ export function BannersClient({
                   imagem,
                 });
               }}
-              onToggle={() => void toggleAtivo(slot.posicao)}
+              onToggle={() => {
+                if (lock.locked) return;
+                void toggleAtivo(slot.posicao);
+              }}
+              onSaveDetails={(banner, details) =>
+                void patchBanner(
+                  banner,
+                  {
+                    href: details.href.trim() || null,
+                    ctaTexto: slot.temBotao
+                      ? details.ctaTexto.trim() || null
+                      : undefined,
+                  },
+                  `${banner.id}:details`,
+                  "Salvando detalhes",
+                )
+                  .then(() =>
+                    toastMutationSuccess("Detalhes do banner salvos", {
+                      id: "banner-details",
+                    }),
+                  )
+                  .catch(() => undefined)
+              }
               onRemove={(id) => void removeBanner(id, slot.posicao)}
             />
-          ),
-        )}
+          );
+        })}
       </div>
     </>
   );
@@ -519,17 +632,123 @@ export function BannersClient({
   return <div className="admin-page">{body}</div>;
 }
 
+function BannerLinkFields({
+  banner,
+  temBotao,
+  disabled,
+  busy,
+  onSave,
+}: {
+  banner: Banner;
+  temBotao: boolean;
+  disabled: boolean;
+  busy: boolean;
+  onSave: (details: LinkDraft) => void;
+}) {
+  const [href, setHref] = useState(banner.href ?? "");
+  const [ctaTexto, setCtaTexto] = useState(banner.ctaTexto ?? "");
+  const [hrefError, setHrefError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setHref(banner.href ?? "");
+    setCtaTexto(banner.ctaTexto ?? "");
+    setHrefError(null);
+  }, [banner.id, banner.versao, banner.href, banner.ctaTexto]);
+
+  const dirty =
+    href.trim() !== (banner.href ?? "").trim() ||
+    (temBotao && ctaTexto.trim() !== (banner.ctaTexto ?? "").trim());
+
+  return (
+    <div className="admin-banner-slot__details">
+      <label className="admin-banner-slot__field">
+        <span className="admin-field-label">
+          Destino ao clicar
+          <FieldHint text="Caminho interno (ex.: /catalogo) ou link completo começando com https://. Deixe em branco para abrir o catálogo." />
+        </span>
+        <input
+          className="input"
+          type="text"
+          inputMode="url"
+          placeholder="/catalogo"
+          value={href}
+          disabled={disabled || busy}
+          onChange={(e) => {
+            setHref(e.target.value);
+            setHrefError(null);
+          }}
+        />
+        {hrefError ? (
+          <span className="admin-banner-slot__field-error">{hrefError}</span>
+        ) : (
+          <span className="admin-banner-slot__field-hint">
+            Ex.: /catalogo ou https://sua-loja.com/oferta
+          </span>
+        )}
+      </label>
+
+      {temBotao ? (
+        <label className="admin-banner-slot__field">
+          <span className="admin-field-label">
+            Texto do botão
+            <FieldHint text="Texto exibido no botão sobre a imagem. Deixe em branco para usar o texto padrão da loja." />
+          </span>
+          <input
+            className="input"
+            type="text"
+            maxLength={80}
+            placeholder={DEFAULT_BANNER_CTA}
+            value={ctaTexto}
+            disabled={disabled || busy}
+            onChange={(e) => setCtaTexto(e.target.value)}
+          />
+        </label>
+      ) : (
+        <p className="admin-banner-slot__field-hint">
+          Nesta área, a imagem inteira é o link — não há botão separado.
+        </p>
+      )}
+
+      <div className="admin-banner-slot__actions">
+        <LoadingButton
+          type="button"
+          className="btn btn-sm btn-primary"
+          loading={busy}
+          loadingLabel="Salvando…"
+          disabled={disabled || !dirty}
+          onClick={() => {
+            if (!isValidBannerHref(href)) {
+              setHrefError(
+                "Use um caminho começando com / ou uma URL http(s).",
+              );
+              return;
+            }
+            onSave({ href, ctaTexto });
+          }}
+        >
+          Salvar detalhes
+        </LoadingButton>
+      </div>
+    </div>
+  );
+}
+
 function SingleBannerSlot({
+  step,
   slot,
   state,
   draft,
   anyBusy,
   busyKey,
+  locked,
+  lockReason,
   onUpdateDraft,
   onCommit,
   onToggle,
+  onSaveDetails,
   onRemove,
 }: {
+  step: number;
   slot: LayoutBannerSlot;
   state: {
     primary: Banner | null;
@@ -540,6 +759,8 @@ function SingleBannerSlot({
   draft?: SlotDraft;
   anyBusy: boolean;
   busyKey: string | null;
+  locked: boolean;
+  lockReason: string | null;
   onUpdateDraft: (
     posicao: BannerPosicao,
     patch: Partial<SlotDraft>,
@@ -547,22 +768,55 @@ function SingleBannerSlot({
   ) => void;
   onCommit: (imagem: ImageMeta, ativo: boolean) => void;
   onToggle: () => void;
+  onSaveDetails: (banner: Banner, details: LinkDraft) => void;
   onRemove: (id: string) => void;
 }) {
   const { primary, extras, ativo, imagem } = state;
   const saving = busyKey === `${slot.posicao}:save`;
+  const detailsBusy = primary
+    ? busyKey === `${primary.id}:details`
+    : false;
   const pendingFile = Boolean(draft?.imagem?.file);
+  const disabled = anyBusy || locked;
 
   return (
     <section
-      className="admin-panel admin-banner-slot"
-      aria-label={slot.label}
+      className={[
+        "admin-panel",
+        "admin-banner-slot",
+        locked ? "admin-banner-slot--locked" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      aria-label={`${step}. ${slot.label}`}
     >
-      <div className="admin-panel__head">
-        <h2>{slot.label}</h2>
+      <div className="admin-panel__head admin-banner-slot__head">
+        <div className="admin-banner-slot__title-row">
+          <span className="admin-banner-slot__step" aria-hidden>
+            {step}
+          </span>
+          <h2>{slot.label}</h2>
+        </div>
+        <span
+          className="admin-banner-slot__ratio"
+          style={{ aspectRatio: slot.aspectRatio }}
+          title={`Proporção aproximada · ${slot.dimensaoIdeal}`}
+          aria-hidden
+        />
       </div>
       <div className="admin-panel__body">
-        <p className="admin-banner-slot__hint">{slot.hint}</p>
+        <p className="admin-banner-slot__where">
+          <strong>Onde aparece:</strong> {slot.ondeAparece}
+        </p>
+        <p className="admin-banner-slot__hint">
+          Tamanho ideal: <strong>{slot.dimensaoIdeal}</strong>. JPEG ou PNG.
+        </p>
+
+        {locked && lockReason ? (
+          <p className="admin-alert admin-alert--warn" role="status">
+            {lockReason}
+          </p>
+        ) : null}
 
         <ImageField
           dominio="banners"
@@ -570,7 +824,7 @@ function SingleBannerSlot({
           showAlt={false}
           showRemove={!primary}
           required={!primary}
-          disabled={anyBusy}
+          disabled={disabled}
           onChange={(next) => {
             const baseline = {
               ativo,
@@ -592,17 +846,27 @@ function SingleBannerSlot({
         ) : null}
 
         <label className="admin-banner-slot__status">
-          <span>Status</span>
+          <span>Status na loja</span>
           <select
             className="select"
             value={ativo ? "ativo" : "inativo"}
-            disabled={anyBusy}
+            disabled={disabled || !primary}
             onChange={onToggle}
           >
-            <option value="ativo">Ativo</option>
-            <option value="inativo">Inativo</option>
+            <option value="ativo">Ativo — aparece na vitrine</option>
+            <option value="inativo">Inativo — oculto na vitrine</option>
           </select>
         </label>
+
+        {primary && !locked ? (
+          <BannerLinkFields
+            banner={primary}
+            temBotao={slot.temBotao}
+            disabled={anyBusy}
+            busy={detailsBusy}
+            onSave={(details) => onSaveDetails(primary, details)}
+          />
+        ) : null}
 
         {pendingFile && imagem?.file && !saving ? (
           <div className="admin-banner-slot__actions">
@@ -610,7 +874,7 @@ function SingleBannerSlot({
               type="button"
               className="btn btn-primary"
               loading={false}
-              disabled={anyBusy}
+              disabled={disabled}
               onClick={() => onCommit(imagem, ativo)}
             >
               Tentar novamente
@@ -667,24 +931,36 @@ function SingleBannerSlot({
 }
 
 function MultiBannerSlot({
+  step,
   slot,
   items,
   anyBusy,
   busyKey,
+  locked,
+  lockReason,
+  publishedMax,
+  layoutDraft,
   onAdd,
   onReplace,
   onToggle,
+  onSaveDetails,
   onReorder,
   onMove,
   onRemove,
 }: {
+  step: number;
   slot: LayoutBannerSlot;
   items: Banner[];
   anyBusy: boolean;
   busyKey: string | null;
+  locked: boolean;
+  lockReason: string | null;
+  publishedMax: number;
+  layoutDraft: boolean;
   onAdd: (images: ImageMeta[]) => void;
   onReplace: (banner: Banner, imagem: ImageMeta) => void;
   onToggle: (banner: Banner) => void;
+  onSaveDetails: (banner: Banner, details: LinkDraft) => void;
   onReorder: (orderedIds: string[]) => void;
   onMove: (bannerId: string, direction: -1 | 1) => void;
   onRemove: (id: string) => void;
@@ -696,20 +972,27 @@ function MultiBannerSlot({
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [dropTargetId, setDropTargetId] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  const remaining = slot.maxItems - items.length;
-  const canAdd = !anyBusy && remaining > 0;
+  const effectiveMax = Math.min(slot.maxItems, Math.max(publishedMax, 0));
+  const remaining = effectiveMax - items.length;
+  const canAdd = !anyBusy && !locked && remaining > 0;
   const saving = busyKey === `${slot.posicao}:save`;
   const moving = busyKey === `${slot.posicao}:move`;
+  const pendingCapacity =
+    layoutDraft && publishedMax > 0 && publishedMax < slot.maxItems;
 
   function filesToDrafts(fileList: FileList | null): ImageMeta[] {
     if (!fileList?.length) return [];
     setStatus(null);
-    const files = Array.from(fileList).slice(0, remaining);
+    const files = Array.from(fileList).slice(0, Math.max(0, remaining));
     if (!files.length) {
-      toastMutationWarning(`Limite de ${slot.maxItems} slides atingido.`, {
-        id: "banner-slot-limit",
-      });
+      toastMutationWarning(
+        pendingCapacity
+          ? "Salve o novo modelo antes de adicionar mais slides."
+          : `Limite de ${slot.maxItems} slides atingido.`,
+        { id: "banner-slot-limit" },
+      );
       return [];
     }
 
@@ -755,7 +1038,7 @@ function MultiBannerSlot({
   }
 
   function openReplacePicker(banner: Banner) {
-    if (anyBusy) return;
+    if (anyBusy || locked) return;
     replaceTargetRef.current = banner;
     replaceInputRef.current?.click();
   }
@@ -828,17 +1111,49 @@ function MultiBannerSlot({
 
   return (
     <section
-      className="admin-panel admin-banner-slot admin-banner-slot--multi"
-      aria-label={slot.label}
+      className={[
+        "admin-panel",
+        "admin-banner-slot",
+        "admin-banner-slot--multi",
+        locked ? "admin-banner-slot--locked" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      aria-label={`${step}. ${slot.label}`}
     >
-      <div className="admin-panel__head">
-        <h2>{slot.label}</h2>
+      <div className="admin-panel__head admin-banner-slot__head">
+        <div className="admin-banner-slot__title-row">
+          <span className="admin-banner-slot__step" aria-hidden>
+            {step}
+          </span>
+          <h2>{slot.label}</h2>
+        </div>
         <span className="tag-chip tag-chip--soft">
           {items.length}/{slot.maxItems}
         </span>
       </div>
       <div className="admin-panel__body">
-        <p className="admin-banner-slot__hint">{slot.hint}</p>
+        <p className="admin-banner-slot__where">
+          <strong>Onde aparece:</strong> {slot.ondeAparece}
+        </p>
+        <p className="admin-banner-slot__hint">
+          Tamanho ideal: <strong>{slot.dimensaoIdeal}</strong>. Até{" "}
+          {slot.maxItems} fotos · JPEG ou PNG.
+        </p>
+
+        {locked && lockReason ? (
+          <p className="admin-alert admin-alert--warn" role="status">
+            {lockReason}
+          </p>
+        ) : null}
+
+        {pendingCapacity && !locked ? (
+          <p className="admin-alert admin-alert--warn" role="status">
+            O modelo publicado ainda permite só {publishedMax}{" "}
+            {publishedMax === 1 ? "foto" : "fotos"} aqui. Salve o novo modelo
+            para liberar até {slot.maxItems} slides.
+          </p>
+        ) : null}
 
         <input
           ref={addInputRef}
@@ -854,7 +1169,7 @@ function MultiBannerSlot({
           type="file"
           accept="image/jpeg,image/png"
           hidden
-          disabled={anyBusy}
+          disabled={anyBusy || locked}
           onChange={(e) => handleReplaceFile(e.target.files)}
         />
 
@@ -886,11 +1201,13 @@ function MultiBannerSlot({
             <span className="admin-banner-carousel__dropzone-title">
               {dragOver
                 ? "Solte as imagens aqui"
-                : "Clique ou arraste as imagens aqui"}
+                : locked
+                  ? "Área bloqueada até salvar o modelo"
+                  : "Clique ou arraste as imagens aqui"}
             </span>
             <span className="admin-banner-carousel__dropzone-hint">
               JPEG ou PNG · várias de uma vez · até {slot.maxItems} slides ·
-              ideal 1920 × 1080
+              ideal {slot.dimensaoIdeal}
             </span>
           </button>
         ) : (
@@ -908,7 +1225,9 @@ function MultiBannerSlot({
                 const itemBusy =
                   busyKey === `${banner.id}:save` ||
                   busyKey === `${banner.id}:delete` ||
-                  busyKey === `${banner.id}:toggle`;
+                  busyKey === `${banner.id}:toggle` ||
+                  busyKey === `${banner.id}:details`;
+                const expanded = expandedId === banner.id;
 
                 return (
                   <li
@@ -1052,12 +1371,33 @@ function MultiBannerSlot({
                         <button
                           type="button"
                           className="admin-banner-carousel__action"
-                          disabled={anyBusy}
+                          disabled={anyBusy || locked}
                           onClick={() => openReplacePicker(banner)}
                         >
                           Trocar
                         </button>
                       </div>
+
+                      <button
+                        type="button"
+                        className="admin-banner-carousel__action admin-banner-carousel__action--wide"
+                        disabled={anyBusy}
+                        onClick={() =>
+                          setExpandedId(expanded ? null : banner.id)
+                        }
+                      >
+                        {expanded ? "Ocultar link e botão" : "Link e botão"}
+                      </button>
+
+                      {expanded ? (
+                        <BannerLinkFields
+                          banner={banner}
+                          temBotao={slot.temBotao}
+                          disabled={anyBusy}
+                          busy={busyKey === `${banner.id}:details`}
+                          onSave={(details) => onSaveDetails(banner, details)}
+                        />
+                      ) : null}
 
                       {itemBusy ? (
                         <p
@@ -1106,7 +1446,9 @@ function MultiBannerSlot({
         ) : null}
         {!canAdd && remaining <= 0 && items.length > 0 ? (
           <p className="admin-banner-slot__hint">
-            Limite de {slot.maxItems} slides atingido.
+            {pendingCapacity
+              ? `Limite atual: ${publishedMax}. Salve o modelo para liberar mais slides.`
+              : `Limite de ${slot.maxItems} slides atingido.`}
           </p>
         ) : null}
         {status ? (
