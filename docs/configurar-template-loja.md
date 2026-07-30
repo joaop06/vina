@@ -55,7 +55,7 @@ O cliente edita os JSONs (e mídia) em `data/` com os dados da loja. **Nada de c
 
 | Gatilho | Quando |
 |---------|--------|
-| Cron | A cada 10 minutos |
+| Cron | 1× por hora (minuto :17 UTC) |
 | Manual | **Actions → Sync upstream (auto-merge) → Run workflow** |
 
 Fluxo:
