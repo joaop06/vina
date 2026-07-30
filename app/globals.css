@@ -1966,47 +1966,6 @@ textarea {
   visibility: visible;
 }
 
-.admin-color-field {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  gap: 0.65rem;
-}
-
-.admin-color-field__swatch {
-  flex: 0 0 2.75rem;
-  width: 2.75rem;
-  height: 2.5rem;
-  padding: 0.2rem;
-  border: 1px solid var(--vn-border);
-  border-radius: var(--vn-radius);
-  background: #fff;
-  cursor: pointer;
-}
-
-.admin-color-field__swatch::-webkit-color-swatch-wrapper {
-  padding: 0;
-}
-
-.admin-color-field__swatch::-webkit-color-swatch {
-  border: 0;
-  border-radius: calc(var(--vn-radius) - 2px);
-}
-
-.admin-color-field__swatch::-moz-color-swatch {
-  border: 0;
-  border-radius: calc(var(--vn-radius) - 2px);
-}
-
-.admin-color-field .input {
-  flex: 1 1 0;
-  width: auto;
-  min-width: 0;
-  max-width: none;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  letter-spacing: 0.02em;
-}
-
 .admin-layout-picker {
   display: grid;
   gap: 0.85rem;

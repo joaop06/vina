@@ -17,6 +17,7 @@ import {
 import {
   migrateSitePersonalizationInput,
   siteComportamentoSchema,
+  siteHexColorSchema,
   siteRotulosSchema,
   siteSeoSchema,
   siteTextosExtendedSchema,
@@ -135,11 +136,11 @@ const siteConfigCoreSchema = z.object({
   slogan: z.string().min(1),
   layout: siteLayoutSchema.default("classic"),
   cores: z.object({
-    primaria: z.string(),
-    secundaria: z.string(),
-    fundo: z.string(),
-    fundoNeutro: z.string(),
-    borda: z.string(),
+    primaria: siteHexColorSchema,
+    secundaria: siteHexColorSchema,
+    fundo: siteHexColorSchema,
+    fundoNeutro: siteHexColorSchema,
+    borda: siteHexColorSchema,
   }),
   logo: siteLogoSchema.nullable().optional(),
   whatsapp: z
