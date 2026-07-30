@@ -429,7 +429,7 @@ export function TemaAvancadoPanel({
         <div className="admin-form__section-body admin-config-colors">
           <ColorField
             label="WhatsApp"
-            hint="Cor do botão flutuante e ícone do WhatsApp."
+            hint="Cor dos botões e ícones de WhatsApp na loja."
             value={tema.corWhatsapp}
             disabled={disabled}
             onCommit={(hex) => patchTema({ corWhatsapp: hex })}

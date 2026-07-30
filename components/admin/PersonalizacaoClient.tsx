@@ -367,6 +367,11 @@ export function PersonalizacaoClient({
       await ensureTabLoaded(next);
       // Contato preview uses whatsapp.telefone when usarWhatsappComoCelular.
       if (next === "contato") await ensureTabLoaded("whatsapp");
+      // WhatsApp surfaces depend on carrinho (Geral) and menu drawer (Navegação).
+      if (next === "whatsapp") {
+        await ensureTabLoaded("geral");
+        await ensureTabLoaded("navegacao");
+      }
     })().catch((err) => {
       toastMutationError(err, { id: "load-config-tab" });
     });
@@ -378,6 +383,20 @@ export function PersonalizacaoClient({
         toastMutationError(err, { id: "load-config-tab" });
       });
     }
+  }, [ensureTabLoaded, initialTab]);
+
+  useEffect(() => {
+    if (initialTab !== "whatsapp") return;
+    void (async () => {
+      if (!loadedTabsRef.current.has("geral")) {
+        await ensureTabLoaded("geral");
+      }
+      if (!loadedTabsRef.current.has("navegacao")) {
+        await ensureTabLoaded("navegacao");
+      }
+    })().catch((err) => {
+      toastMutationError(err, { id: "load-config-tab" });
+    });
   }, [ensureTabLoaded, initialTab]);
 
   async function syncVersaoFromServer() {
@@ -821,6 +840,8 @@ export function PersonalizacaoClient({
                   onSubmit={save}
                   onConfigChange={onConfigChange}
                   onOpenGeralTab={() => selectTab("geral")}
+                  onOpenNavegacaoTab={() => selectTab("navegacao")}
+                  navegacaoLoaded={loadedTabs.has("navegacao")}
                 />
               ) : null}
             </div>
