@@ -64,6 +64,6 @@ Checklist rápido pós-save:
 
 Produtos usam `variantes[].atributos` (chaves = `rotulos.dimensoes[].id`). Legado `tamanho`/`cor` é migrado no parse Zod e persistido pela migration `2026-07-product-variant-atributos` (boot ou CLI).
 
-## Forks
+## Repositórios de loja
 
-Novos campos nos fragmentos têm default no schema; forks antigos são atualizados pelas migrations no startup ou com `npm run data:migrate`.
+Novos campos nos fragmentos têm default no schema; lojas já existentes são atualizadas pelas migrations no startup ou com `npm run data:migrate`.

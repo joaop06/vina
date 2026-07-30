@@ -1,0 +1,35 @@
+name: Sync upstream (auto-merge)
+
+on:
+  schedule:
+    - cron: "*/10 * * * *" # a cada 10 minutos
+  workflow_dispatch: # permite disparo manual pelo botão "Run workflow"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do repo do cliente
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.SYNC_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Merge automático do upstream (repo base)
+        run: |
+          git config user.name "sync-bot"
+          git config user.email "bot@sync.local"
+
+          # adiciona o repo base como upstream (ignora erro se já existir)
+          git remote add upstream https://github.com/joaop06/vina.git || true
+          git fetch upstream
+
+          # -X ours: em qualquer conflito, mantém a versão do cliente
+          # protege a pasta data/ e qualquer ajuste local
+          git merge upstream/main --no-edit -X ours
+
+          # push direto no main -> dispara o redeploy da Vercel
+          git push origin main
