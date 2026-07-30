@@ -133,15 +133,32 @@ export const githubAdapter: DataAdapter = {
         });
         return null;
       }
-      recordReadOp({
-        kind: "readJson",
-        path: relativePath,
-        bytes: buf.byteLength,
-        durationMs: performance.now() - t0,
-        ok: true,
-      });
-      return JSON.parse(buf.toString("utf8")) as T;
+      try {
+        const parsed = JSON.parse(buf.toString("utf8")) as T;
+        recordReadOp({
+          kind: "readJson",
+          path: relativePath,
+          bytes: buf.byteLength,
+          durationMs: performance.now() - t0,
+          ok: true,
+        });
+        return parsed;
+      } catch (parseErr) {
+        recordReadOp({
+          kind: "readJson",
+          path: relativePath,
+          bytes: buf.byteLength,
+          durationMs: performance.now() - t0,
+          ok: false,
+        });
+        const err = new Error(
+          `Invalid JSON at ${relativePath}: ${(parseErr as Error).message}`,
+        );
+        (err as Error & { code?: string }).code = "INVALID_JSON";
+        throw err;
+      }
     } catch (e) {
+      if ((e as Error & { code?: string }).code === "INVALID_JSON") throw e;
       recordReadOp({
         kind: "readJson",
         path: relativePath,

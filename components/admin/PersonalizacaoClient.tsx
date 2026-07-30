@@ -235,11 +235,13 @@ export function PersonalizacaoClient({
   const [logoDraft, setLogoDraft] = useState<ImageMeta | null>(() =>
     logoFromConfig(initialConfig),
   );
-  const [loadedTabs, setLoadedTabs] = useState<Set<ConfiguracoesTabId>>(
-    () => new Set(initialLoadedTabs),
+  // Plain array (not Set): Client Component state must stay JSON-serializable
+  // across SSR → hydration on Next/Vercel production builds.
+  const [loadedTabs, setLoadedTabs] = useState<ConfiguracoesTabId[]>(
+    () => [...initialLoadedTabs],
   );
-  const loadedTabsRef = useRef(loadedTabs);
-  loadedTabsRef.current = loadedTabs;
+  const loadedTabsRef = useRef(new Set(loadedTabs));
+  loadedTabsRef.current = new Set(loadedTabs);
   const [loadingTab, setLoadingTab] = useState<ConfiguracoesTabId | null>(null);
   const [baselineByTab, setBaselineByTab] = useState(() =>
     tabBaselineFingerprints(
@@ -329,9 +331,10 @@ export function PersonalizacaoClient({
           return merged;
         });
         setLoadedTabs((prev) => {
-          const nextSet = new Set(prev).add(next);
-          loadedTabsRef.current = nextSet;
-          return nextSet;
+          if (prev.includes(next)) return prev;
+          const nextTabs = [...prev, next];
+          loadedTabsRef.current = new Set(nextTabs);
+          return nextTabs;
         });
 
         if (next === "vitrine" && !bannersLoaded) {
@@ -452,7 +455,7 @@ export function PersonalizacaoClient({
 
   // Live theme preview; restore committed theme on unmount.
   useEffect(() => {
-    if (!loadedTabs.has("geral") && !loadedTabs.has("vitrine")) return;
+    if (!loadedTabs.includes("geral") && !loadedTabs.includes("vitrine")) return;
     applySiteTheme({
       cores: { ...config.cores, primaria: colorPickerValue },
       layout: selectedLayout,
@@ -689,7 +692,7 @@ export function PersonalizacaoClient({
     }
   }
 
-  const tabReady = loadedTabs.has(tab) && loadingTab !== tab;
+  const tabReady = loadedTabs.includes(tab) && loadingTab !== tab;
 
   return (
     <div className="admin-page">
@@ -848,7 +851,7 @@ export function PersonalizacaoClient({
                   onConfigChange={onConfigChange}
                   onOpenGeralTab={() => selectTab("geral")}
                   onOpenNavegacaoTab={() => selectTab("navegacao")}
-                  navegacaoLoaded={loadedTabs.has("navegacao")}
+                  navegacaoLoaded={loadedTabs.includes("navegacao")}
                 />
               ) : null}
             </div>
