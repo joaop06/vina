@@ -32,6 +32,7 @@ import {
   type SiteConfigFragments,
   type SiteConfigMeta,
   type SiteConfigTabApiResponse,
+  type SiteConfigTabFragment,
   type SiteConfigTabId,
 } from "@/src/schemas/site-config-tabs";
 import {
@@ -108,7 +109,13 @@ function applyWhatsappTemplateMigrations(config: SiteConfig): SiteConfig {
 }
 
 async function readMeta(): Promise<SiteConfigMeta | null> {
-  const raw = await readJson<unknown>(SITE_CONFIG_META_PATH);
+  let raw: unknown;
+  try {
+    raw = await readJson<unknown>(SITE_CONFIG_META_PATH);
+  } catch (e) {
+    console.warn("[site-config] meta.json read failed", e);
+    return null;
+  }
   if (!raw) return null;
   const parsed = siteConfigMetaSchema.safeParse(raw);
   if (!parsed.success) {
@@ -132,6 +139,31 @@ type FragmentsLoad = {
   fallbackTabs: SiteConfigTabId[];
 };
 
+async function readTabFragmentSafe<T extends SiteConfigTabId>(
+  tab: T,
+  defaults: SiteConfigFragments,
+): Promise<{ data: SiteConfigTabFragment[T]; usedFallback: boolean }> {
+  try {
+    const raw = await readJson<unknown>(SITE_CONFIG_TAB_PATHS[tab]);
+    if (raw == null) {
+      console.warn(
+        `[site-config] missing ${SITE_CONFIG_TAB_PATHS[tab]}, using defaults`,
+      );
+      return { data: defaults[tab], usedFallback: true };
+    }
+    try {
+      return { data: parseTabFragment(tab, raw), usedFallback: false };
+    } catch (e) {
+      console.warn(`[site-config] invalid ${SITE_CONFIG_TAB_PATHS[tab]}`, e);
+      return { data: defaults[tab], usedFallback: true };
+    }
+  } catch (e) {
+    // Storage/network/parse errors must not take down admin SSR.
+    console.warn(`[site-config] read failed ${SITE_CONFIG_TAB_PATHS[tab]}`, e);
+    return { data: defaults[tab], usedFallback: true };
+  }
+}
+
 /**
  * Load meta + all tab files. Missing/invalid tabs fall back to defaults
  * instead of discarding the entire config.
@@ -146,22 +178,9 @@ async function readAllFragments(): Promise<FragmentsLoad | null> {
 
   await Promise.all(
     SITE_CONFIG_TAB_IDS.map(async (tab) => {
-      const raw = await readJson<unknown>(SITE_CONFIG_TAB_PATHS[tab]);
-      if (raw == null) {
-        console.warn(
-          `[site-config] missing ${SITE_CONFIG_TAB_PATHS[tab]}, using defaults`,
-        );
-        fragments[tab] = defaults[tab] as never;
-        fallbackTabs.push(tab);
-        return;
-      }
-      try {
-        fragments[tab] = parseTabFragment(tab, raw) as never;
-      } catch (e) {
-        console.warn(`[site-config] invalid ${SITE_CONFIG_TAB_PATHS[tab]}`, e);
-        fragments[tab] = defaults[tab] as never;
-        fallbackTabs.push(tab);
-      }
+      const { data, usedFallback } = await readTabFragmentSafe(tab, defaults);
+      fragments[tab] = data as never;
+      if (usedFallback) fallbackTabs.push(tab);
     }),
   );
 
@@ -186,7 +205,13 @@ function fragmentJsonWrites(fragments: SiteConfigFragments) {
 }
 
 async function readLegacySiteConfig(): Promise<SiteConfig | null> {
-  const legacy = await readJson<unknown>(LEGACY_SITE_CONFIG_PATH);
+  let legacy: unknown;
+  try {
+    legacy = await readJson<unknown>(LEGACY_SITE_CONFIG_PATH);
+  } catch (e) {
+    console.warn("[site-config] legacy site.json read failed", e);
+    return null;
+  }
   if (!legacy) return null;
   const parsed = siteConfigSchema.safeParse(legacy);
   if (!parsed.success) {
@@ -222,16 +247,21 @@ export const getSiteBranding = cache(async (): Promise<SiteBranding> => {
     };
   }
 
-  const raw = await readJson<unknown>(SITE_CONFIG_TAB_PATHS.geral);
-  if (raw) {
-    const parsed = siteGeralFragmentSchema.safeParse(raw);
-    if (parsed.success) {
-      return {
-        nomeLoja: parsed.data.nomeLoja,
-        logo: parsed.data.logo ?? null,
-      };
+  try {
+    const raw = await readJson<unknown>(SITE_CONFIG_TAB_PATHS.geral);
+    if (raw) {
+      const parsed = siteGeralFragmentSchema.safeParse(raw);
+      if (parsed.success) {
+        return {
+          nomeLoja: parsed.data.nomeLoja,
+          logo: parsed.data.logo ?? null,
+        };
+      }
     }
+  } catch (e) {
+    console.warn("[site-config] geral branding read failed", e);
   }
+
   const full = await getSiteConfig();
   return {
     nomeLoja: full.nomeLoja,
@@ -239,27 +269,38 @@ export const getSiteBranding = cache(async (): Promise<SiteBranding> => {
   };
 });
 
+/**
+ * Lazy tab read: only meta + the requested fragment (not all 7 tabs).
+ * Critical on DATA_BACKEND=github to keep admin SSR within budget/timeouts.
+ */
 export async function getSiteConfigTab<T extends SiteConfigTabId>(
   tab: T,
 ): Promise<SiteConfigTabResponse<T>> {
-  const loaded = await readAllFragments();
-  if (loaded) {
+  const meta = await readMeta();
+
+  if (meta) {
+    const defaults = splitSiteConfig(DEFAULT_SITE_CONFIG);
+    const { data } = await readTabFragmentSafe(tab, defaults);
     return {
       tab,
-      versao: loaded.fragments.meta.versao,
-      atualizadoEm: loaded.fragments.meta.atualizadoEm,
-      data: loaded.fragments[tab] as SiteConfigTabResponse<T>["data"],
+      versao: meta.versao,
+      atualizadoEm: meta.atualizadoEm,
+      data,
     };
   }
 
-  const legacy = await readLegacySiteConfig();
-  if (legacy) {
-    return {
-      tab,
-      versao: legacy.versao,
-      atualizadoEm: legacy.atualizadoEm,
-      data: extractTabSlice(legacy, tab),
-    };
+  try {
+    const legacy = await readLegacySiteConfig();
+    if (legacy) {
+      return {
+        tab,
+        versao: legacy.versao,
+        atualizadoEm: legacy.atualizadoEm,
+        data: extractTabSlice(legacy, tab),
+      };
+    }
+  } catch (e) {
+    console.warn("[site-config] getSiteConfigTab legacy failed", e);
   }
 
   const full = await getSiteConfig();

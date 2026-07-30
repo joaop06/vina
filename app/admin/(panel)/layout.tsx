@@ -5,7 +5,14 @@ import { ConfirmProvider } from "@/components/admin/ConfirmDialog";
 import { mediaUrl } from "@/src/lib/front/format";
 import { getCachedSiteBranding } from "@/src/lib/cache/storefront-reads";
 import { clearSession } from "@/src/lib/auth/session";
+import { DEFAULT_SITE_CONFIG } from "@/src/config/default-site-config";
 import { redirect } from "next/navigation";
+
+/**
+ * Admin is always request-time: auth cookie + GitHub-backed reads.
+ * A static layout under a force-dynamic page can crash as Vercel's bare 500.
+ */
+export const dynamic = "force-dynamic";
 
 async function logout() {
   "use server";
@@ -18,7 +25,16 @@ export default async function AdminPanelLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const site = await getCachedSiteBranding();
+  let storeName = DEFAULT_SITE_CONFIG.nomeLoja;
+  let logoUrl: string | null = null;
+  try {
+    const site = await getCachedSiteBranding();
+    storeName = site.nomeLoja;
+    logoUrl = mediaUrl(site.logo?.path);
+  } catch (e) {
+    console.error("[admin-layout] branding unavailable", e);
+  }
+
   return (
     <ConfirmProvider>
       <AdminBusyProvider>
@@ -26,8 +42,8 @@ export default async function AdminPanelLayout({
         <div className="admin-shell">
           <AdminSidebar
             logoutAction={logout}
-            storeName={site.nomeLoja}
-            logoUrl={mediaUrl(site.logo?.path)}
+            storeName={storeName}
+            logoUrl={logoUrl}
           />
           <div className="admin-main">{children}</div>
         </div>
