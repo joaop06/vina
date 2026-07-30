@@ -93,8 +93,6 @@ Detalhes e comentários extras estão em **`.env.example`**.
 
 Se produtos existirem mas listagens falharem, rode `npm run indices:rebuild -- --data=data-dev` (ou `indices:repair`).
 
-Nos **forks**, **Sync fork** faz poll a cada 10 min da `main` de `joaop06/vina` e **Release vercel** espelha a `main` do fork na branch `vercel` (deploy). Configure secrets `SYNC_COMMIT_*` e o PAT `SYNC_COMMIT_TOKEN` — ver [docs/configurar-fork-loja.md](docs/configurar-fork-loja.md).
-
 ### Produção
 
 ```bash
@@ -102,7 +100,7 @@ npm run build
 npm run start
 ```
 
-Na Vercel, configure `DATA_BACKEND=github` e as credenciais GitHub para que alterações do admin persistam no repositório.
+Na Vercel, configure `DATA_BACKEND=github` e as credenciais GitHub para que alterações do admin persistam no repositório. A Production Branch deve ser `main`: o workflow de sync faz push nela e dispara o redeploy.
 
 ### Login padrão em desenvolvimento
 
@@ -117,10 +115,11 @@ npm test
 
 Há scripts opcionais de medição de leitura (`baseline:read`, `phase6:verify`) documentados nos comentários do `.env.example`, voltados a evolução de performance do projeto.
 
-### Lojas (fork do repositório base)
+### Lojas (template do repositório base)
 
-Passo a passo (fork, Actions, Vercel, Sync fork + Release vercel): **[docs/configurar-fork-loja.md](docs/configurar-fork-loja.md)**.
+Cada loja é um repositório criado via **Use this template**. O cliente edita só `data/`; o workflow **Sync upstream** faz merge diário do base (`-X ours`) direto na `main` e a Vercel redeploya.
 
+Passo a passo (template, Actions, Vercel, `SYNC_TOKEN` opcional): **[docs/configurar-template-loja.md](docs/configurar-template-loja.md)**.
 
 ---
 
