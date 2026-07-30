@@ -185,10 +185,13 @@ export const siteFonteIdSchema = z.enum([
   "system",
 ]);
 
-/** Hex color: #RGB or #RRGGBB (case-insensitive). */
+/** Hex color: #RGB, #RGBA, #RRGGBB or #RRGGBBAA (case-insensitive). */
 export const siteHexColorSchema = z
   .string()
-  .regex(/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/, "Use uma cor hexadecimal (#RGB ou #RRGGBB)");
+  .regex(
+    /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{4}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/,
+    "Use uma cor hexadecimal (#RGB, #RGBA, #RRGGBB ou #RRGGBBAA)",
+  );
 
 /**
  * Container max-width: number with optional unit px|rem|em|%.

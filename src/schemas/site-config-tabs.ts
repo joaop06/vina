@@ -2,6 +2,7 @@ import { z } from "zod";
 import { isoDateSchema } from "./common";
 import {
   siteComportamentoSchema,
+  siteHexColorSchema,
   siteRotulosSchema,
   siteSeoSchema,
   siteTemaSchema,
@@ -87,11 +88,11 @@ export const siteGeralFragmentSchema = z.object({
   assinatura: z.string().min(1),
   slogan: z.string().min(1),
   cores: z.object({
-    primaria: z.string(),
-    secundaria: z.string(),
-    fundo: z.string(),
-    fundoNeutro: z.string(),
-    borda: z.string(),
+    primaria: siteHexColorSchema,
+    secundaria: siteHexColorSchema,
+    fundo: siteHexColorSchema,
+    fundoNeutro: siteHexColorSchema,
+    borda: siteHexColorSchema,
   }),
   logo: siteLogoSchema.nullable().optional(),
   metaReceitaMensal: z.number().min(0).nullable().default(null),

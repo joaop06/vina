@@ -423,7 +423,8 @@ export function TemaAvancadoPanel({
           <h2 className="admin-form__section-title">Cores das redes</h2>
           <p className="admin-form__section-desc">
             Cor dos ícones e botões de WhatsApp e Instagram na vitrine. Use o
-            seletor ou digite o código hexadecimal.
+            seletor ou digite o código hexadecimal (#RGB, #RRGGBB ou com
+            transparência).
           </p>
         </header>
         <div className="admin-form__section-body admin-config-colors">
