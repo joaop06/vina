@@ -363,6 +363,13 @@ export function PersonalizacaoClient({
   function selectTab(next: ConfiguracoesTabId) {
     setTab(next);
     router.replace(configTabHref(next), { scroll: false });
+    const reduceMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({
+      top: 0,
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
     void (async () => {
       await ensureTabLoaded(next);
       // Contato preview uses whatsapp.telefone when usarWhatsappComoCelular.

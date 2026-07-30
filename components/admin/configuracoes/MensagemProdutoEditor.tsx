@@ -84,7 +84,7 @@ export function MensagemProdutoEditor({
       previewText={preview}
       storeName={storeName}
       phoneLabel={phoneLabel}
-      mobileSummary="Ver mensagem e local"
+      mobileSummary="Ver prévia"
       asideExtra={
         <WhatsAppStorePreview
           storeName={storeName}
@@ -100,7 +100,7 @@ export function MensagemProdutoEditor({
             Como o produto aparece na mensagem
           </span>
           <p className="wa-product-msg__block-desc">
-            Escolha a aparência da lista. A prévia à direita atualiza na hora.
+            Escolha a aparência da lista. A prévia atualiza na hora.
           </p>
           <div className={styles.formatCards} role="radiogroup" aria-label="Formato do item">
             <label

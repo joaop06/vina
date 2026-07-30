@@ -41,8 +41,7 @@ export function NavegacaoPanel({
         <header className="admin-form__section-header">
           <h2 className="admin-form__section-title">Menus do site</h2>
           <p className="admin-form__section-desc">
-            Monte o que o cliente vê no topo da loja e no menu do celular. Cada
-            opção mostra, na prévia, exatamente onde ela aparece.
+            Menus do topo e do celular.
           </p>
         </header>
         <div className="admin-form__section-body">

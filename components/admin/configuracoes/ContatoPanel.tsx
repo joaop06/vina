@@ -9,7 +9,6 @@ import {
   EyeOff,
   MapPin,
   Phone,
-  Sparkles,
 } from "lucide-react";
 import { FieldHint } from "@/components/admin/FieldHint";
 import { EnderecoLocalFields } from "@/components/admin/configuracoes/EnderecoLocalFields";
@@ -62,11 +61,14 @@ function WhereChips({
 }: {
   items: Array<{ label: string; active?: boolean; muted?: boolean }>;
 }) {
+  const visible = items.filter((item) => item.active);
+  const list = visible.length > 0 ? visible : items;
+
   return (
-    <div>
+    <div className={styles.whereChips}>
       <p className={styles.chipLabel}>Onde aparece</p>
       <ul className={styles.chips}>
-        {items.map((item) => (
+        {list.map((item) => (
           <li
             key={item.label}
             className={[
@@ -347,20 +349,6 @@ export function ContatoPanel({
         .join(" ")}
       aria-busy={disabled || undefined}
     >
-      <div className={styles.intro}>
-        <span className={styles.introIcon} aria-hidden>
-          <Sparkles size={18} strokeWidth={1.9} />
-        </span>
-        <div className={styles.introBody}>
-          <p className={styles.introTitle}>Como o cliente te encontra</p>
-          <p className={styles.introText}>
-            Preencha Instagram, endereço, horários e telefones. As prévias ao
-            lado mostram exatamente o que aparece na loja — e o que fica
-            escondido até você ligar a exibição.
-          </p>
-        </div>
-      </div>
-
       <section className="admin-form__section">
         <header
           className={["admin-form__section-header", styles.sectionHeader].join(
@@ -387,14 +375,14 @@ export function ContatoPanel({
                 </StatusBadge>
               </div>
               <p className="admin-form__section-desc">
-                O @ da loja vira um botão que leva ao perfil oficial.
+                @ da loja vira botão para o perfil.
               </p>
             </div>
           </div>
         </header>
         <div className="admin-form__section-body">
           <PreviewSplit
-            summary="Ver prévia do Instagram"
+            summary="Ver prévia"
             renderPreview={(live) => (
               <InstagramPreview config={config} live={live} />
             )}
@@ -416,8 +404,7 @@ export function ContatoPanel({
                       Exibir botão na loja
                     </p>
                     <p className={styles.visibilityDesc}>
-                      Quando ligado, o Instagram aparece nos botões e no
-                      rodapé.
+                      Liga o Instagram nos botões e no rodapé.
                     </p>
                   </div>
                   <label
@@ -473,15 +460,9 @@ export function ContatoPanel({
                   </div>
                   {config.instagram.handle ? (
                     <p className={styles.fieldHelp}>
-                      Link gerado:{" "}
-                      {instagramProfileUrl(config.instagram.handle)}
+                      Link: {instagramProfileUrl(config.instagram.handle)}
                     </p>
-                  ) : (
-                    <p className={styles.fieldHelp}>
-                      Exemplo: se o perfil for @minhaloja, digite apenas
-                      minhaloja.
-                    </p>
-                  )}
+                  ) : null}
                 </div>
               </>
             }
@@ -515,15 +496,14 @@ export function ContatoPanel({
                 </StatusBadge>
               </div>
               <p className="admin-form__section-desc">
-                Dados da loja física. A página Sobre usa o endereço preenchido;
-                o rodapé só mostra se você permitir.
+                Endereço e horários da loja física.
               </p>
             </div>
           </div>
         </header>
         <div className="admin-form__section-body">
           <PreviewSplit
-            summary="Ver prévia de endereço e horários"
+            summary="Ver prévia"
             renderPreview={(live) => (
               <EnderecoPreview config={config} live={live} />
             )}
@@ -574,10 +554,6 @@ export function ContatoPanel({
                       })
                     }
                   />
-                  <p className={styles.fieldHelp}>
-                    Dica: use um texto curto, como no exemplo. Em branco =
-                    horário oculto.
-                  </p>
                 </div>
               </>
             }
@@ -607,15 +583,14 @@ export function ContatoPanel({
                 </StatusBadge>
               </div>
               <p className="admin-form__section-desc">
-                Fixo e celular aparecem no rodapé. O celular pode reutilizar o
-                número do WhatsApp.
+                Fixo e celular no rodapé. Celular pode ser o do WhatsApp.
               </p>
             </div>
           </div>
         </header>
         <div className="admin-form__section-body">
           <PreviewSplit
-            summary="Ver prévia dos telefones"
+            summary="Ver prévia"
             renderPreview={(live) => (
               <TelefonesPreview config={config} live={live} />
             )}
@@ -745,13 +720,8 @@ export function ContatoPanel({
                       <p className={styles.fieldHelp}>
                         Usando o número da aba{" "}
                         <Link href={configTabHref("whatsapp")}>WhatsApp</Link>.
-                        Desative “Usar WhatsApp” para informar outro celular.
                       </p>
-                    ) : (
-                      <p className={styles.fieldHelp}>
-                        Informe um celular diferente do WhatsApp, se quiser.
-                      </p>
-                    )}
+                    ) : null}
                     <input
                       className="input"
                       inputMode="tel"

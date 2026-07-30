@@ -101,7 +101,7 @@ export function MensagemCarrinhoEditor({
       previewMuted={previewMuted}
       storeName={storeName}
       phoneLabel={phoneLabel}
-      mobileSummary="Ver mensagem e local"
+      mobileSummary="Ver prévia"
       asideExtra={
         <WhatsAppStorePreview
           storeName={storeName}

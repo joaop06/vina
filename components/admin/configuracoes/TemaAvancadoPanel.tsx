@@ -151,15 +151,13 @@ export function TemaAvancadoPanel({
         <header className="admin-form__section-header">
           <h2 className="admin-form__section-title">Tema da vitrine</h2>
           <p className="admin-form__section-desc">
-            Escolha o formato dos cantos, a largura do conteúdo, as fontes e as
-            cores dos ícones sociais. O exemplo ao lado atualiza na hora — salve
-            para publicar na loja.
+            Cantos, largura, fontes e cores dos ícones sociais.
           </p>
         </header>
 
         <div className={`admin-form__section-body ${styles.sectionBody}`}>
           <details className={styles.previewMobile}>
-            <summary className={styles.previewMobileSummary}>Ver exemplo</summary>
+            <summary className={styles.previewMobileSummary}>Ver prévia</summary>
             <div className={styles.previewMobileBody}>
               <TemaPreview config={config} />
             </div>
@@ -302,8 +300,7 @@ export function TemaAvancadoPanel({
         <header className="admin-form__section-header">
           <h2 className="admin-form__section-title">Tipografia</h2>
           <p className="admin-form__section-desc">
-            Escolha um estilo pronto ou combine fontes manualmente. Títulos usam
-            a fonte de destaque; textos usam a fonte do corpo.
+            Estilo pronto ou fontes manuais para títulos e textos.
           </p>
         </header>
         <div className="admin-form__section-body">
@@ -422,9 +419,7 @@ export function TemaAvancadoPanel({
         <header className="admin-form__section-header">
           <h2 className="admin-form__section-title">Cores das redes</h2>
           <p className="admin-form__section-desc">
-            Cor dos ícones e botões de WhatsApp e Instagram na vitrine. Use o
-            seletor ou digite o código hexadecimal (#RGB, #RRGGBB ou com
-            transparência).
+            Cor dos ícones de WhatsApp e Instagram na loja.
           </p>
         </header>
         <div className="admin-form__section-body admin-config-colors">

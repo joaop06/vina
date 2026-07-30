@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useMemo, useState, type ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
   Cookie,
@@ -44,8 +44,7 @@ const CATEGORIES: Array<{
     id: "institucional",
     label: "Sobre e Trocas",
     shortLabel: "Sobre",
-    description:
-      "Apresentação da loja e orientações sobre trocas exibidas na página Sobre.",
+    description: "Apresentação e política de trocas na página Sobre.",
     icon: FileText,
     fieldCount: 2,
   },
@@ -53,8 +52,7 @@ const CATEGORIES: Array<{
     id: "paginas",
     label: "Páginas",
     shortLabel: "Páginas",
-    description:
-      "Títulos das páginas principais, textos da página Sobre e da tela “não encontrada”.",
+    description: "Títulos de páginas, Sobre e tela “não encontrada”.",
     icon: FileText,
     fieldCount: 12,
   },
@@ -62,8 +60,7 @@ const CATEGORIES: Array<{
     id: "home",
     label: "Home",
     shortLabel: "Home",
-    description:
-      "Títulos das seções da página inicial, botões do banner e bloco de dúvidas.",
+    description: "Seções da home, botões do banner e dúvidas.",
     icon: Home,
     fieldCount: 9,
   },
@@ -71,8 +68,7 @@ const CATEGORIES: Array<{
     id: "catalogo",
     label: "Catálogo",
     shortLabel: "Catálogo",
-    description:
-      "Busca, filtros, contagem de produtos e mensagem quando não há resultados.",
+    description: "Busca, filtros, contagem e sem resultados.",
     icon: Package,
     fieldCount: 6,
   },
@@ -80,8 +76,7 @@ const CATEGORIES: Array<{
     id: "produto",
     label: "Produto",
     shortLabel: "Produto",
-    description:
-      "Selos nos cards, botões de compra/WhatsApp e avisos de estoque e variação.",
+    description: "Selos, botões e avisos de estoque/variação.",
     icon: Tags,
     fieldCount: 12,
   },
@@ -89,7 +84,7 @@ const CATEGORIES: Array<{
     id: "rodape",
     label: "Rodapé",
     shortLabel: "Rodapé",
-    description: "Títulos das colunas e rótulos de contato no rodapé da loja.",
+    description: "Colunas e rótulos de contato no rodapé.",
     icon: Footprints,
     fieldCount: 7,
   },
@@ -97,7 +92,7 @@ const CATEGORIES: Array<{
     id: "cookies",
     label: "Cookies",
     shortLabel: "Cookies",
-    description: "Aviso de cookies que aparece na parte de baixo da loja.",
+    description: "Aviso de cookies no rodapé da loja.",
     icon: Cookie,
     fieldCount: 3,
   },
@@ -105,8 +100,7 @@ const CATEGORIES: Array<{
     id: "lead",
     label: "WhatsApp",
     shortLabel: "Lead",
-    description:
-      "Janela pedindo nome e contato antes de abrir o WhatsApp (quando ativo).",
+    description: "Janela de contato antes do WhatsApp (se ativo).",
     icon: MessageCircle,
     fieldCount: 9,
   },
@@ -114,8 +108,7 @@ const CATEGORIES: Array<{
     id: "carrinho",
     label: "Carrinho",
     shortLabel: "Carrinho",
-    description:
-      "Título da página, estado vazio, avisos e botão de envio do pedido.",
+    description: "Título, vazio, avisos e botão de envio.",
     icon: ShoppingBag,
     fieldCount: 8,
   },
@@ -123,8 +116,7 @@ const CATEGORIES: Array<{
     id: "rotulos",
     label: "Rótulos",
     shortLabel: "Rótulos",
-    description:
-      "Nome do menu de categorias e nomes das opções de variação (tamanho, cor…).",
+    description: "Menu de categorias e nomes de variação.",
     icon: Tags,
     fieldCount: 0,
   },
@@ -197,12 +189,24 @@ function PreviewShell({
   note?: string;
   children: ReactNode;
 }) {
-  return (
-    <aside className={styles.preview} aria-live="polite">
+  const body = (
+    <>
       <p className={styles.previewLabel}>{label}</p>
       <div className={styles.previewStage}>{children}</div>
       {note ? <p className={styles.previewNote}>{note}</p> : null}
-    </aside>
+    </>
+  );
+
+  return (
+    <div className={styles.previewSlot}>
+      <details className={styles.previewMobile}>
+        <summary className={styles.previewMobileSummary}>Ver prévia</summary>
+        <div className={styles.previewMobileBody}>{body}</div>
+      </details>
+      <aside className={styles.preview} aria-live="polite">
+        {body}
+      </aside>
+    </div>
   );
 }
 
@@ -685,11 +689,6 @@ export function TextosVitrinePanel({
   const active = CATEGORIES.find((c) => c.id === category) ?? CATEGORIES[0];
   const ActiveIcon = active.icon;
 
-  const totalFields = useMemo(() => {
-    const fixed = CATEGORIES.reduce((sum, c) => sum + c.fieldCount, 0);
-    return fixed + 1 + config.rotulos.dimensoes.length;
-  }, [config.rotulos.dimensoes.length]);
-
   function patchTextos(partial: Partial<SiteConfig["textos"]>) {
     onConfigChange({ ...config, textos: { ...t, ...partial } });
   }
@@ -747,18 +746,10 @@ export function TextosVitrinePanel({
       aria-busy={disabled || undefined}
     >
       <div className={styles.intro}>
-        <div>
-          <h2 className={styles.introTitle}>Textos da vitrine</h2>
-          <p className={styles.introText}>
-            Escolha uma área da loja, edite o texto e veja à direita (ou abaixo)
-            onde ele aparece. As alterações só valem depois de salvar.
-          </p>
-        </div>
-        <div className={styles.introMeta}>
-          <span className={styles.chip}>{CATEGORIES.length} áreas</span>
-          <span className={styles.chip}>{totalFields} textos</span>
-          <span className={styles.chip}>Prévia ao vivo</span>
-        </div>
+        <h2 className={styles.introTitle}>Textos da vitrine</h2>
+        <p className={styles.introText}>
+          Edite os textos por área. Vale depois de salvar.
+        </p>
       </div>
 
       <div
@@ -1034,7 +1025,7 @@ export function TextosVitrinePanel({
                     />
                     <TextField
                       label="Link “ver tudo”"
-                      where="Link ao lado das seções (mais comum em alguns layouts)"
+                      where="Link junto das seções (em alguns layouts)"
                       value={t.home.verTudo}
                       disabled={disabled}
                       onChange={(v) =>

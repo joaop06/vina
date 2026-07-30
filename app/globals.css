@@ -47,6 +47,9 @@
   --vn-safe-right: env(safe-area-inset-right, 0px);
   /** Reserved space under list content for the fixed pagination dock. */
   --vn-pagination-dock-h: 4.25rem;
+  /** Sticky mobile admin chrome (menu bar + config tabs). */
+  --admin-mobile-bar-h: calc(var(--vn-touch) + 1.5rem);
+  --admin-config-tabs-h: 2.85rem;
 }
 
 @media (min-width: 768px) {
@@ -1090,6 +1093,18 @@ textarea {
 }
 
 @media (max-width: 767.98px) {
+  .dash-tabs--config .dash-tabs__list {
+    position: sticky;
+    top: var(--admin-mobile-bar-h);
+    z-index: 18;
+    margin-inline: -0.15rem;
+    padding-inline: 0.15rem;
+    background: color-mix(in srgb, var(--vn-surface, #fff) 94%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 16px -12px rgba(17, 17, 17, 0.18);
+  }
+
   .dash-tabs--config .dash-tabs__tab {
     min-height: 2.75rem;
     padding: 0.55rem 0.75rem;
