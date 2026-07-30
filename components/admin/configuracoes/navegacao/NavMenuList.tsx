@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { Info } from "lucide-react";
 import type { NavSurfaceKey } from "@/src/lib/navigation-admin";
 import type { NavItem } from "@/src/schemas/navigation";
 import type { Category } from "@/src/schemas/category";
 import { NavAddMenu } from "./NavAddMenu";
 import { NavItemEditor } from "./NavItemEditor";
 import { NavItemRow } from "./NavItemRow";
+import styles from "./NavegacaoEditor.module.css";
 
 function moveItem<T>(list: T[], from: number, to: number): T[] {
   if (to < 0 || to >= list.length || from === to) return list;
@@ -46,12 +48,15 @@ export function NavMenuList({
   const expandedItem = itens.find((i) => i.id === expandedId);
 
   return (
-    <div className="admin-nav-v2__list-block">
-      <p className="admin-nav-v2__list-hint">
-        Arraste pelo ícone ⋮⋮ para reordenar. Itens ocultos não aparecem na
-        loja.
+    <div className={styles.listBlock}>
+      <p className={styles.listHint}>
+        <Info size={15} strokeWidth={1.75} className={styles.listHintIcon} aria-hidden />
+        <span>
+          Arraste pelo ícone de pontos para reordenar, ou use as setas. Itens
+          ocultos (olho riscado) não aparecem na loja.
+        </span>
       </p>
-      <ul className="admin-nav-v2__list">
+      <ul className={styles.list}>
         {itens.map((item, index) => (
           <NavItemRow
             key={item.id}
@@ -60,6 +65,7 @@ export function NavMenuList({
             total={itens.length}
             disabled={disabled}
             dragging={dragIndex === index}
+            expanded={expandedId === item.id}
             onToggleVisible={() =>
               updateItem(item.id, {
                 ...item,
@@ -87,7 +93,10 @@ export function NavMenuList({
         ))}
       </ul>
       {itens.length === 0 ? (
-        <p className="admin-nav-v2__list-empty">Nenhum link no menu ainda.</p>
+        <p className={styles.listEmpty}>
+          Nenhum link neste menu ainda. Adicione páginas, categorias ou um link
+          personalizado.
+        </p>
       ) : null}
       {expandedItem ? (
         <NavItemEditor
@@ -103,7 +112,10 @@ export function NavMenuList({
         itens={itens}
         surfaceKey={surfaceKey}
         disabled={disabled}
-        onAdd={(item) => onChange([...itens, item])}
+        onAdd={(item) => {
+          onChange([...itens, item]);
+          setExpandedId(item.id);
+        }}
       />
     </div>
   );

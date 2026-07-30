@@ -1,8 +1,19 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import {
+  ArrowDown,
+  ArrowUp,
+  Eye,
+  EyeOff,
+  GripVertical,
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 import { navItemKindLabel } from "@/src/lib/navigation-admin";
 import { navItemLabel, type NavItem } from "@/src/schemas/navigation";
+import styles from "./NavegacaoEditor.module.css";
 
 type Props = {
   item: NavItem;
@@ -10,6 +21,7 @@ type Props = {
   total: number;
   disabled?: boolean;
   dragging: boolean;
+  expanded?: boolean;
   onToggleVisible: () => void;
   onToggleExpand: () => void;
   onRemove: () => void;
@@ -26,6 +38,7 @@ export function NavItemRow({
   total,
   disabled,
   dragging,
+  expanded,
   onToggleVisible,
   onToggleExpand,
   onRemove,
@@ -37,6 +50,9 @@ export function NavItemRow({
 }: Props) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const menuBtnRef = useRef<HTMLButtonElement>(null);
+  const firstItemRef = useRef<HTMLButtonElement>(null);
+  const menuId = useId();
   const visible = item.visivel !== false;
   const label = navItemLabel(item);
   const kind = navItemKindLabel(item);
@@ -46,16 +62,27 @@ export function NavItemRow({
     function onDoc(e: MouseEvent) {
       if (!menuRef.current?.contains(e.target as Node)) setMenuOpen(false);
     }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setMenuOpen(false);
+        menuBtnRef.current?.focus();
+      }
+    }
     document.addEventListener("click", onDoc);
-    return () => document.removeEventListener("click", onDoc);
+    document.addEventListener("keydown", onKey);
+    firstItemRef.current?.focus();
+    return () => {
+      document.removeEventListener("click", onDoc);
+      document.removeEventListener("keydown", onKey);
+    };
   }, [menuOpen]);
 
   return (
     <li
       className={[
-        "admin-nav-v2__row",
-        !visible ? "is-hidden-item" : "",
-        dragging ? "is-dragging" : "",
+        styles.row,
+        !visible ? styles.rowHidden : "",
+        dragging ? styles.rowDragging : "",
       ]
         .filter(Boolean)
         .join(" ")}
@@ -78,104 +105,134 @@ export function NavItemRow({
         onDropOn();
       }}
     >
-      <div className="admin-nav-v2__row-main">
-        <span className="admin-nav-v2__drag" aria-hidden="true">
-          ⋮⋮
+      <div className={styles.rowMain}>
+        <span className={styles.drag} aria-hidden="true" title="Arrastar">
+          <GripVertical size={16} strokeWidth={1.75} />
         </span>
-        <div className="admin-nav-v2__row-text">
-          <span className="admin-nav-v2__row-label">{label}</span>
-          <span className="admin-nav-v2__row-kind">{kind}</span>
+        <div className={styles.rowText}>
+          <span className={styles.rowLabel}>{label}</span>
+          <div className={styles.rowMeta}>
+            <span className={styles.badge}>{kind}</span>
+            {!visible ? (
+              <span className={`${styles.badge} ${styles.badgeMuted}`}>
+                Oculto na loja
+              </span>
+            ) : null}
+          </div>
         </div>
-        <button
-          type="button"
-          className="admin-nav-v2__eye"
-          disabled={disabled}
-          aria-pressed={visible}
-          aria-label={visible ? `Ocultar ${label}` : `Mostrar ${label}`}
-          onClick={onToggleVisible}
-        >
-          {visible ? (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path
-                d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"
-                stroke="currentColor"
-                strokeWidth="1.75"
-              />
-              <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.75" />
-            </svg>
-          ) : (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path
-                d="M3 3l18 18M10.5 10.5a3 3 0 004.24 4.24M9.9 5.1A10.8 10.8 0 0112 5c6.5 0 10 7 10 7a16.2 16.2 0 01-4.06 5.94M6.1 6.1C3.6 7.8 2 12 2 12a16.2 16.2 0 005.94 4.94"
-                stroke="currentColor"
-                strokeWidth="1.75"
-                strokeLinecap="round"
-              />
-            </svg>
-          )}
-        </button>
-        <div className="admin-nav-v2__menu-wrap" ref={menuRef}>
+        <div className={styles.rowActions}>
           <button
             type="button"
-            className="admin-nav-v2__menu-btn"
-            disabled={disabled}
-            aria-expanded={menuOpen}
-            aria-haspopup="menu"
-            aria-label={`Ações para ${label}`}
-            onClick={() => setMenuOpen((o) => !o)}
+            className={`${styles.iconBtn} ${styles.moveBtn}`}
+            disabled={disabled || index === 0}
+            aria-label={`Mover ${label} para cima`}
+            onClick={onMoveUp}
           >
-            ⋯
+            <ArrowUp size={16} strokeWidth={1.75} />
           </button>
-          {menuOpen ? (
-            <div className="admin-nav-v2__menu" role="menu">
-              <button
-                type="button"
-                role="menuitem"
-                className="admin-nav-v2__menu-item"
-                onClick={() => {
-                  setMenuOpen(false);
-                  onToggleExpand();
-                }}
-              >
-                Editar
-              </button>
-              <button
-                type="button"
-                role="menuitem"
-                className="admin-nav-v2__menu-item"
-                disabled={index === 0}
-                onClick={() => {
-                  setMenuOpen(false);
-                  onMoveUp();
-                }}
-              >
-                Mover para cima
-              </button>
-              <button
-                type="button"
-                role="menuitem"
-                className="admin-nav-v2__menu-item"
-                disabled={index >= total - 1}
-                onClick={() => {
-                  setMenuOpen(false);
-                  onMoveDown();
-                }}
-              >
-                Mover para baixo
-              </button>
-              <button
-                type="button"
-                role="menuitem"
-                className="admin-nav-v2__menu-item admin-nav-v2__menu-item--danger"
-                onClick={() => {
-                  setMenuOpen(false);
-                  onRemove();
-                }}
-              >
-                Remover
-              </button>
-            </div>
-          ) : null}
+          <button
+            type="button"
+            className={`${styles.iconBtn} ${styles.moveBtn}`}
+            disabled={disabled || index >= total - 1}
+            aria-label={`Mover ${label} para baixo`}
+            onClick={onMoveDown}
+          >
+            <ArrowDown size={16} strokeWidth={1.75} />
+          </button>
+          <button
+            type="button"
+            className={[
+              styles.iconBtn,
+              !visible ? styles.iconBtnActive : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            disabled={disabled}
+            aria-pressed={visible}
+            aria-label={visible ? `Ocultar ${label}` : `Mostrar ${label}`}
+            onClick={onToggleVisible}
+          >
+            {visible ? (
+              <Eye size={18} strokeWidth={1.75} aria-hidden />
+            ) : (
+              <EyeOff size={18} strokeWidth={1.75} aria-hidden />
+            )}
+          </button>
+          <div className={styles.menuWrap} ref={menuRef}>
+            <button
+              ref={menuBtnRef}
+              type="button"
+              className={[
+                styles.iconBtn,
+                expanded || menuOpen ? styles.iconBtnActive : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+              disabled={disabled}
+              aria-expanded={menuOpen}
+              aria-haspopup="menu"
+              aria-controls={menuOpen ? menuId : undefined}
+              aria-label={`Ações para ${label}`}
+              onClick={() => setMenuOpen((o) => !o)}
+            >
+              <MoreHorizontal size={18} strokeWidth={1.75} aria-hidden />
+            </button>
+            {menuOpen ? (
+              <div className={styles.menu} role="menu" id={menuId}>
+                <button
+                  ref={firstItemRef}
+                  type="button"
+                  role="menuitem"
+                  className={styles.menuItem}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onToggleExpand();
+                  }}
+                >
+                  <Pencil size={15} strokeWidth={1.75} aria-hidden />
+                  Editar
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className={styles.menuItem}
+                  disabled={index === 0}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onMoveUp();
+                  }}
+                >
+                  <ArrowUp size={15} strokeWidth={1.75} aria-hidden />
+                  Mover para cima
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className={styles.menuItem}
+                  disabled={index >= total - 1}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onMoveDown();
+                  }}
+                >
+                  <ArrowDown size={15} strokeWidth={1.75} aria-hidden />
+                  Mover para baixo
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className={`${styles.menuItem} ${styles.menuItemDanger}`}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onRemove();
+                  }}
+                >
+                  <Trash2 size={15} strokeWidth={1.75} aria-hidden />
+                  Remover
+                </button>
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
     </li>
