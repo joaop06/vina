@@ -590,12 +590,12 @@ Login, chrome `.admin-shell`, docks de paginação do painel e Sonner saem de `g
 
 ### Como
 
-- [ ] Acrescentar em `admin.css` todo ruleset cujo seletor contenha `.admin-shell`, `.admin-login-root`, `html:has(.admin-login-root)`, `.admin-busy-bar*`, `.admin-loading*`, ou o bloco Sonner do admin. Incluir `.admin-shell .pagination-dock…`, `.admin-shell .back-to-top` e `.admin-panel .pagination-nav--dock`.
-- [ ] Se um `@media` ou um ruleset misturar seletor de vitrine que já deveria ter saído nas fases 3 e 4, não duplicar: a parte de vitrine já está no kit; só a parte admin entra aqui.
-- [ ] Manter o import de `admin.css` em `app/admin/layout.tsx`. Não importar em `app/layout.tsx`.
-- [ ] Apagar esses rulesets de `globals.css`.
-- [ ] Se `globals.css` ficar vazio ou só com comentário, apagar o arquivo e o import em `app/layout.tsx`. Se ainda restar regra de layout (`body[data-layout="gallery"]` ou refinamento `[data-layout]`), o arquivo permanece até o fecho.
-- [ ] `layout-tokens.css` continua importado na raiz.
+- [x] Acrescentar em `admin.css` todo ruleset cujo seletor contenha `.admin-shell`, `.admin-login-root`, `html:has(.admin-login-root)`, `.admin-busy-bar*`, `.admin-loading*`, ou o bloco Sonner do admin. Incluir `.admin-shell .pagination-dock…`, `.admin-shell .back-to-top` e `.admin-panel .pagination-nav--dock`.
+- [x] Se um `@media` ou um ruleset misturar seletor de vitrine que já deveria ter saído nas fases 3 e 4, não duplicar: a parte de vitrine já está no kit; só a parte admin entra aqui.
+- [x] Manter o import de `admin.css` em `app/admin/layout.tsx`. Não importar em `app/layout.tsx`.
+- [x] Apagar esses rulesets de `globals.css`.
+- [x] Se `globals.css` ficar vazio ou só com comentário, apagar o arquivo e o import em `app/layout.tsx`. Se ainda restar regra de layout (`body[data-layout="gallery"]` ou refinamento `[data-layout]`), o arquivo permanece até o fecho.
+- [x] `layout-tokens.css` continua importado na raiz.
 
 ### Fora desta fase
 
@@ -606,10 +606,10 @@ Login, chrome `.admin-shell`, docks de paginação do painel e Sonner saem de `g
 
 ### Pronto quando
 
-- [ ] `/admin/login` sem scroll indevido do documento e com o mesmo formulário.
-- [ ] `/admin`, produtos, pedidos, personalização: sidebar, toaster, paginação flutuante do painel.
-- [ ] Uma página pública não carrega `admin.css` (ver a lista de CSS no devtools; ausência de `.admin-shell` no CSS da home).
-- [ ] Critério de pronto comum.
+- [x] `/admin/login` sem scroll indevido do documento e com o mesmo formulário.
+- [x] `/admin`, produtos, pedidos, personalização: sidebar, toaster, paginação flutuante do painel.
+- [x] Uma página pública não carrega `admin.css` (ver a lista de CSS no devtools; ausência de `.admin-shell` no CSS da home).
+- [x] Critério de pronto comum.
 
 ---
 
