@@ -7,19 +7,19 @@ import { useEffect, useMemo, useState } from "react";
 import { WhatsAppButton } from "@/components/public/kit/feedback/WhatsAppButton";
 import { CartIcon } from "@/components/public/kit/chrome/icons/StorefrontIcons";
 import { useCart } from "@/components/public/kit/cart/CartProvider";
-import { cartLineKey, type CartLine } from "@/src/lib/front/cart";
-import { formatBrl, mediaUrl } from "@/src/lib/front/format";
-import { coverImage } from "@/src/lib/front/media";
-import { IMAGE_SIZES } from "@/src/lib/front/media-image";
-import { variantDisplayPrice } from "@/src/lib/front/pricing";
-import { findVariant } from "@/src/lib/front/variants";
+import { cartLineKey, type CartLine } from "@/src/foundation/behaviors/cart/cart";
+import { formatBrl, mediaUrl } from "@/src/foundation/behaviors/media/format";
+import { coverImage } from "@/src/foundation/behaviors/media/media";
+import { IMAGE_SIZES } from "@/src/foundation/behaviors/media/media-image";
+import { variantDisplayPrice } from "@/src/foundation/behaviors/pricing/pricing";
+import { findVariant } from "@/src/foundation/behaviors/pricing/variants";
 import {
   cartWaMessage,
   clampQuantity,
   waLink,
   WA_MESSAGE_URL_WARN_LENGTH,
   waMessageEncodedLength,
-} from "@/src/lib/wa";
+} from "@/src/foundation/behaviors/whatsapp/wa";
 import type { CartPageModel } from "@/src/foundation/behaviors/view-models";
 
 type ResolvedLine = {

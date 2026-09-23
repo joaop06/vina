@@ -1,15 +1,15 @@
 import { createProduct, getProductById, listProductsPage, listProductsPageFull } from "@/src/services";
 import { productCreateSchema, productStatusSchema } from "@/src/schemas";
 import { NextRequest } from "next/server";
-import { requireAdmin } from "@/src/lib/auth/session";
-import { jsonError, jsonOk } from "@/src/lib/api/response";
-import { AppError } from "@/src/lib/api/errors";
-import { parseAdminMutationForm } from "@/src/lib/admin/parse-multipart";
-import { normalizePagination, PAGINATION, parseOptionalBooleanParam } from "@/src/lib/pagination";
+import { requireAdmin } from "@/src/foundation/auth/session";
+import { jsonError, jsonOk } from "@/src/foundation/http/response";
+import { AppError } from "@/src/foundation/http/errors";
+import { parseAdminMutationForm } from "@/src/foundation/admin/parse-multipart";
+import { normalizePagination, PAGINATION, parseOptionalBooleanParam } from "@/src/foundation/behaviors/catalog/pagination";
 import {
   estimateJsonPayloadBytes,
   runWithListingReadMetrics,
-} from "@/src/lib/observability/listing-read";
+} from "@/src/foundation/observability/listing-read";
 import { z } from "zod";
 
 /**

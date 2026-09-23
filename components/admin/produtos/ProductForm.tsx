@@ -30,8 +30,8 @@ import {
   buildCategoryTree,
   depthUnderParent,
   flattenCategoryTree,
-} from "@/src/lib/categories-tree";
-import { formatBrl, maskBrlInput, parseBrlInput } from "@/src/lib/front/format";
+} from "@/src/foundation/behaviors/catalog/categories-tree";
+import { formatBrl, maskBrlInput, parseBrlInput } from "@/src/foundation/behaviors/media/format";
 
 function sortCategories(list: Category[]) {
   return [...list].sort(

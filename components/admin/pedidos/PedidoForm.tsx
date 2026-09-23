@@ -16,8 +16,8 @@ import {
   toastMutationSuccess,
   toastMutationWarning,
 } from "@/components/admin/shell/adminToast";
-import { formatBrl } from "@/src/lib/front/format";
-import { variantSellPrice } from "@/src/lib/front/pricing";
+import { formatBrl } from "@/src/foundation/behaviors/media/format";
+import { variantSellPrice } from "@/src/foundation/behaviors/pricing/pricing";
 
 type DraftLine = {
   key: string;

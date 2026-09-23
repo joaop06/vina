@@ -1,9 +1,9 @@
 import { createCategory, listCategories } from "@/src/services";
 import { categoryCreateSchema } from "@/src/schemas";
 import { NextRequest } from "next/server";
-import { requireAdmin } from "@/src/lib/auth/session";
-import { jsonError, jsonOk } from "@/src/lib/api/response";
-import { AppError } from "@/src/lib/api/errors";
+import { requireAdmin } from "@/src/foundation/auth/session";
+import { jsonError, jsonOk } from "@/src/foundation/http/response";
+import { AppError } from "@/src/foundation/http/errors";
 import { z } from "zod";
 
 export async function GET() {

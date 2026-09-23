@@ -1,8 +1,8 @@
 import { getDashboardStats, periodForPreset, type DashboardPeriodPreset } from "@/src/services";
-import { requireAdmin } from "@/src/lib/auth/session";
-import { AppError } from "@/src/lib/api/errors";
-import { jsonError, jsonOk } from "@/src/lib/api/response";
-import { parseDateOnly } from "@/src/lib/analytics-date";
+import { requireAdmin } from "@/src/foundation/auth/session";
+import { AppError } from "@/src/foundation/http/errors";
+import { jsonError, jsonOk } from "@/src/foundation/http/response";
+import { parseDateOnly } from "@/src/foundation/platform/analytics-date";
 import { NextRequest } from "next/server";
 
 const PRESETS = new Set<DashboardPeriodPreset>([

@@ -3,7 +3,7 @@
 import type { NavItem, Category } from "@/src/schemas";
 import { useState } from "react";
 import { Info } from "lucide-react";
-import type { NavSurfaceKey } from "@/src/lib/navigation-admin";
+import type { NavSurfaceKey } from "@/src/foundation/behaviors/navigation/navigation-admin";
 import { NavAddMenu } from "./NavAddMenu";
 import { NavItemEditor } from "./NavItemEditor";
 import { NavItemRow } from "./NavItemRow";

@@ -31,7 +31,7 @@ Cada loja de cliente é um repositório criado com **Use this template**. O clie
 
 | Restrição | Onde aparece |
 |-----------|----------------|
-| `data/` na raiz do repositório, único namespace preservado no sync | `sync.yml`; `dataRepoPath()` em [`src/lib/data/paths.ts`](../../../src/lib/data/paths.ts) prefixa sempre `data/` |
+| `data/` na raiz do repositório, único namespace preservado no sync | `sync.yml`; `dataRepoPath()` em [`src/foundation/data/paths.ts`](../../../src/foundation/data/paths.ts) prefixa sempre `data/` |
 | `data-dev/` é cópia local, gitignored, usada quando `NODE_ENV=development` | `DATA_DIR_NAME` em `paths.ts`; scripts `dev:restore:data` / `dev:reset:data` |
 | App Router na raiz `app/` | páginas, layouts, rotas `api/`, `media/` |
 | Código não entra em `data/`; dado da loja não sai de `data/` | [`docs/configurar-template-loja.md`](../../configurar-template-loja.md) |
@@ -143,7 +143,7 @@ O barrel [`src/schemas/index.ts`](../../../src/schemas/index.ts) reexporta `comm
 
 #### Acesso a dados
 
-`src/lib/data/` escolhe o adapter: `fs` no disco, `github` na API do GitHub. Em development o backend é sempre `fs` + `data-dev/`, e `DATA_BACKEND` é ignorado.
+`src/foundation/data/` escolhe o adapter: `fs` no disco, `github` na API do GitHub. Em development o backend é sempre `fs` + `data-dev/`, e `DATA_BACKEND` é ignorado.
 
 Escrita típica: service monta `FileChange[]` → `commitFiles` (fs atômico ou commit GitHub) → `revalidateStorefront`. Migrations rodam no startup (`instrumentation.ts`) e no CLI `npm run data:migrate`. O ledger fica em `configuracoes/migrations.json`.
 
@@ -240,7 +240,7 @@ Para acrescentar um layout hoje é preciso alterar, no mínimo: o enum Zod, o re
 | [`app/layout-tokens.css`](../../../app/layout-tokens.css) | 333 linhas | Variáveis `--vn-layout-*` em `:root` / classic, split e gallery. Ateliê não tem bloco |
 | CSS modules | por componente | chrome e home de cada layout; vários painéis admin; alguns widgets (`CategoryNav`, `StoreBrand`, `ConsentBanner`, `PublicMobileNav`, header do ateliê) |
 
-Tema do lojista (cores, raio, container) não está nesses arquivos: `src/lib/front/site-theme-css.ts` injeta variáveis `--vn-*` no layout raiz. Fontes padrão (Poppins, Inter, Bebas Neue) vêm de `next/font` em `app/layout.tsx`. A Cormorant do ateliê é arquivo local em `layouts/atelie/header/fonts/`.
+Tema do lojista (cores, raio, container) não está nesses arquivos: `src/foundation/behaviors/theme/site-theme-css.ts` injeta variáveis `--vn-*` no layout raiz. Fontes padrão (Poppins, Inter, Bebas Neue) vêm de `next/font` em `app/layout.tsx`. A Cormorant do ateliê é arquivo local em `layouts/atelie/header/fonts/`.
 
 Catálogo, PDP e carrinho estilizam com classes globais (`.catalog-page`, `.card-product`, `.product-detail`, …). Um layout novo que queira outra pele precisa editar `globals.css` ou `layout-tokens.css`, fora da pasta do layout.
 
@@ -277,7 +277,7 @@ flowchart LR
   publicRoutes[app public]
   layouts[layouts registry]
   services[src/services]
-  adapters[src/lib/data]
+  adapters[src/foundation/data]
   storeData[data ou data-dev]
   adminUI --> services
   publicRoutes --> services
@@ -287,7 +287,7 @@ flowchart LR
   adapters --> storeData
 ```
 
-A fundação (`src/schemas`, `src/services`, `src/lib/data`) é o único caminho até o disco. Os layouts desenham com props já carregadas. O admin grava fragmentos de `configuracoes/` e entidades. A vitrine lê o mesmo contrato.
+A fundação (`src/schemas`, `src/services`, `src/foundation/data`) é o único caminho até o disco. Os layouts desenham com props já carregadas. O admin grava fragmentos de `configuracoes/` e entidades. A vitrine lê o mesmo contrato.
 
 O acoplamento que foge desse desenho é visual: layouts e páginas públicas dependem de classes em `globals.css`, e três layouts dependem dos mesmos componentes soltos em `components/public/`.
 
@@ -295,7 +295,7 @@ O acoplamento que foge desse desenho é visual: layouts e páginas públicas dep
 
 O código que transforma dados fica na fundação. O JSON transformado e o registro do que já rodou ficam nos dados mutáveis.
 
-**Código.** O pacote é [`src/lib/data/migrations/`](../../../src/lib/data/migrations/). O contrato em [`types.ts`](../../../src/lib/data/migrations/types.ts) tem `id`, `order` e `run`, que devolve uma lista de `FileChange`. O registry em [`registry.ts`](../../../src/lib/data/migrations/registry.ts) é a lista ordenada:
+**Código.** O pacote é [`src/foundation/data/migrations/`](../../../src/foundation/data/migrations/). O contrato em [`types.ts`](../../../src/foundation/data/migrations/types.ts) tem `id`, `order` e `run`, que devolve uma lista de `FileChange`. O registry em [`registry.ts`](../../../src/foundation/data/migrations/registry.ts) é a lista ordenada:
 
 | `order` | `id` |
 |---------|------|
@@ -303,15 +303,15 @@ O código que transforma dados fica na fundação. O JSON transformado e o regis
 | 20 | `2026-07-split-site-config-by-tab` |
 | 30 | `2026-07-merge-geral-config-tab` |
 
-O runner acrescenta `2026-07-indices-repair` (`order` 90), definido em [`src/lib/indices/repair-all.ts`](../../../src/lib/indices/repair-all.ts). `id` e `order` são únicos: o registry interrompe o load se algum se repetir.
+O runner acrescenta `2026-07-indices-repair` (`order` 90), definido em [`src/foundation/indices/repair-all.ts`](../../../src/foundation/indices/repair-all.ts). `id` e `order` são únicos: o registry interrompe o load se algum se repetir.
 
-**Ledger.** `configuracoes/migrations.json` guarda `schemaVersion` e `applied[id].appliedAt`. O escritor é o runner ([`state.ts`](../../../src/lib/data/migrations/state.ts)). Esse arquivo registra execução; a transformação continua no código.
+**Ledger.** `configuracoes/migrations.json` guarda `schemaVersion` e `applied[id].appliedAt`. O escritor é o runner ([`state.ts`](../../../src/foundation/data/migrations/state.ts)). Esse arquivo registra execução; a transformação continua no código.
 
 **Quando roda.** No startup do runtime Node, por [`instrumentation.ts`](../../../instrumentation.ts), e no CLI `npm run data:migrate`. O runtime Edge usa um stub e não migra.
 
 **Loja que já existe.** O sync aplica o código novo e devolve o `data/` do cliente como estava, ledger incluído. A migration nova chega com o código e roda no boot seguinte, sobre o JSON antigo. O seed de `data/` no repo base vale para loja nova; a loja que já tem o próprio `data/` só avança pela migration.
 
-**Idempotência e validação.** `fileChangeIfMigrated` deixa o arquivo de fora quando o JSON já está na forma nova. [`validate.ts`](../../../src/lib/data/migrations/validate.ts) confere o conteúdo contra o Zod vigente antes do commit; o ledger, os índices e o analytics ficam fora dessa checagem. Um lock `__data_migrations__` serializa a execução, com nova tentativa em `VERSION_CONFLICT` e `REF_CONFLICT`. Os arquivos da entidade entram num commit; o ledger entra no commit seguinte. Se o processo parar entre os dois, a migration roda outra vez, e o `run` precisa produzir o mesmo resultado.
+**Idempotência e validação.** `fileChangeIfMigrated` deixa o arquivo de fora quando o JSON já está na forma nova. [`validate.ts`](../../../src/foundation/data/migrations/validate.ts) confere o conteúdo contra o Zod vigente antes do commit; o ledger, os índices e o analytics ficam fora dessa checagem. Um lock `__data_migrations__` serializa a execução, com nova tentativa em `VERSION_CONFLICT` e `REF_CONFLICT`. Os arquivos da entidade entram num commit; o ledger entra no commit seguinte. Se o processo parar entre os dois, a migration roda outra vez, e o `run` precisa produzir o mesmo resultado.
 
 ### O que já está coerente
 
@@ -333,7 +333,7 @@ Estes pontos obrigam a abrir arquivos grandes ou várias pastas para entender um
 5. **`src/lib` mistura papéis.** Adapters, índices e auth têm pasta. WhatsApp, navegação, slug, CSV e paginação estão soltos. `front/` agrupa coisas da vitrine que também são comportamento de domínio (preço, copy, carrinho).
 6. **Barrels parciais.** `services/index.ts` e `schemas/index.ts` parecem a API pública e omitem pedido, analytics, navegação e índices. O import honesto é o caminho do arquivo.
 7. **Navegação em três módulos** com nomes próximos: schema, resolução da vitrine, edição no admin.
-8. **Breakpoints duplicados.** `src/lib/front/breakpoints.ts` (768/1024) e `layouts/atelie/header/breakpoints.ts` (1100). O segundo é local de propósito; o risco é o CSS global continuar no primeiro enquanto o módulo usa o outro.
+8. **Breakpoints duplicados.** `src/foundation/behaviors/viewport/breakpoints.ts` (768/1024) e `layouts/atelie/header/breakpoints.ts` (1100). O segundo é local de propósito; o risco é o CSS global continuar no primeiro enquanto o módulo usa o outro.
 9. **Enum de layout fechado no schema de site.** O id do módulo é dado da loja (`configuracoes` / `layout`) e também lista compilada no código. Isso é esperado enquanto os layouts shipam no repo base, e precisa continuar explícito: módulo novo é mudança de fundação (o enum) mais a pasta do módulo.
 
 ---
@@ -387,7 +387,7 @@ src/
   schemas/                            contratos Zod (já está no lugar certo)
   services/                           um service por entidade
   foundation/
-    data/                             hoje src/lib/data (adapters, commit, paths)
+    data/                             hoje src/foundation/data (adapters, commit, paths)
       migrations/                     registry ordenado + um arquivo por id; cada uma declara targets
     indices/                          hoje src/lib/indices
     auth/                             hoje src/lib/auth

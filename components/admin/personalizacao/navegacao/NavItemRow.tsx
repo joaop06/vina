@@ -12,7 +12,7 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
-import { navItemKindLabel } from "@/src/lib/navigation-admin";
+import { navItemKindLabel } from "@/src/foundation/behaviors/navigation/navigation-admin";
 import styles from "./NavegacaoEditor.module.css";
 
 type Props = {

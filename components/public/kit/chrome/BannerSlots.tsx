@@ -1,13 +1,13 @@
 import type { Banner } from "@/src/schemas";
 import Image from "next/image";
 import Link from "next/link";
-import { mediaUrl } from "@/src/lib/front/format";
-import { IMAGE_SIZES } from "@/src/lib/front/media-image";
+import { mediaUrl } from "@/src/foundation/behaviors/media/format";
+import { IMAGE_SIZES } from "@/src/foundation/behaviors/media/media-image";
 import {
   bannerCtaTexto,
   bannerHref,
   pickBanner,
-} from "@/src/lib/front/media";
+} from "@/src/foundation/behaviors/media/media";
 
 type Props = {
   banners: Banner[];

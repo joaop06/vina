@@ -1,9 +1,9 @@
 import { NextRequest } from "next/server";
-import { getAuthEnv } from "@/src/lib/env";
-import { createSession, verifyPassword } from "@/src/lib/auth/session";
-import { rateLimit } from "@/src/lib/rate-limit";
-import { AppError } from "@/src/lib/api/errors";
-import { jsonError, jsonOk } from "@/src/lib/api/response";
+import { getAuthEnv } from "@/src/foundation/platform/env";
+import { createSession, verifyPassword } from "@/src/foundation/auth/session";
+import { rateLimit } from "@/src/foundation/platform/rate-limit";
+import { AppError } from "@/src/foundation/http/errors";
+import { jsonError, jsonOk } from "@/src/foundation/http/response";
 import { z } from "zod";
 
 const bodySchema = z.object({

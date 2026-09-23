@@ -22,7 +22,7 @@ import {
   type StorePreviewSurface,
 } from "@/components/admin/personalizacao/WhatsAppStorePreview";
 import styles from "@/components/admin/personalizacao/WhatsAppPanel.module.css";
-import { formatBrWhatsApp, normalizeWaDigits } from "@/src/lib/wa";
+import { formatBrWhatsApp, normalizeWaDigits } from "@/src/foundation/behaviors/whatsapp/wa";
 
 function StatusBadge({
   tone,

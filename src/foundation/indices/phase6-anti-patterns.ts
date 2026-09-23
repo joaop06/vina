@@ -43,10 +43,10 @@ const HOT_SERVICE_FILES = [
 /** Paths where full-catalog helpers may still appear (definition / diagnostics). */
 const FULL_LIST_ALLOWLIST = [
   "app/api/v1/admin/diagnostics/",
-  "src/lib/cache/storefront-reads.ts",
+  "src/foundation/cache/storefront-reads.ts",
   "src/services/products.service.ts",
   "scripts/",
-  "src/lib/indices/phase6-anti-patterns",
+  "src/foundation/indices/phase6-anti-patterns",
 ] as const;
 
 const FORBIDDEN_FULL_LIST_SYMBOLS = [

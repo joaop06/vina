@@ -2,7 +2,7 @@ export async function register() {
   if (process.env.NEXT_RUNTIME !== "nodejs") return;
   try {
     const { runDataMigrations } = await import(
-      "@/src/lib/data/migrations/runner"
+      "@/src/foundation/data/migrations/runner"
     );
     const summary = await runDataMigrations({ trigger: "startup" });
     if (summary.applied.length > 0) {

@@ -1,15 +1,15 @@
 "use client";
 
 import type { SiteConfig } from "@/src/schemas";
-import { productWaMessageFromParts } from "@/src/lib/wa";
+import { productWaMessageFromParts } from "@/src/foundation/behaviors/whatsapp/wa";
 import {
   type ProductWaTemplateParts,
-} from "@/src/lib/wa-product-template";
+} from "@/src/foundation/behaviors/whatsapp/wa-product-template";
 import {
   DEFAULT_COMPACT_CART_ITEM_PARTS,
   type CompactCartItemParts,
-} from "@/src/lib/wa-compact-template";
-import { DEFAULT_PRODUCT_WA_TEMPLATE_PARTS } from "@/src/lib/wa-product-template";
+} from "@/src/foundation/behaviors/whatsapp/wa-compact-template";
+import { DEFAULT_PRODUCT_WA_TEMPLATE_PARTS } from "@/src/foundation/behaviors/whatsapp/wa-product-template";
 import { WhatsAppSectionSplit } from "@/components/admin/personalizacao/WhatsAppSectionSplit";
 import { WhatsAppStorePreview } from "@/components/admin/personalizacao/WhatsAppStorePreview";
 import styles from "@/components/admin/personalizacao/WhatsAppPanel.module.css";

@@ -14,7 +14,7 @@ import {
   setClientLead,
   withClientGreeting,
   type ClientLead,
-} from "@/src/lib/front/client-lead";
+} from "@/src/foundation/behaviors/feedback/client-lead";
 import { ClientLeadModal } from "@/components/public/kit/feedback/ClientLeadModal";
 import { useAnalyticsOptional } from "@/components/public/kit/feedback/analytics/AnalyticsProvider";
 

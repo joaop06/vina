@@ -2,16 +2,16 @@ import { orderCanalSchema, orderStatusSchema, indexEntryToOrder, indexEntryToCli
 import {
   getCachedClientIndex,
   getCachedOrderIndex,
-} from "@/src/lib/cache/storefront-reads";
+} from "@/src/foundation/cache/storefront-reads";
 import { PedidosClient } from "@/components/admin/pedidos/PedidosClient";
 import {
   firstSearchParam,
   normalizePagination,
   paginateItems,
   PAGINATION,
-} from "@/src/lib/pagination";
-import { filterOrderIndexEntries } from "@/src/lib/indices/order-index-core";
-import { setListingReadContext } from "@/src/lib/observability/listing-read";
+} from "@/src/foundation/behaviors/catalog/pagination";
+import { filterOrderIndexEntries } from "@/src/foundation/indices/order-index-core";
+import { setListingReadContext } from "@/src/foundation/observability/listing-read";
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;

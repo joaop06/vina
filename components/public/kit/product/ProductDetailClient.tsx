@@ -3,24 +3,24 @@
 import type { Product, ProductVariant } from "@/src/schemas";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { formatBrl } from "@/src/lib/front/format";
+import { formatBrl } from "@/src/foundation/behaviors/media/format";
 import {
   discountPercent,
   variantDisplayPrice,
-} from "@/src/lib/front/pricing";
+} from "@/src/foundation/behaviors/pricing/pricing";
 import {
   findVariant,
   uniqueCores,
   uniqueTamanhos,
-} from "@/src/lib/front/variants";
-import { clampQuantity, productWaMessageFromParts, waLink } from "@/src/lib/wa";
+} from "@/src/foundation/behaviors/pricing/variants";
+import { clampQuantity, productWaMessageFromParts, waLink } from "@/src/foundation/behaviors/whatsapp/wa";
 import { ProductGallery } from "@/components/public/kit/product/ProductGallery";
 import { ProductVariantPicker } from "@/components/public/kit/product/ProductVariantPicker";
 import { WhatsAppButton } from "@/components/public/kit/feedback/WhatsAppButton";
 import { CartIcon } from "@/components/public/kit/chrome/icons/StorefrontIcons";
 import { useCartOptional } from "@/components/public/kit/cart/CartProvider";
-import { coverImage } from "@/src/lib/front/media";
-import { selecioneVarianteFromDims } from "@/src/lib/front/store-copy";
+import { coverImage } from "@/src/foundation/behaviors/media/media";
+import { selecioneVarianteFromDims } from "@/src/foundation/behaviors/copy/store-copy";
 import type { ProductDetailModel } from "@/src/foundation/behaviors/view-models";
 
 export type ProductDetailProps = ProductDetailModel;

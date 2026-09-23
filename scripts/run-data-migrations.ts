@@ -82,7 +82,7 @@ async function main() {
   process.env.DATA_BACKEND = "fs";
 
   const { runDataMigrations } = await import(
-    "@/src/lib/data/migrations/runner"
+    "@/src/foundation/data/migrations/runner"
   );
   const summary = await runDataMigrations({ trigger: "cli", dryRun });
   console.log(JSON.stringify(summary, null, 2));

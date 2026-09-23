@@ -10,8 +10,8 @@ import {
   isoDayInSaoPaulo,
   periodBoundsIso,
   startOfMonthDateOnly,
-} from "@/src/lib/analytics-date";
-import { variantSellPrice } from "@/src/lib/front/pricing";
+} from "@/src/foundation/platform/analytics-date";
+import { variantSellPrice } from "@/src/foundation/behaviors/pricing/pricing";
 import type { Category } from "@/src/schemas/category";
 import { clientSchema } from "@/src/schemas/client";
 import { dailyAnalyticsSchema } from "@/src/schemas/analytics";
@@ -692,7 +692,7 @@ async function main() {
   {
     const { productToIndexEntry } = await import("@/src/schemas/product-index");
     const { stateFromEntries, serializeProductIndexWrites } = await import(
-      "@/src/lib/indices/product-index-core"
+      "@/src/foundation/indices/product-index-core"
     );
     const state = stateFromEntries(products.map((p) => productToIndexEntry(p)));
     const writes = serializeProductIndexWrites(state);
@@ -714,7 +714,7 @@ async function main() {
   {
     const { orderToIndexEntry } = await import("@/src/schemas/order-index");
     const { stateFromOrderEntries, serializeOrderIndexWrites } = await import(
-      "@/src/lib/indices/order-index-core"
+      "@/src/foundation/indices/order-index-core"
     );
     const state = stateFromOrderEntries(orders.map((o) => orderToIndexEntry(o)));
     const writes = serializeOrderIndexWrites(state);
@@ -730,7 +730,7 @@ async function main() {
   {
     const { clientToIndexEntry } = await import("@/src/schemas/client-index");
     const { stateFromClientEntries, serializeClientIndexWrites } = await import(
-      "@/src/lib/indices/client-index-core"
+      "@/src/foundation/indices/client-index-core"
     );
     const state = stateFromClientEntries(
       clients.map((c) => clientToIndexEntry(c)),

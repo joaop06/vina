@@ -1,8 +1,8 @@
 import "server-only";
 import path from "node:path";
 import { ImageResponse } from "next/og";
-import { readBinary } from "@/src/lib/data";
-import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
+import { readBinary } from "@/src/foundation/data";
+import { getCachedSiteConfig } from "@/src/foundation/cache/storefront-reads";
 
 const MIME: Record<string, string> = {
   ".jpg": "image/jpeg",

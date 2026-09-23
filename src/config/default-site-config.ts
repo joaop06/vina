@@ -1,6 +1,6 @@
-import { DEFAULT_COMPACT_CART_ITEM_PARTS } from "@/src/lib/wa-compact-template";
-import { DEFAULT_CART_WA_TEMPLATE_PARTS } from "@/src/lib/wa-cart-template";
-import { DEFAULT_PRODUCT_WA_TEMPLATE_PARTS } from "@/src/lib/wa-product-template";
+import { DEFAULT_COMPACT_CART_ITEM_PARTS } from "@/src/foundation/behaviors/whatsapp/wa-compact-template";
+import { DEFAULT_CART_WA_TEMPLATE_PARTS } from "@/src/foundation/behaviors/whatsapp/wa-cart-template";
+import { DEFAULT_PRODUCT_WA_TEMPLATE_PARTS } from "@/src/foundation/behaviors/whatsapp/wa-product-template";
 import {
   DEFAULT_DIMENSOES,
   DEFAULT_SITE_COMPORTAMENTO,

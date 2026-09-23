@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
-import { mediaUrl } from "@/src/lib/front/format";
+import { mediaUrl } from "@/src/foundation/behaviors/media/format";
 import {
   UPLOAD_SOFT_LIMIT_BYTES,
   createLocalImageDraft,

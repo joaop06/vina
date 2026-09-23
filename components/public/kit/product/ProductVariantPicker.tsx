@@ -7,8 +7,8 @@ import {
   isCorAvailable,
   isTamanhoAvailable,
   uniqueDimensionValues,
-} from "@/src/lib/front/variants";
-import { formatEstoqueVarios } from "@/src/lib/front/store-copy";
+} from "@/src/foundation/behaviors/pricing/variants";
+import { formatEstoqueVarios } from "@/src/foundation/behaviors/copy/store-copy";
 import { ProductQuantityStepper } from "@/components/public/kit/product/ProductQuantityStepper";
 import { DEFAULT_DIMENSOES } from "@/src/config/store-copy-defaults";
 

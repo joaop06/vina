@@ -1,10 +1,10 @@
 import "server-only";
 import { cache } from "react";
-import { commitFiles, listJsonDir, readJson } from "@/src/lib/data";
-import { buildMutationFiles } from "@/src/lib/data/commit-mutation";
-import { AppError } from "@/src/lib/api/errors";
-import { CACHE_TAGS } from "@/src/lib/cache-tags";
-import { revalidateStorefront } from "@/src/lib/admin/revalidate-storefront";
+import { commitFiles, listJsonDir, readJson } from "@/src/foundation/data";
+import { buildMutationFiles } from "@/src/foundation/data/commit-mutation";
+import { AppError } from "@/src/foundation/http/errors";
+import { CACHE_TAGS } from "@/src/foundation/cache/cache-tags";
+import { revalidateStorefront } from "@/src/foundation/admin/revalidate-storefront";
 import {
   orderSchema,
   type Order,
@@ -13,28 +13,28 @@ import {
   type OrderUpdate,
 } from "@/src/schemas/order";
 import { productSchema, variantAttr, type Product } from "@/src/schemas/product";
-import { variantSellPrice } from "@/src/lib/front/pricing";
+import { variantSellPrice } from "@/src/foundation/behaviors/pricing/pricing";
 import { getClient } from "@/src/services/clients.service";
 import { getProductById } from "@/src/services/products.service";
-import { normalizeProductReferencia } from "@/src/lib/product-referencia";
+import { normalizeProductReferencia } from "@/src/foundation/behaviors/catalog/product-referencia";
 import {
   normalizePagination,
   paginateItems,
   PAGINATION,
   type PaginatedResult,
-} from "@/src/lib/pagination";
+} from "@/src/foundation/behaviors/catalog/pagination";
 import {
   indexWritesAfterUpsertMany,
   loadProductIndexForMutation,
-} from "@/src/lib/indices/product-index-mutate";
+} from "@/src/foundation/indices/product-index-mutate";
 import {
   orderIndexWritesAfterUpsert,
   loadOrderIndexForMutation,
-} from "@/src/lib/indices/order-index-mutate";
-import { getOrderIndexState } from "@/src/lib/indices/order-index-io";
+} from "@/src/foundation/indices/order-index-mutate";
+import { getOrderIndexState } from "@/src/foundation/indices/order-index-io";
 import {
   filterOrderIndexEntries,
-} from "@/src/lib/indices/order-index-core";
+} from "@/src/foundation/indices/order-index-core";
 import { indexEntryToOrder } from "@/src/schemas/order-index";
 
 const DIR = "pedidos";

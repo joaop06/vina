@@ -6,7 +6,7 @@ import { StoreBrand } from "@/components/public/kit/chrome/StoreBrand";
 import {
   getSiteNavegacao,
   resolveNavEntries,
-} from "@/src/lib/navigation";
+} from "@/src/foundation/behaviors/navigation/navigation";
 
 export type PublicFooterClassNames = {
   footerInner: string;

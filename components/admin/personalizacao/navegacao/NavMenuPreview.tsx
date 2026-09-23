@@ -9,8 +9,8 @@ import {
   Search,
   Store,
 } from "lucide-react";
-import { resolveNavEntries } from "@/src/lib/navigation";
-import type { NavSurfaceKey } from "@/src/lib/navigation-admin";
+import { resolveNavEntries } from "@/src/foundation/behaviors/navigation/navigation";
+import type { NavSurfaceKey } from "@/src/foundation/behaviors/navigation/navigation-admin";
 import styles from "./NavegacaoEditor.module.css";
 
 type Props = {

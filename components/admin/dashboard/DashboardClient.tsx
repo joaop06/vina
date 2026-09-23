@@ -24,7 +24,7 @@ import {
   type DashboardTabId,
 } from "@/components/admin/dashboard/dashboardTabs";
 import { BackToTopButton } from "@/components/ui/BackToTopButton";
-import { apiClientErrorFromResponse } from "@/src/lib/api/client-error";
+import { apiClientErrorFromResponse } from "@/src/foundation/http/client-error";
 
 type DashboardPayload = DashboardStats & { preset?: DashboardPeriodPreset };
 

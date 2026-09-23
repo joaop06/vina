@@ -12,12 +12,12 @@ import { LoadingButton } from "@/components/admin/shell/LoadingButton";
 import { mutationFetch, assertMutationOk } from "@/components/admin/http/mutationFetch";
 import { toastMutationError, toastMutationSuccess } from "@/components/admin/shell/adminToast";
 import { PaginationNav } from "@/components/ui/PaginationNav";
-import { formatBrl } from "@/src/lib/front/format";
+import { formatBrl } from "@/src/foundation/behaviors/media/format";
 import {
   buildPageSizeSelectOptions,
   PAGE_SIZE_OPTIONS_ADMIN,
   PAGINATION,
-} from "@/src/lib/pagination";
+} from "@/src/foundation/behaviors/catalog/pagination";
 
 const CANAL_LABEL: Record<Order["canal"], string> = {
   whatsapp: "WhatsApp",

@@ -19,7 +19,7 @@ import {
   parseCartState,
   type CartLine,
   type CartState,
-} from "@/src/lib/front/cart";
+} from "@/src/foundation/behaviors/cart/cart";
 import { CartToast } from "@/components/public/kit/cart/CartToast";
 
 type CartContextValue = {

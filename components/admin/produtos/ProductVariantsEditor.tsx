@@ -3,7 +3,7 @@
 import { type Product, variantAttr, type SiteDimensao } from "@/src/schemas";
 import { useState, type KeyboardEvent } from "react";
 import { FieldHint } from "@/components/admin/shell/FieldHint";
-import { formatBrl, maskBrlInput, parseBrlInput } from "@/src/lib/front/format";
+import { formatBrl, maskBrlInput, parseBrlInput } from "@/src/foundation/behaviors/media/format";
 import { DEFAULT_DIMENSOES } from "@/src/config/store-copy-defaults";
 
 export type ProductVariantDraft = Product["variantes"][number];

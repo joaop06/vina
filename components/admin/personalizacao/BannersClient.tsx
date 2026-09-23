@@ -26,7 +26,7 @@ import {
   type LayoutBannerSlot,
 } from "@/components/public/layouts/contract/banner-slots";
 import { DEFAULT_BANNER_CTA } from "@/src/config/store-copy-defaults";
-import { mediaUrl } from "@/src/lib/front/format";
+import { mediaUrl } from "@/src/foundation/behaviors/media/format";
 
 type SlotDraft = {
   ativo: boolean;

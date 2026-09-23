@@ -23,7 +23,7 @@ import {
   resetSurfaceToDefault,
   surfacesItemsDiffer,
   type NavSurfaceKey,
-} from "@/src/lib/navigation-admin";
+} from "@/src/foundation/behaviors/navigation/navigation-admin";
 
 type Props = {
   value: SiteNavegacao;

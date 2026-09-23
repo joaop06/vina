@@ -1,6 +1,6 @@
 import type { DashboardPeriodPreset, DashboardStats } from "@/src/schemas";
 import Link from "next/link";
-import { formatBrl } from "@/src/lib/front/format";
+import { formatBrl } from "@/src/foundation/behaviors/media/format";
 import { CanalCard } from "./CanalCard";
 import { DashEmpty } from "./DashEmpty";
 import { DashSection } from "./DashSection";

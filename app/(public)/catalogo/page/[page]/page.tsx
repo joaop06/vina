@@ -8,14 +8,14 @@ import { getLayout } from "@/components/public/layouts";
 import {
   CATALOG_STATIC_PAGE_LIMIT,
   parseCatalogPageParam,
-} from "@/src/lib/cache/storefront-isr";
+} from "@/src/foundation/cache/storefront-isr";
 import {
   getCachedProductIndex,
   getCachedSiteConfig,
-} from "@/src/lib/cache/storefront-reads";
-import { filterProductIndexEntries } from "@/src/lib/indices/product-index-core";
-import { seoTitleFromTemplate } from "@/src/lib/front/store-copy";
-import { PAGINATION, totalPages } from "@/src/lib/pagination";
+} from "@/src/foundation/cache/storefront-reads";
+import { filterProductIndexEntries } from "@/src/foundation/indices/product-index-core";
+import { seoTitleFromTemplate } from "@/src/foundation/behaviors/copy/store-copy";
+import { PAGINATION, totalPages } from "@/src/foundation/behaviors/catalog/pagination";
 
 type Props = {
   params: Promise<{ page: string }>;

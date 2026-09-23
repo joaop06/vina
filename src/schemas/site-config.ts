@@ -2,18 +2,18 @@ import { z } from "zod";
 import {
   INSTAGRAM_HANDLE_RE,
   syncInstagram,
-} from "@/src/lib/instagram";
+} from "@/src/foundation/platform/instagram";
 import { isoDateSchema, uuidSchema } from "./common";
 import {
   DEFAULT_NAVEGACAO,
   siteNavegacaoSchema,
 } from "./navigation";
-import { normalizeWhatsappTemplates } from "@/src/lib/wa-whatsapp-normalize";
+import { normalizeWhatsappTemplates } from "@/src/foundation/behaviors/whatsapp/wa-whatsapp-normalize";
 import {
   cartWaTemplatePartsSchema,
   compactCartItemPartsSchema,
   productWaTemplatePartsSchema,
-} from "@/src/lib/wa-template-validation";
+} from "@/src/foundation/behaviors/whatsapp/wa-template-validation";
 import {
   migrateSitePersonalizationInput,
   siteComportamentoSchema,
@@ -29,7 +29,7 @@ export {
   productWaTemplatePartsSchema,
   cartWaTemplatePartsSchema,
   compactCartItemPartsSchema,
-} from "@/src/lib/wa-template-validation";
+} from "@/src/foundation/behaviors/whatsapp/wa-template-validation";
 
 export const siteInstagramSchema = z
   .object({

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import {
   getCachedClients,
   getCachedProductsByIds,
-} from "@/src/lib/cache/storefront-reads";
+} from "@/src/foundation/cache/storefront-reads";
 import { PedidoForm } from "@/components/admin/pedidos/PedidoForm";
 
 type Props = { params: Promise<{ id: string }> };

@@ -3,18 +3,18 @@ import { ClientesClient } from "@/components/admin/clientes/ClientesClient";
 import {
   getCachedClientIndex,
   getCachedOrderIndex,
-} from "@/src/lib/cache/storefront-reads";
+} from "@/src/foundation/cache/storefront-reads";
 import {
   clientFiltersFromSearchParams,
   filterAndSortClients,
-} from "@/src/lib/front/client-filter";
+} from "@/src/foundation/behaviors/catalog/client-filter";
 import {
   firstSearchParam,
   normalizePagination,
   paginateItems,
   PAGINATION,
-} from "@/src/lib/pagination";
-import { setListingReadContext } from "@/src/lib/observability/listing-read";
+} from "@/src/foundation/behaviors/catalog/pagination";
+import { setListingReadContext } from "@/src/foundation/observability/listing-read";
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;

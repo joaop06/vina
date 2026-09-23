@@ -6,8 +6,8 @@ import {
   parseDateOnly,
   periodBoundsIso,
   startOfMonthDateOnly,
-} from "@/src/lib/analytics-date";
-import { CACHE_TAGS } from "@/src/lib/cache-tags";
+} from "@/src/foundation/platform/analytics-date";
+import { CACHE_TAGS } from "@/src/foundation/cache/cache-tags";
 import {
   buildCadastrosSeries,
   buildCanalDetalhe,
@@ -30,19 +30,19 @@ import {
   filterOrdersInPeriod,
   previousPeriodBounds,
   type DashboardProductRef,
-} from "@/src/lib/dashboard-aggregates";
+} from "@/src/foundation/admin/dashboard-aggregates";
 import {
   getDailyRange,
   mergeDailyPublic,
 } from "@/src/services/analytics.service";
 import { listBanners } from "@/src/services/banners.service";
 import { listCategories } from "@/src/services/categories.service";
-import { getOrderIndexState } from "@/src/lib/indices/order-index-io";
-import { getClientIndexState } from "@/src/lib/indices/client-index-io";
+import { getOrderIndexState } from "@/src/foundation/indices/order-index-io";
+import { getClientIndexState } from "@/src/foundation/indices/client-index-io";
 import { indexEntryToOrder } from "@/src/schemas/order-index";
 import { indexEntryToClient } from "@/src/schemas/client-index";
-import { getProductIndexState } from "@/src/lib/indices/product-index-io";
-import { getDashboardCatalogIndex } from "@/src/lib/indices/dashboard-catalog-io";
+import { getProductIndexState } from "@/src/foundation/indices/product-index-io";
+import { getDashboardCatalogIndex } from "@/src/foundation/indices/dashboard-catalog-io";
 import { getSiteConfig } from "@/src/services/site-config.service";
 import type {
   DashboardPeriodPreset,

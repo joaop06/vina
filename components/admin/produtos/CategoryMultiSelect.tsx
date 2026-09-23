@@ -7,7 +7,7 @@ import {
   categoryPathLabel,
   flattenCategoryTree,
   isEffectivelyActive,
-} from "@/src/lib/categories-tree";
+} from "@/src/foundation/behaviors/catalog/categories-tree";
 
 type Props = {
   categories: Category[];

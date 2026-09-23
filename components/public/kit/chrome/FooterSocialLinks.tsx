@@ -3,7 +3,7 @@
 import type { SiteConfig } from "@/src/schemas";
 import { WhatsAppButton } from "@/components/public/kit/feedback/WhatsAppButton";
 import { WhatsAppIcon as WhatsAppGlyph } from "@/components/public/kit/chrome/icons/StorefrontIcons";
-import { waLink } from "@/src/lib/wa";
+import { waLink } from "@/src/foundation/behaviors/whatsapp/wa";
 
 type Props = {
   site: SiteConfig;

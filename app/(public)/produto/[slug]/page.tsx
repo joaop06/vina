@@ -5,7 +5,7 @@ import {
   getCachedPublicProductSlugs,
   getCachedProductBySlug,
   getCachedSiteConfig,
-} from "@/src/lib/cache/storefront-reads";
+} from "@/src/foundation/cache/storefront-reads";
 import { getLayout } from "@/components/public/layouts";
 import { ProductDetailClient } from "@/components/public/kit/product/ProductDetailClient";
 import ProductLoading from "./loading";

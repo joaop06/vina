@@ -7,8 +7,8 @@ import {
   useState,
   type CSSProperties,
 } from "react";
-import type { CategoryTreeNode } from "@/src/lib/categories-tree";
-import type { ResolvedNavEntry } from "@/src/lib/navigation";
+import type { CategoryTreeNode } from "@/src/foundation/behaviors/catalog/categories-tree";
+import type { ResolvedNavEntry } from "@/src/foundation/behaviors/navigation/navigation";
 import styles from "./CategoryNav.module.css";
 
 function catalogHref(slug: string) {

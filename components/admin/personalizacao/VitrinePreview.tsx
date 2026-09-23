@@ -2,7 +2,7 @@
 
 import type { Banner, BannerPosicao, SiteLayoutId } from "@/src/schemas";
 import { useMemo, useState, type CSSProperties } from "react";
-import { mediaUrl } from "@/src/lib/front/format";
+import { mediaUrl } from "@/src/foundation/behaviors/media/format";
 import { DEFAULT_BANNER_CTA } from "@/src/config/store-copy-defaults";
 import { getBannerSlotsForLayout } from "@/components/public/layouts/contract/banner-slots";
 import styles from "./VitrinePreview.module.css";

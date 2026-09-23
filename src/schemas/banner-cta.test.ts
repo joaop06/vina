@@ -7,7 +7,7 @@ import {
 import {
   bannerCtaTexto,
   bannerHref,
-} from "@/src/lib/front/media";
+} from "@/src/foundation/behaviors/media/media";
 import { DEFAULT_BANNER_CTA } from "@/src/config/store-copy-defaults";
 
 const baseImage = {

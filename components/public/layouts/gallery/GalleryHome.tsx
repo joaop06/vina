@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ProductCard } from "@/components/public/kit/product/ProductCard";
 import { WhatsAppButton } from "@/components/public/kit/feedback/WhatsAppButton";
-import { bannersByPosicao } from "@/src/lib/front/media";
-import { buildCategoryTree } from "@/src/lib/categories-tree";
+import { bannersByPosicao } from "@/src/foundation/behaviors/media/media";
+import { buildCategoryTree } from "@/src/foundation/behaviors/catalog/categories-tree";
 import type { HomeProps } from "../contract/types";
 import { GalleryCarousel } from "./GalleryCarousel";
 import styles from "./gallery.module.css";

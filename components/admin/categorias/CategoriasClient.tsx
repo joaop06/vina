@@ -18,7 +18,7 @@ import {
   depthUnderParent,
   flattenCategoryTree,
   hasInactiveAncestor,
-} from "@/src/lib/categories-tree";
+} from "@/src/foundation/behaviors/catalog/categories-tree";
 
 function initials(nome: string) {
   const parts = nome.trim().split(/\s+/).filter(Boolean);

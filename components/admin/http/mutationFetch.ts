@@ -1,4 +1,4 @@
-import { apiClientErrorFromResponse } from "@/src/lib/api/client-error";
+import { apiClientErrorFromResponse } from "@/src/foundation/http/client-error";
 
 export type MutationFetchResult = {
   ok: boolean;

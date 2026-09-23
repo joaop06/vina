@@ -1,5 +1,5 @@
 import type { DashboardSeriePoint } from "@/src/schemas";
-import { formatBrl } from "@/src/lib/front/format";
+import { formatBrl } from "@/src/foundation/behaviors/media/format";
 
 export function formatShortDate(date: string): string {
   const [, m, d] = date.split("-");

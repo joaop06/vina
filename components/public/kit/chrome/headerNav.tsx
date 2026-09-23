@@ -9,9 +9,9 @@ import {
   getSiteNavegacao,
   resolveSurfaceEntries,
   type ResolvedNavEntry,
-} from "@/src/lib/navigation";
-import { formatEnderecoLinha } from "@/src/lib/br/endereco";
-import { formatBrWhatsApp, waLink } from "@/src/lib/wa";
+} from "@/src/foundation/behaviors/navigation/navigation";
+import { formatEnderecoLinha } from "@/src/foundation/platform/br/endereco";
+import { formatBrWhatsApp, waLink } from "@/src/foundation/behaviors/whatsapp/wa";
 import type { ReactNode } from "react";
 
 export function headerTopbarVisible(site: SiteConfig): boolean {

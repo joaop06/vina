@@ -9,9 +9,9 @@ import {
   useState,
   type PointerEvent as ReactPointerEvent,
 } from "react";
-import { mediaUrl } from "@/src/lib/front/format";
-import { IMAGE_SIZES } from "@/src/lib/front/media-image";
-import { sortedProductImages } from "@/src/lib/front/media";
+import { mediaUrl } from "@/src/foundation/behaviors/media/format";
+import { IMAGE_SIZES } from "@/src/foundation/behaviors/media/media-image";
+import { sortedProductImages } from "@/src/foundation/behaviors/media/media";
 
 const THUMB_VISIBLE = 5;
 const SWIPE_THRESHOLD = 40;

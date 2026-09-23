@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   SESSION_COOKIE,
   verifyAdminToken,
-} from "@/src/lib/auth/session-edge";
-import { catalogSearchHasFilters } from "@/src/lib/cache/storefront-isr";
+} from "@/src/foundation/auth/session-edge";
+import { catalogSearchHasFilters } from "@/src/foundation/cache/storefront-isr";
 
 /**
  * Legacy catalog query URLs → stable ISR / busca paths:

@@ -1,10 +1,10 @@
 import "server-only";
 import { cache } from "react";
-import { commitFiles, listJsonDir, readBinary, readJson } from "@/src/lib/data";
-import { buildMutationFiles } from "@/src/lib/data/commit-mutation";
-import { AppError } from "@/src/lib/api/errors";
-import { CACHE_TAGS } from "@/src/lib/cache-tags";
-import { revalidateStorefront } from "@/src/lib/admin/revalidate-storefront";
+import { commitFiles, listJsonDir, readBinary, readJson } from "@/src/foundation/data";
+import { buildMutationFiles } from "@/src/foundation/data/commit-mutation";
+import { AppError } from "@/src/foundation/http/errors";
+import { CACHE_TAGS } from "@/src/foundation/cache/cache-tags";
+import { revalidateStorefront } from "@/src/foundation/admin/revalidate-storefront";
 import { getSlotDef } from "@/components/public/layouts/contract/banner-slots";
 import {
   BANNER_POSICAO_LABELS,

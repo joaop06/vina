@@ -2,9 +2,9 @@ import { AdminBusyProvider } from "@/components/admin/shell/AdminBusy";
 import { AdminSidebar } from "@/components/admin/shell/AdminSidebar";
 import { AdminToaster } from "@/components/admin/shell/AdminToaster";
 import { ConfirmProvider } from "@/components/admin/shell/ConfirmDialog";
-import { mediaUrl } from "@/src/lib/front/format";
-import { getCachedSiteBranding } from "@/src/lib/cache/storefront-reads";
-import { clearSession } from "@/src/lib/auth/session";
+import { mediaUrl } from "@/src/foundation/behaviors/media/format";
+import { getCachedSiteBranding } from "@/src/foundation/cache/storefront-reads";
+import { clearSession } from "@/src/foundation/auth/session";
 import { DEFAULT_SITE_CONFIG } from "@/src/config/default-site-config";
 import { redirect } from "next/navigation";
 

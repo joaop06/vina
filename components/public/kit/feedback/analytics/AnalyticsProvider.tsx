@@ -19,8 +19,8 @@ import {
   setConsentAccepted,
   setConsentDeclined,
   type ConsentStatus,
-} from "@/src/lib/front/analytics-consent";
-import { getClientLead } from "@/src/lib/front/client-lead";
+} from "@/src/foundation/behaviors/feedback/analytics-consent";
+import { getClientLead } from "@/src/foundation/behaviors/feedback/client-lead";
 import { ConsentBanner } from "./ConsentBanner";
 
 type AnalyticsContextValue = {

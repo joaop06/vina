@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
-import { getCachedPublicProductSlugs } from "@/src/lib/cache/storefront-reads";
-import { getSiteUrl } from "@/src/lib/env";
+import { getCachedPublicProductSlugs } from "@/src/foundation/cache/storefront-reads";
+import { getSiteUrl } from "@/src/foundation/platform/env";
 
 /** Sitemap regenerates with the storefront ISR window; on-demand via products tag. */
 export const revalidate = 120; // keep in sync with STOREFRONT_REVALIDATE_SECONDS

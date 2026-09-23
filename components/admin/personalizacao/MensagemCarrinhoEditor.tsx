@@ -3,13 +3,13 @@
 import type { SiteConfig } from "@/src/schemas";
 import { useMemo } from "react";
 import { Info } from "lucide-react";
-import { cartWaMessage } from "@/src/lib/wa";
+import { cartWaMessage } from "@/src/foundation/behaviors/whatsapp/wa";
 import {
   type CartWaTemplateParts,
-} from "@/src/lib/wa-cart-template";
+} from "@/src/foundation/behaviors/whatsapp/wa-cart-template";
 import {
   type CompactCartItemParts,
-} from "@/src/lib/wa-compact-template";
+} from "@/src/foundation/behaviors/whatsapp/wa-compact-template";
 import { WhatsAppSectionSplit } from "@/components/admin/personalizacao/WhatsAppSectionSplit";
 import { WhatsAppStorePreview } from "@/components/admin/personalizacao/WhatsAppStorePreview";
 import styles from "@/components/admin/personalizacao/WhatsAppPanel.module.css";

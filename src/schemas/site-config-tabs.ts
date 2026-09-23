@@ -26,12 +26,12 @@ import {
 } from "@/src/schemas/site-config";
 import { DEFAULT_SITE_CONFIG } from "@/src/config/default-site-config";
 import { DEFAULT_NAVEGACAO, siteNavegacaoSchema } from "@/src/schemas/navigation";
-import { normalizeWhatsappTemplates } from "@/src/lib/wa-whatsapp-normalize";
+import { normalizeWhatsappTemplates } from "@/src/foundation/behaviors/whatsapp/wa-whatsapp-normalize";
 import {
   cartWaTemplatePartsSchema,
   compactCartItemPartsSchema,
   productWaTemplatePartsSchema,
-} from "@/src/lib/wa-template-validation";
+} from "@/src/foundation/behaviors/whatsapp/wa-template-validation";
 
 /** Tab ids aligned with admin Configurações UI. */
 export const SITE_CONFIG_TAB_IDS = [

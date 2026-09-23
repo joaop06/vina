@@ -1,5 +1,5 @@
 import type { DashboardCanalDetalhe } from "@/src/schemas";
-import { formatBrl } from "@/src/lib/front/format";
+import { formatBrl } from "@/src/foundation/behaviors/media/format";
 import styles from "./NegocioPanel.module.css";
 import { DashIcon, dashIcons } from "./icons";
 

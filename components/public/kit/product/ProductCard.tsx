@@ -1,9 +1,9 @@
 import { listItemCompareAt, listItemSell, type ProductListItem, type SiteTextosExtended } from "@/src/schemas";
 import Image from "next/image";
 import Link from "next/link";
-import { formatBrl, mediaUrl } from "@/src/lib/front/format";
-import { IMAGE_SIZES } from "@/src/lib/front/media-image";
-import { discountPercent } from "@/src/lib/front/pricing";
+import { formatBrl, mediaUrl } from "@/src/foundation/behaviors/media/format";
+import { IMAGE_SIZES } from "@/src/foundation/behaviors/media/media-image";
+import { discountPercent } from "@/src/foundation/behaviors/pricing/pricing";
 import { DEFAULT_SITE_TEXTOS_PRODUTO } from "@/src/config/store-copy-defaults";
 import { CartCatalogAction } from "@/components/public/kit/cart/CartCatalogAction";
 

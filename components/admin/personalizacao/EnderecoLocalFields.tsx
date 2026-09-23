@@ -8,8 +8,8 @@ import {
   formatCep,
   normalizeCep,
   syncEnderecoTexto,
-} from "@/src/lib/br/endereco";
-import { fetchEnderecoByCep, ViaCepError } from "@/src/lib/br/viacep";
+} from "@/src/foundation/platform/br/endereco";
+import { fetchEnderecoByCep, ViaCepError } from "@/src/foundation/platform/br/viacep";
 import styles from "./ContatoPanel.module.css";
 
 type Endereco = SiteConfig["endereco"];

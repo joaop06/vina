@@ -34,8 +34,8 @@ import {
   normalizeHexForPicker,
 } from "@/components/admin/personalizacao/siteTheme";
 import type { ImageMeta } from "@/components/admin/produtos/ImageField";
-import { normalizeWaDigits } from "@/src/lib/wa";
-import { isApiClientError } from "@/src/lib/api/client-error";
+import { normalizeWaDigits } from "@/src/foundation/behaviors/whatsapp/wa";
+import { isApiClientError } from "@/src/foundation/http/client-error";
 
 // Stable IDs avoid React 19 useId prefix differences between Next.js SSR and hydration.
 const TABS_ID = "admin-personalizacao";

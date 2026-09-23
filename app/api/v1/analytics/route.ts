@@ -2,10 +2,10 @@ import { ingestAnalyticsBatch } from "@/src/services";
 import { analyticsBatchSchema } from "@/src/schemas";
 import { NextRequest } from "next/server";
 import { z } from "zod";
-import { AppError } from "@/src/lib/api/errors";
-import { jsonError, jsonOk } from "@/src/lib/api/response";
-import { dateInSaoPaulo } from "@/src/lib/analytics-date";
-import { rateLimit } from "@/src/lib/rate-limit";
+import { AppError } from "@/src/foundation/http/errors";
+import { jsonError, jsonOk } from "@/src/foundation/http/response";
+import { dateInSaoPaulo } from "@/src/foundation/platform/analytics-date";
+import { rateLimit } from "@/src/foundation/platform/rate-limit";
 
 export async function POST(req: NextRequest) {
   try {

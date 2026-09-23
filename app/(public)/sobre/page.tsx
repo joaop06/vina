@@ -1,6 +1,6 @@
 import { getAboutPageModel } from "@/src/foundation/behaviors/view-models";
-import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
-import { seoTitleFromTemplate } from "@/src/lib/front/store-copy";
+import { getCachedSiteConfig } from "@/src/foundation/cache/storefront-reads";
+import { seoTitleFromTemplate } from "@/src/foundation/behaviors/copy/store-copy";
 import { getLayout } from "@/components/public/layouts";
 import { AboutPageView } from "@/components/public/kit/catalog/AboutPageView";
 

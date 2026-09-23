@@ -1,11 +1,11 @@
 import { createBanner } from "@/src/services";
 import { bannerCreateSchema } from "@/src/schemas";
 import { NextRequest } from "next/server";
-import { requireAdmin } from "@/src/lib/auth/session";
-import { jsonError, jsonOk } from "@/src/lib/api/response";
-import { AppError } from "@/src/lib/api/errors";
-import { parseAdminMutationForm } from "@/src/lib/admin/parse-multipart";
-import { getCachedAllBanners } from "@/src/lib/cache/storefront-reads";
+import { requireAdmin } from "@/src/foundation/auth/session";
+import { jsonError, jsonOk } from "@/src/foundation/http/response";
+import { AppError } from "@/src/foundation/http/errors";
+import { parseAdminMutationForm } from "@/src/foundation/admin/parse-multipart";
+import { getCachedAllBanners } from "@/src/foundation/cache/storefront-reads";
 import { z } from "zod";
 
 export async function GET() {

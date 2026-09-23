@@ -1,5 +1,5 @@
-import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
-import { jsonError, jsonOk } from "@/src/lib/api/response";
+import { getCachedSiteConfig } from "@/src/foundation/cache/storefront-reads";
+import { jsonError, jsonOk } from "@/src/foundation/http/response";
 
 export async function GET() {
   try {

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toastMutationError } from "@/components/admin/shell/adminToast";
-import { apiClientErrorFromResponse } from "@/src/lib/api/client-error";
+import { apiClientErrorFromResponse } from "@/src/foundation/http/client-error";
 import styles from "@/components/admin/shell/AdminLogin.module.css";
 
 function EyeIcon() {

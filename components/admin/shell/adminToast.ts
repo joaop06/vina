@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import {
   ApiClientError,
   isApiClientError,
-} from "@/src/lib/api/client-error";
+} from "@/src/foundation/http/client-error";
 
 const DEFAULT_ERROR_DURATION = 12_000;
 const DEFAULT_SUCCESS_DURATION = 2_000;

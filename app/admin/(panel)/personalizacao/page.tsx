@@ -4,7 +4,7 @@ import { PersonalizacaoClient } from "@/components/admin/personalizacao/Personal
 import {
   getCachedActiveCategories,
   getCachedAllBanners,
-} from "@/src/lib/cache/storefront-reads";
+} from "@/src/foundation/cache/storefront-reads";
 import { parseConfigTab } from "@/components/admin/personalizacao/configTabs";
 import { DEFAULT_SITE_CONFIG } from "@/src/config/default-site-config";
 

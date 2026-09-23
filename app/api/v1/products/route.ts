@@ -2,9 +2,9 @@ import { NextRequest } from "next/server";
 import {
   listCachedProductListItems,
   resolveCategoryFilterIds,
-} from "@/src/lib/cache/storefront-reads";
-import { jsonError, jsonOk } from "@/src/lib/api/response";
-import { normalizePagination, PAGINATION } from "@/src/lib/pagination";
+} from "@/src/foundation/cache/storefront-reads";
+import { jsonError, jsonOk } from "@/src/foundation/http/response";
+import { normalizePagination, PAGINATION } from "@/src/foundation/behaviors/catalog/pagination";
 
 export async function GET(req: NextRequest) {
   try {

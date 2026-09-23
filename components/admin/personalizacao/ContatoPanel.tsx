@@ -15,9 +15,9 @@ import { FieldHint } from "@/components/admin/shell/FieldHint";
 import { EnderecoLocalFields } from "@/components/admin/personalizacao/EnderecoLocalFields";
 import { configTabHref } from "@/components/admin/personalizacao/configTabs";
 import { getFooterContact } from "@/components/public/kit/chrome/footerContact";
-import { formatEnderecoLinha } from "@/src/lib/br/endereco";
-import { instagramProfileUrl, syncInstagram } from "@/src/lib/instagram";
-import { formatBrWhatsApp, normalizeWaDigits } from "@/src/lib/wa";
+import { formatEnderecoLinha } from "@/src/foundation/platform/br/endereco";
+import { instagramProfileUrl, syncInstagram } from "@/src/foundation/platform/instagram";
+import { formatBrWhatsApp, normalizeWaDigits } from "@/src/foundation/behaviors/whatsapp/wa";
 import styles from "./ContatoPanel.module.css";
 
 function InstagramGlyph({ size = 18 }: { size?: number }) {

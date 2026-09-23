@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { buildCatalogHref } from "@/src/lib/cache/storefront-isr";
+import { buildCatalogHref } from "@/src/foundation/cache/storefront-isr";
 import { ProductCard } from "@/components/public/kit/product/ProductCard";
 import { CatalogFilters } from "@/components/public/kit/catalog/CatalogFilters";
 import { PaginationNav } from "@/components/ui/PaginationNav";
 import {
   buildPageSizeSelectOptions,
   PAGE_SIZE_OPTIONS_PUBLIC,
-} from "@/src/lib/pagination";
+} from "@/src/foundation/behaviors/catalog/pagination";
 import type { CatalogPageModel } from "@/src/foundation/behaviors/view-models";
 
 export type { CatalogViewQuery } from "@/src/foundation/behaviors/view-models";

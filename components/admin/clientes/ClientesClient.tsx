@@ -12,7 +12,7 @@ import { PaginationNav } from "@/components/ui/PaginationNav";
 import {
   buildPageSizeSelectOptions,
   PAGE_SIZE_OPTIONS_ADMIN,
-} from "@/src/lib/pagination";
+} from "@/src/foundation/behaviors/catalog/pagination";
 import {
   CLIENT_SORT_OPTIONS,
   buildClientesHref,
@@ -24,8 +24,8 @@ import {
   type ClientOrderFilter,
   type ClientPeriodPreset,
   type ClientSort,
-} from "@/src/lib/front/client-filter";
-import { formatBrWhatsApp } from "@/src/lib/wa";
+} from "@/src/foundation/behaviors/catalog/client-filter";
+import { formatBrWhatsApp } from "@/src/foundation/behaviors/whatsapp/wa";
 
 function initials(nome: string) {
   const parts = nome.trim().split(/\s+/).filter(Boolean);

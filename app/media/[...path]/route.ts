@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { unstable_cache } from "next/cache";
-import { readBinary } from "@/src/lib/data";
-import { CACHE_TAGS } from "@/src/lib/cache-tags";
+import { readBinary } from "@/src/foundation/data";
+import { CACHE_TAGS } from "@/src/foundation/cache/cache-tags";
 import path from "node:path";
 
 type Ctx = { params: Promise<{ path: string[] }> };

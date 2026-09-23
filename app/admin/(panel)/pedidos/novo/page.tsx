@@ -2,12 +2,12 @@ import type { Product } from "@/src/schemas";
 import {
   getCachedClients,
   getCachedProductsByIds,
-} from "@/src/lib/cache/storefront-reads";
+} from "@/src/foundation/cache/storefront-reads";
 import {
   PedidoForm,
   type PedidoInitialLine,
 } from "@/components/admin/pedidos/PedidoForm";
-import { variantSellPrice } from "@/src/lib/front/pricing";
+import { variantSellPrice } from "@/src/foundation/behaviors/pricing/pricing";
 
 type Props = {
   searchParams: Promise<{ itens?: string | string[] }>;

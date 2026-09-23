@@ -1,7 +1,7 @@
 "use client";
 
 import { HeaderDrawerNav } from "@/components/public/kit/chrome/headerNav";
-import type { ResolvedNavEntry } from "@/src/lib/navigation";
+import type { ResolvedNavEntry } from "@/src/foundation/behaviors/navigation/navigation";
 import styles from "./atelie-header.module.css";
 import { useAtelieMenu } from "./use-atelie-menu";
 

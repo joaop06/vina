@@ -4,9 +4,9 @@ import { BannerFaixa, BannerPromo } from "@/components/public/kit/chrome/BannerS
 import { InstagramButton } from "@/components/public/kit/feedback/InstagramButton";
 import { ProductCard } from "@/components/public/kit/product/ProductCard";
 import { WhatsAppButton } from "@/components/public/kit/feedback/WhatsAppButton";
-import { mediaUrl } from "@/src/lib/front/format";
-import { IMAGE_SIZES } from "@/src/lib/front/media-image";
-import { bannerCtaTexto, bannerHref, pickBanner } from "@/src/lib/front/media";
+import { mediaUrl } from "@/src/foundation/behaviors/media/format";
+import { IMAGE_SIZES } from "@/src/foundation/behaviors/media/media-image";
+import { bannerCtaTexto, bannerHref, pickBanner } from "@/src/foundation/behaviors/media/media";
 import type { HomeProps } from "../contract/types";
 import styles from "./classic.module.css";
 

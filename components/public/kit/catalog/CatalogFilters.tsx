@@ -17,11 +17,11 @@ import {
   getAncestorIds,
   getFilterCategoryIds,
   type CategoryTreeNode,
-} from "@/src/lib/categories-tree";
+} from "@/src/foundation/behaviors/catalog/categories-tree";
 import {
   countCompactFacetMatches,
   type CompactCatalogFacets,
-} from "@/src/lib/front/catalog-facets";
+} from "@/src/foundation/behaviors/catalog/catalog-facets";
 
 export type CatalogCategoryOption = {
   id: string;

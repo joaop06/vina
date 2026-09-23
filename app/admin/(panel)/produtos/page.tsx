@@ -1,13 +1,13 @@
 import { listCategories } from "@/src/services";
 import { productStatusSchema, type ProductListItem, uuidSchema } from "@/src/schemas";
 import Link from "next/link";
-import { listCachedProductListItems } from "@/src/lib/cache/storefront-reads";
-import { isEffectivelyActive } from "@/src/lib/categories-tree";
-import { formatBrl, mediaUrl } from "@/src/lib/front/format";
+import { listCachedProductListItems } from "@/src/foundation/cache/storefront-reads";
+import { isEffectivelyActive } from "@/src/foundation/behaviors/catalog/categories-tree";
+import { formatBrl, mediaUrl } from "@/src/foundation/behaviors/media/format";
 import {
   estimateJsonPayloadBytes,
   runWithListingReadMetrics,
-} from "@/src/lib/observability/listing-read";
+} from "@/src/foundation/observability/listing-read";
 import { AdminNavRow } from "@/components/admin/shell/AdminNavRow";
 import { AdminPageActions } from "@/components/admin/shell/AdminPageActions";
 import { DeleteProductButton } from "@/components/admin/produtos/DeleteProductButton";
@@ -19,7 +19,7 @@ import {
   PAGE_SIZE_OPTIONS_ADMIN,
   PAGINATION,
   parseOptionalBooleanParam,
-} from "@/src/lib/pagination";
+} from "@/src/foundation/behaviors/catalog/pagination";
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;

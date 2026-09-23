@@ -22,7 +22,7 @@ import {
   maskBrlInput,
   mediaUrl,
   parseBrlInput,
-} from "@/src/lib/front/format";
+} from "@/src/foundation/behaviors/media/format";
 import styles from "./GeralPanel.module.css";
 
 type ColorKey = keyof SiteConfig["cores"];

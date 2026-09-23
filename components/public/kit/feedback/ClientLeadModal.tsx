@@ -6,8 +6,8 @@ import {
   validateClientLeadForm,
   type ClientLead,
   type ClientLeadFormErrors,
-} from "@/src/lib/front/client-lead";
-import { formatBrWhatsApp, normalizeWaDigits } from "@/src/lib/wa";
+} from "@/src/foundation/behaviors/feedback/client-lead";
+import { formatBrWhatsApp, normalizeWaDigits } from "@/src/foundation/behaviors/whatsapp/wa";
 import { WhatsAppIcon } from "@/components/public/kit/chrome/icons/StorefrontIcons";
 
 type Props = {

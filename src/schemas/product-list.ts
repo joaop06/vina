@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { productFromPrice } from "@/src/lib/front/pricing";
-import { coverImage } from "@/src/lib/front/media";
+import { productFromPrice } from "@/src/foundation/behaviors/pricing/pricing";
+import { coverImage } from "@/src/foundation/behaviors/media/media";
 import {
   buildVariantFacets,
   productStatusSchema,

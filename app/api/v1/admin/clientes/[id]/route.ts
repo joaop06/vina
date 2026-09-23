@@ -1,7 +1,7 @@
 import { deleteClient } from "@/src/services";
 import { NextRequest } from "next/server";
-import { requireAdmin } from "@/src/lib/auth/session";
-import { jsonError, jsonOk } from "@/src/lib/api/response";
+import { requireAdmin } from "@/src/foundation/auth/session";
+import { jsonError, jsonOk } from "@/src/foundation/http/response";
 
 type Ctx = { params: Promise<{ id: string }> };
 

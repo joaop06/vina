@@ -1232,11 +1232,11 @@ Fachadas criadas nas fases 8 e 9. Scripts em `scripts/`, `instrumentation.ts`, `
 
 ### Como
 
-- [ ] Buscar `@/src/lib/` e `src/lib/` no repositório (código, teste, script, config do Next).
-- [ ] Trocar cada import para o destino do [mapa](#srclib--srcfoundation). Migrations: `@/src/foundation/data/migrations/...`.
-- [ ] Apagar o arquivo de fachada só quando a busca não achar mais o caminho.
-- [ ] Apagar a pasta `src/lib/` quando estiver vazia.
-- [ ] Conferir `instrumentation.ts` (runner no Node), stub Edge em `next.config.ts`, `middleware.ts` (sessão Edge) e `npm run data:migrate`.
+- [x] Buscar `@/src/lib/` e `src/lib/` no repositório (código, teste, script, config do Next).
+- [x] Trocar cada import para o destino do [mapa](#srclib--srcfoundation). Migrations: `@/src/foundation/data/migrations/...`.
+- [x] Apagar o arquivo de fachada só quando a busca não achar mais o caminho.
+- [x] Apagar a pasta `src/lib/` quando estiver vazia.
+- [x] Conferir `instrumentation.ts` (runner no Node), stub Edge em `next.config.ts`, `middleware.ts` (sessão Edge) e `npm run data:migrate`.
 
 ### Fora desta fase
 
@@ -1245,9 +1245,9 @@ Fachadas criadas nas fases 8 e 9. Scripts em `scripts/`, `instrumentation.ts`, `
 
 ### Pronto quando
 
-- [ ] Busca por `src/lib` no código-fonte (excluindo `node_modules` e este documento) não acha pasta nem import.
-- [ ] `npm test`, `npm run data:migrate`, login admin e home.
-- [ ] Critério de pronto comum.
+- [x] Busca por `src/lib` no código-fonte (excluindo `node_modules` e este documento) não acha pasta nem import.
+- [x] `npm test`, `npm run data:migrate`, login admin e home.
+- [x] Critério de pronto comum.
 
 ---
 
