@@ -1,42 +1,33 @@
-import type { Banner, Category, ProductListItem, SiteConfig, SiteLayoutId } from "@/src/schemas";
+import type {
+  AboutPageModel,
+  CartPageModel,
+  CatalogPageModel,
+  HomePageModel,
+  ProductDetailModel,
+} from "@/src/foundation/behaviors/view-models";
+import type { Category, SiteConfig, SiteLayoutId } from "@/src/schemas";
 import type { ReactNode } from "react";
-import type { CatalogViewQuery } from "@/components/public/kit/catalog/CatalogPageView";
-import type { ProductDetailProps } from "@/components/public/kit/product/ProductDetailClient";
 
 export type { SiteLayoutId };
-export type { ProductDetailProps };
 
 export type ChromeProps = {
   site: SiteConfig;
   categories: Category[];
 };
 
-export type HomeProps = {
-  site: SiteConfig;
-  categories: Category[];
-  banners: Banner[];
-  destaques: ProductListItem[];
-  novos: ProductListItem[];
-  /** Public products shown when both destaques and novos are empty. */
-  vitrineFallback: ProductListItem[];
-  wa: string;
-};
+export type HomeProps = HomePageModel;
 
 export type NotFoundProps = {
   site: SiteConfig;
 };
 
-export type CatalogPageProps = {
-  query: CatalogViewQuery;
-};
+export type CatalogPageProps = CatalogPageModel;
 
-export type CartPageProps = {
-  site: SiteConfig;
-};
+export type ProductDetailProps = ProductDetailModel;
 
-export type AboutPageProps = {
-  site: SiteConfig;
-};
+export type CartPageProps = CartPageModel;
+
+export type AboutPageProps = AboutPageModel;
 
 export type SiteLayoutModule = {
   id: SiteLayoutId;

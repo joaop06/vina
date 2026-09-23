@@ -1,6 +1,6 @@
 "use client";
 
-import type { Product, SiteConfig } from "@/src/schemas";
+import type { Product } from "@/src/schemas";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -20,6 +20,7 @@ import {
   WA_MESSAGE_URL_WARN_LENGTH,
   waMessageEncodedLength,
 } from "@/src/lib/wa";
+import type { CartPageModel } from "@/src/foundation/behaviors/view-models";
 
 type ResolvedLine = {
   key: string;
@@ -86,7 +87,7 @@ function resolveLine(
   };
 }
 
-export function CartPageClient({ site }: { site: SiteConfig }) {
+export function CartPageClient({ site, copy }: CartPageModel) {
   const cart = useCart();
   const wa = site.whatsapp;
   const [products, setProducts] = useState<Product[]>([]);
@@ -169,21 +170,19 @@ export function CartPageClient({ site }: { site: SiteConfig }) {
     message.length > 0 &&
     waMessageEncodedLength(message) > WA_MESSAGE_URL_WARN_LENGTH;
 
-  const carrinho = site.textos.carrinho;
-
   return (
     <div
       className={`container cart-page${cart.lines.length === 0 ? " cart-page--empty" : ""}`}
     >
       <header className="cart-page__head">
-        <h1 className="vn-section-title cart-page__title">{carrinho.titulo}</h1>
+        <h1 className="vn-section-title cart-page__title">{copy.titulo}</h1>
         {cart.lines.length > 0 ? (
           <button
             type="button"
             className="cart-page__clear link-btn"
             onClick={() => cart.clear()}
           >
-            {carrinho.esvaziar}
+            {copy.esvaziar}
           </button>
         ) : null}
       </header>
@@ -193,15 +192,15 @@ export function CartPageClient({ site }: { site: SiteConfig }) {
           <div className="cart-page__empty-icon" aria-hidden="true">
             <CartEmptyIcon />
           </div>
-          <h2 className="cart-page__empty-title">{carrinho.emptyTitulo}</h2>
-          <p className="cart-page__empty-lead">{carrinho.emptyLead}</p>
+          <h2 className="cart-page__empty-title">{copy.emptyTitulo}</h2>
+          <p className="cart-page__empty-lead">{copy.emptyLead}</p>
           <div className="cart-page__empty-actions">
             <Link href="/catalogo" className="btn btn-primary">
               <CartIcon size={18} className="btn__icon" />
-              {carrinho.verCatalogo}
+              {copy.verCatalogo}
             </Link>
             <Link href="/" className="cart-page__empty-link">
-              {carrinho.voltarHome}
+              {copy.voltarHome}
             </Link>
           </div>
         </div>
@@ -220,7 +219,7 @@ export function CartPageClient({ site }: { site: SiteConfig }) {
 
           {messageTooLong ? (
             <p className="cart-page__warn" role="status">
-              {carrinho.limiteWa}
+              {copy.limiteWa}
             </p>
           ) : null}
 
@@ -231,7 +230,7 @@ export function CartPageClient({ site }: { site: SiteConfig }) {
                 href={waHref}
                 waSource="cart"
               >
-                {carrinho.enviarWhatsapp}
+                {copy.enviarWhatsapp}
               </WhatsAppButton>
             </div>
           ) : null}

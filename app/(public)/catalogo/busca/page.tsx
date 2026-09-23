@@ -1,3 +1,7 @@
+import {
+  getCatalogPageModel,
+  type CatalogViewQuery,
+} from "@/src/foundation/behaviors/view-models";
 import { CatalogPageView } from "@/components/public/kit/catalog/CatalogPageView";
 import { getLayout } from "@/components/public/layouts";
 import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
@@ -42,9 +46,8 @@ export default async function CatalogoBuscaPage({ searchParams }: Props) {
   );
 
   const { CatalogPage } = getLayout(site.layout);
-  const query = { page, pageSize, q, categoria, tamanho, cor };
-  if (CatalogPage) {
-    return <CatalogPage query={query} />;
-  }
-  return <CatalogPageView query={query} />;
+  const query: CatalogViewQuery = { page, pageSize, q, categoria, tamanho, cor };
+  const model = await getCatalogPageModel(query);
+  const Surface = CatalogPage ?? CatalogPageView;
+  return <Surface {...model} />;
 }

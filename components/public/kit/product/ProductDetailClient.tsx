@@ -1,6 +1,6 @@
 "use client";
 
-import type { Product, ProductVariant, SiteDimensao, SiteTextosExtended } from "@/src/schemas";
+import type { Product, ProductVariant } from "@/src/schemas";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { formatBrl } from "@/src/lib/front/format";
@@ -14,8 +14,6 @@ import {
   uniqueTamanhos,
 } from "@/src/lib/front/variants";
 import { clampQuantity, productWaMessageFromParts, waLink } from "@/src/lib/wa";
-import type { ProductWaTemplateParts } from "@/src/lib/wa-product-template";
-import type { CompactCartItemParts } from "@/src/lib/wa-compact-template";
 import { ProductGallery } from "@/components/public/kit/product/ProductGallery";
 import { ProductVariantPicker } from "@/components/public/kit/product/ProductVariantPicker";
 import { WhatsAppButton } from "@/components/public/kit/feedback/WhatsAppButton";
@@ -23,24 +21,9 @@ import { CartIcon } from "@/components/public/kit/chrome/icons/StorefrontIcons";
 import { useCartOptional } from "@/components/public/kit/cart/CartProvider";
 import { coverImage } from "@/src/lib/front/media";
 import { selecioneVarianteFromDims } from "@/src/lib/front/store-copy";
+import type { ProductDetailModel } from "@/src/foundation/behaviors/view-models";
 
-export type ProductDetailProps = {
-  product: Product;
-  productCopy: SiteTextosExtended["produto"];
-  dimensoes: SiteDimensao[];
-  whatsappCurto: string;
-  waPhone: string;
-  waProductParts: ProductWaTemplateParts;
-  waIncluirReferencia?: boolean;
-  waProdutoFormatoItens?: "produto" | "compacto";
-  waProdutoItemCompactoParts?: CompactCartItemParts;
-  showWhatsApp?: boolean;
-  initialTamanho?: string;
-  initialCor?: string;
-  initialQuantidade?: number;
-  siteUrl?: string;
-  mostrarCarrinho?: boolean;
-};
+export type ProductDetailProps = ProductDetailModel;
 
 function resolveInitialVariant(
   product: Product,

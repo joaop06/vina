@@ -1,4 +1,8 @@
 import { notFound } from "next/navigation";
+import {
+  getCatalogPageModel,
+  type CatalogViewQuery,
+} from "@/src/foundation/behaviors/view-models";
 import { CatalogPageView } from "@/components/public/kit/catalog/CatalogPageView";
 import { getLayout } from "@/components/public/layouts";
 import {
@@ -65,12 +69,11 @@ export default async function CatalogoPagedPage({ params }: Props) {
   if (page > pages) notFound();
 
   const { CatalogPage } = getLayout(site.layout);
-  const query = {
+  const query: CatalogViewQuery = {
     page,
     pageSize: PAGINATION.PUBLIC_DEFAULT_PAGE_SIZE,
   };
-  if (CatalogPage) {
-    return <CatalogPage query={query} />;
-  }
-  return <CatalogPageView query={query} />;
+  const model = await getCatalogPageModel(query);
+  const Surface = CatalogPage ?? CatalogPageView;
+  return <Surface {...model} />;
 }

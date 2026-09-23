@@ -1191,13 +1191,13 @@ As rotas públicas montam as props de catálogo, PDP, carrinho e sobre num únic
 
 ### Como
 
-- [ ] `catalog.ts`: função server que recebe o `query` atual e devolve o que `CatalogPageView` hoje busca (site, árvore, facetas, página de produtos, rótulos de contagem, hrefs). A função chama cache e behaviors. Não chama adapter `fs` direto.
-- [ ] `CatalogPageView` passa a receber esse resultado e só renderiza. A page chama o view-model e entrega ao `layout.CatalogPage ?? CatalogPageView`.
-- [ ] `product.ts`: o que a page de PDP já carrega (produto, site, copy de produto, dimensões) num objeto só. `ProductDetailClient` continua client e pode seguir derivando variante e preço com os behaviors, recebendo o objeto em vez de argumentos soltos. Não mover `useSearchParams` para o servidor.
-- [ ] `cart.ts`: `{ site, cartEnabled, copy }` já resolvido. A page mantém o `notFound()` quando o carrinho está desligado. `CartPageClient` continua buscando linhas no cliente.
-- [ ] `about.ts`: `{ site, waHref, showWa, showIg, enderecoLinha, title, lead, labels }`. A page fica fina. O JSX atual pode ir para `kit/catalog/AboutPageView.tsx` (ou `kit/chrome` se fizer mais sentido ao lado do footer) com o mesmo markup e as mesmas classes. Esse componente é o fallback, não um `AboutPage` de layout.
-- [ ] Atualizar os tipos opcionais do contrato para essas props. Layouts continuam sem implementar as chaves.
-- [ ] Home: se extrair, a função mora em `view-models/home.ts` e a page só chama `getLayout` e o view-model. As props de `HomeProps` não mudam de campo.
+- [x] `catalog.ts`: função server que recebe o `query` atual e devolve o que `CatalogPageView` hoje busca (site, árvore, facetas, página de produtos, rótulos de contagem, hrefs). A função chama cache e behaviors. Não chama adapter `fs` direto.
+- [x] `CatalogPageView` passa a receber esse resultado e só renderiza. A page chama o view-model e entrega ao `layout.CatalogPage ?? CatalogPageView`.
+- [x] `product.ts`: o que a page de PDP já carrega (produto, site, copy de produto, dimensões) num objeto só. `ProductDetailClient` continua client e pode seguir derivando variante e preço com os behaviors, recebendo o objeto em vez de argumentos soltos. Não mover `useSearchParams` para o servidor.
+- [x] `cart.ts`: `{ site, cartEnabled, copy }` já resolvido. A page mantém o `notFound()` quando o carrinho está desligado. `CartPageClient` continua buscando linhas no cliente.
+- [x] `about.ts`: `{ site, waHref, showWa, showIg, enderecoLinha, title, lead, labels }`. A page fica fina. O JSX atual pode ir para `kit/catalog/AboutPageView.tsx` (ou `kit/chrome` se fizer mais sentido ao lado do footer) com o mesmo markup e as mesmas classes. Esse componente é o fallback, não um `AboutPage` de layout.
+- [x] Atualizar os tipos opcionais do contrato para essas props. Layouts continuam sem implementar as chaves.
+- [x] Home: se extrair, a função mora em `view-models/home.ts` e a page só chama `getLayout` e o view-model. As props de `HomeProps` não mudam de campo.
 
 ### Fora desta fase
 
@@ -1207,10 +1207,10 @@ As rotas públicas montam as props de catálogo, PDP, carrinho e sobre num únic
 
 ### Pronto quando
 
-- [ ] Catálogo (página 1, página N, busca), PDP, carrinho ligado, carrinho desligado (404) e sobre iguais ao antes, nos quatro `data-layout`.
-- [ ] `CatalogPageView` não importa `storefront-reads` nem `products.service`.
-- [ ] Grep em `components/public/layouts/classic|split|gallery|atelie` não acha `service` nem `storefront-reads`.
-- [ ] Critério de pronto comum.
+- [x] Catálogo (página 1, página N, busca), PDP, carrinho ligado, carrinho desligado (404) e sobre iguais ao antes, nos quatro `data-layout`.
+- [x] `CatalogPageView` não importa `storefront-reads` nem `products.service`.
+- [x] Grep em `components/public/layouts/classic|split|gallery|atelie` não acha `service` nem `storefront-reads`.
+- [x] Critério de pronto comum.
 
 ---
 

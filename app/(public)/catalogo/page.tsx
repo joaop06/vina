@@ -1,3 +1,7 @@
+import {
+  getCatalogPageModel,
+  type CatalogViewQuery,
+} from "@/src/foundation/behaviors/view-models";
 import { CatalogPageView } from "@/components/public/kit/catalog/CatalogPageView";
 import { getLayout } from "@/components/public/layouts";
 import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
@@ -17,12 +21,11 @@ export async function generateMetadata() {
 export default async function CatalogoPage() {
   const site = await getCachedSiteConfig();
   const { CatalogPage } = getLayout(site.layout);
-  const query = {
+  const query: CatalogViewQuery = {
     page: 1,
     pageSize: PAGINATION.PUBLIC_DEFAULT_PAGE_SIZE,
   };
-  if (CatalogPage) {
-    return <CatalogPage query={query} />;
-  }
-  return <CatalogPageView query={query} />;
+  const model = await getCatalogPageModel(query);
+  const Surface = CatalogPage ?? CatalogPageView;
+  return <Surface {...model} />;
 }
