@@ -327,17 +327,17 @@ As rotas não consultam o registry para essas telas:
 
 ### Como
 
-- [ ] Em `types.ts`, declarar props iguais ao que a rota já passa hoje:
+- [x] Em `types.ts`, declarar props iguais ao que a rota já passa hoje:
   - `CatalogPageProps`: `{ query: CatalogViewQuery }` (importar o tipo de `CatalogPageView`, ou extraí-lo para `types.ts` se o import do kit a partir do contrato criar ciclo; se criar ciclo, duplicar o tipo mínimo `{ page, pageSize, q?, categoria?, tamanho?, cor? }` no contrato e manter `CatalogViewQuery` compatível).
   - `ProductDetailProps`: o mesmo objeto que `ProductDetailClient` já recebe. Importar o tipo do componente se ele for exportado; se for só `type Props` interno, exportar esse tipo sem mudar campos.
   - `CartPageProps`: `{ site: SiteConfig }`.
   - `AboutPageProps`: `{ site: SiteConfig }`. A page de sobre hoje deriva sozinha `wa`, endereço e rótulos. Não antecipar a fase 11.
-- [ ] Acrescentar no `SiteLayoutModule` as chaves opcionais `CatalogPage?`, `ProductDetail?`, `CartPage?`, `AboutPage?`. As quatro atuais continuam obrigatórias.
-- [ ] Em cada page pública listada acima, obter o módulo com `getLayout(site.layout)` (a page de catálogo que hoje não carrega `site` passa a chamar `getCachedSiteConfig` só para ler `site.layout`; o `query` enviado ao fallback permanece o mesmo).
-- [ ] Resolver a superfície assim: se a chave existir, renderizar a do módulo com as props atuais; senão, renderizar o componente ou o JSX atual. No carrinho, o `notFound()` por `mostrarCarrinho` continua antes dessa escolha.
-- [ ] No sobre, o JSX atual vira o ramo `else`. Não extrair um componente novo só para “organizar”. O fallback permanece na page até a fase 11, que pode extraí-lo para o kit sem mudar markup.
-- [ ] Reexportar os tipos novos em [components/public/layouts/index.ts](../../../components/public/layouts/index.ts) se esse barrel já reexporta `HomeProps`.
-- [ ] Confirmar que `classicLayout`, `splitLayout`, `galleryLayout` e `atelieLayout` não definem as quatro chaves.
+- [x] Acrescentar no `SiteLayoutModule` as chaves opcionais `CatalogPage?`, `ProductDetail?`, `CartPage?`, `AboutPage?`. As quatro atuais continuam obrigatórias.
+- [x] Em cada page pública listada acima, obter o módulo com `getLayout(site.layout)` (a page de catálogo que hoje não carrega `site` passa a chamar `getCachedSiteConfig` só para ler `site.layout`; o `query` enviado ao fallback permanece o mesmo).
+- [x] Resolver a superfície assim: se a chave existir, renderizar a do módulo com as props atuais; senão, renderizar o componente ou o JSX atual. No carrinho, o `notFound()` por `mostrarCarrinho` continua antes dessa escolha.
+- [x] No sobre, o JSX atual vira o ramo `else`. Não extrair um componente novo só para “organizar”. O fallback permanece na page até a fase 11, que pode extraí-lo para o kit sem mudar markup.
+- [x] Reexportar os tipos novos em [components/public/layouts/index.ts](../../../components/public/layouts/index.ts) se esse barrel já reexporta `HomeProps`.
+- [x] Confirmar que `classicLayout`, `splitLayout`, `galleryLayout` e `atelieLayout` não definem as quatro chaves.
 
 ### Fora desta fase
 
@@ -349,9 +349,9 @@ As rotas não consultam o registry para essas telas:
 
 ### Pronto quando
 
-- [ ] Com `site.layout` em classic, split, gallery e ateliê, catálogo, PDP, carrinho e sobre renderizam o mesmo componente de antes.
-- [ ] Um teste ou uma verificação manual temporária: ao atribuir `CatalogPage` num módulo de teste local e reverter em seguida, a rota usa o componente do módulo. Não commitar layout com a chave preenchida.
-- [ ] Critério de pronto comum, mais as quatro rotas públicas e a home (home não deve ter mudado).
+- [x] Com `site.layout` em classic, split, gallery e ateliê, catálogo, PDP, carrinho e sobre renderizam o mesmo componente de antes.
+- [x] Um teste ou uma verificação manual temporária: ao atribuir `CatalogPage` num módulo de teste local e reverter em seguida, a rota usa o componente do módulo. Não commitar layout com a chave preenchida.
+- [x] Critério de pronto comum, mais as quatro rotas públicas e a home (home não deve ter mudado).
 
 ---
 

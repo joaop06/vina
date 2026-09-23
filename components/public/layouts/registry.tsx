@@ -6,9 +6,13 @@ import type { SiteLayoutModule } from "./types";
 import type { SiteLayoutId } from "@/src/schemas/site-config";
 
 export type {
+  AboutPageProps,
+  CartPageProps,
+  CatalogPageProps,
   ChromeProps,
   HomeProps,
   NotFoundProps,
+  ProductDetailProps,
   SiteLayoutId,
   SiteLayoutModule,
 } from "./types";

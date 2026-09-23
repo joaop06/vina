@@ -2,6 +2,7 @@ import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
 import { formatEnderecoLinha } from "@/src/lib/br/endereco";
 import { seoTitleFromTemplate, sobrePageTitle } from "@/src/lib/front/store-copy";
 import { waLink } from "@/src/lib/wa";
+import { getLayout } from "@/components/public/layouts";
 import { InstagramButton } from "@/components/public/InstagramButton";
 import { WhatsAppButton } from "@/components/public/WhatsAppButton";
 
@@ -16,6 +17,11 @@ export async function generateMetadata() {
 
 export default async function SobrePage() {
   const site = await getCachedSiteConfig();
+  const { AboutPage } = getLayout(site.layout);
+  if (AboutPage) {
+    return <AboutPage site={site} />;
+  }
+
   const wa = waLink(site.whatsapp.telefone, site.whatsapp.mensagemPadrao);
   const showWa = site.whatsapp.mostrar;
   const showIg = site.instagram.mostrar;

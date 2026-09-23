@@ -6,6 +6,7 @@ import {
   getCachedSiteConfig,
 } from "@/src/lib/cache/storefront-reads";
 import { getSiteUrl } from "@/src/lib/env";
+import { getLayout } from "@/components/public/layouts";
 import { ProductDetailClient } from "@/components/public/ProductDetailClient";
 import ProductLoading from "./loading";
 
@@ -42,28 +43,30 @@ export default async function ProductPage({ params }: Props) {
   ]);
   if (!product) notFound();
 
+  const { ProductDetail } = getLayout(site.layout);
+  const detailProps = {
+    product,
+    productCopy: site.textos.produto,
+    dimensoes: site.rotulos.dimensoes,
+    whatsappCurto: site.textos.home.whatsappCurto,
+    waPhone: site.whatsapp.telefone,
+    waProductParts: site.whatsapp.mensagemProdutoParts,
+    waIncluirReferencia: Boolean(
+      site.whatsapp.mensagemProdutoIncluirReferencia,
+    ),
+    waProdutoFormatoItens:
+      site.whatsapp.mensagemProdutoFormatoItens ?? "produto",
+    waProdutoItemCompactoParts:
+      site.whatsapp.mensagemProdutoItemCompactoParts,
+    showWhatsApp: site.whatsapp.mostrar,
+    siteUrl: getSiteUrl(),
+    mostrarCarrinho: site.mostrarCarrinho,
+  };
+  const Surface = ProductDetail ?? ProductDetailClient;
+
   return (
     <Suspense fallback={<ProductLoading />}>
-      <ProductDetailClient
-        product={product}
-        productCopy={site.textos.produto}
-        dimensoes={site.rotulos.dimensoes}
-        whatsappCurto={site.textos.home.whatsappCurto}
-        waPhone={site.whatsapp.telefone}
-        waProductParts={site.whatsapp.mensagemProdutoParts}
-        waIncluirReferencia={Boolean(
-          site.whatsapp.mensagemProdutoIncluirReferencia,
-        )}
-        waProdutoFormatoItens={
-          site.whatsapp.mensagemProdutoFormatoItens ?? "produto"
-        }
-        waProdutoItemCompactoParts={
-          site.whatsapp.mensagemProdutoItemCompactoParts
-        }
-        showWhatsApp={site.whatsapp.mostrar}
-        siteUrl={getSiteUrl()}
-        mostrarCarrinho={site.mostrarCarrinho}
-      />
+      <Surface {...detailProps} />
     </Suspense>
   );
 }

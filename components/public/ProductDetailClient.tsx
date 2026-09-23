@@ -25,7 +25,7 @@ import { coverImage } from "@/src/lib/front/media";
 import { selecioneVarianteFromDims } from "@/src/lib/front/store-copy";
 import type { SiteDimensao, SiteTextosExtended } from "@/src/schemas/site-personalization";
 
-type Props = {
+export type ProductDetailProps = {
   product: Product;
   productCopy: SiteTextosExtended["produto"];
   dimensoes: SiteDimensao[];
@@ -191,7 +191,7 @@ export function ProductDetailClient({
   initialQuantidade,
   siteUrl,
   mostrarCarrinho = true,
-}: Props) {
+}: ProductDetailProps) {
   const cart = useCartOptional();
   const cartActive = Boolean(mostrarCarrinho && cart?.enabled);
   const hasVariants = product.variantes.length > 0;

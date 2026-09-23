@@ -1,4 +1,5 @@
 import { CatalogPageView } from "@/components/public/CatalogPageView";
+import { getLayout } from "@/components/public/layouts";
 import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
 import { seoTitleFromTemplate } from "@/src/lib/front/store-copy";
 import {
@@ -26,6 +27,7 @@ export async function generateMetadata() {
 }
 
 export default async function CatalogoBuscaPage({ searchParams }: Props) {
+  const site = await getCachedSiteConfig();
   const sp = await searchParams;
   const categoria = firstSearchParam(sp.categoria);
   const tamanho = firstSearchParam(sp.tamanho);
@@ -39,9 +41,10 @@ export default async function CatalogoBuscaPage({ searchParams }: Props) {
     { defaultPageSize: PAGINATION.PUBLIC_DEFAULT_PAGE_SIZE },
   );
 
-  return (
-    <CatalogPageView
-      query={{ page, pageSize, q, categoria, tamanho, cor }}
-    />
-  );
+  const { CatalogPage } = getLayout(site.layout);
+  const query = { page, pageSize, q, categoria, tamanho, cor };
+  if (CatalogPage) {
+    return <CatalogPage query={query} />;
+  }
+  return <CatalogPageView query={query} />;
 }

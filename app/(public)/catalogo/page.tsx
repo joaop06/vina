@@ -1,4 +1,5 @@
 import { CatalogPageView } from "@/components/public/CatalogPageView";
+import { getLayout } from "@/components/public/layouts";
 import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
 import { seoTitleFromTemplate } from "@/src/lib/front/store-copy";
 import { PAGINATION } from "@/src/lib/pagination";
@@ -14,12 +15,14 @@ export async function generateMetadata() {
 }
 
 export default async function CatalogoPage() {
-  return (
-    <CatalogPageView
-      query={{
-        page: 1,
-        pageSize: PAGINATION.PUBLIC_DEFAULT_PAGE_SIZE,
-      }}
-    />
-  );
+  const site = await getCachedSiteConfig();
+  const { CatalogPage } = getLayout(site.layout);
+  const query = {
+    page: 1,
+    pageSize: PAGINATION.PUBLIC_DEFAULT_PAGE_SIZE,
+  };
+  if (CatalogPage) {
+    return <CatalogPage query={query} />;
+  }
+  return <CatalogPageView query={query} />;
 }

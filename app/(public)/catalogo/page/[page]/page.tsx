@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { CatalogPageView } from "@/components/public/CatalogPageView";
+import { getLayout } from "@/components/public/layouts";
 import {
   CATALOG_STATIC_PAGE_LIMIT,
   parseCatalogPageParam,
@@ -50,7 +51,10 @@ export default async function CatalogoPagedPage({ params }: Props) {
   const page = parseCatalogPageParam(raw);
   if (page == null || page < 2) notFound();
 
-  const index = await getCachedProductIndex();
+  const [index, site] = await Promise.all([
+    getCachedProductIndex(),
+    getCachedSiteConfig(),
+  ]);
   const publicCount = filterProductIndexEntries(index.entries, {
     publicOnly: true,
   }).length;
@@ -60,12 +64,13 @@ export default async function CatalogoPagedPage({ params }: Props) {
   );
   if (page > pages) notFound();
 
-  return (
-    <CatalogPageView
-      query={{
-        page,
-        pageSize: PAGINATION.PUBLIC_DEFAULT_PAGE_SIZE,
-      }}
-    />
-  );
+  const { CatalogPage } = getLayout(site.layout);
+  const query = {
+    page,
+    pageSize: PAGINATION.PUBLIC_DEFAULT_PAGE_SIZE,
+  };
+  if (CatalogPage) {
+    return <CatalogPage query={query} />;
+  }
+  return <CatalogPageView query={query} />;
 }

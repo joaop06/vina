@@ -8,9 +8,13 @@ export {
 export type { LayoutBannerSlot } from "./banner-slots";
 export { PublicMobileNav } from "./PublicMobileNav";
 export type {
+  AboutPageProps,
+  CartPageProps,
+  CatalogPageProps,
   ChromeProps,
   HomeProps,
   NotFoundProps,
+  ProductDetailProps,
   SiteLayoutId,
   SiteLayoutModule,
 } from "./types";
