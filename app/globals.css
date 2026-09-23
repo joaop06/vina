@@ -1,52 +1,4 @@
-/*
-  Breakpoints canônicos (mobile-first):
-  - md: 768px  — topbar completa, grids 2→3, filtros sheet→painel
-  - lg: 1024px — nav inline no cabeçalho, grid 4 cols, hero split confortável
-  - micro: 360px — empilhar CTAs extremos
-*/
 :root {
-  --vn-bp-md: 768px;
-  --vn-bp-lg: 1024px;
-  --vn-primary: #111111;
-  --vn-secondary: #111111;
-  --vn-surface: #ffffff;
-  --vn-muted: #f5f5f5;
-  --vn-border: #e5e5e5;
-  --vn-whatsapp: #25d366;
-  --vn-instagram: #e1306c;
-  --vn-radius: 8px;
-
-  --vn-font: var(--font-poppins), system-ui, sans-serif;
-  --vn-font-display: var(--font-lookbook), Impact, "Arial Narrow", sans-serif;
-
-  --vn-text-xs: 0.75rem;
-  --vn-text-sm: 0.8125rem;
-  --vn-text-md: 0.9375rem;
-  --vn-text-lg: 1.0625rem;
-  --vn-text-xl: 1.25rem;
-  --vn-text-2xl: 1.5rem;
-  --vn-text-display: clamp(1.5rem, 5vw, 2.25rem);
-  --vn-text-hero: clamp(1.75rem, 8vw, 2.75rem);
-
-  --vn-space-1: 0.25rem;
-  --vn-space-2: 0.5rem;
-  --vn-space-3: 0.75rem;
-  --vn-space-4: 1rem;
-  --vn-space-5: 1.25rem;
-  --vn-space-6: 1.5rem;
-  --vn-space-7: 2rem;
-  --vn-space-8: 3rem;
-
-  --vn-gutter: 1.25rem;
-  --vn-container: min(1120px, calc(100% - 2 * var(--vn-gutter)));
-  --vn-touch: 44px;
-  --vn-header-offset: 0px;
-  --vn-safe-top: env(safe-area-inset-top, 0px);
-  --vn-safe-bottom: env(safe-area-inset-bottom, 0px);
-  --vn-safe-left: env(safe-area-inset-left, 0px);
-  --vn-safe-right: env(safe-area-inset-right, 0px);
-  /** Reserved space under list content for the fixed pagination dock. */
-  --vn-pagination-dock-h: 4.25rem;
   /** Sticky mobile admin chrome (menu bar + config tabs). */
   --admin-mobile-bar-h: calc(var(--vn-touch) + 1.5rem);
   --admin-config-tabs-h: 2.85rem;
@@ -80,71 +32,12 @@ body:has(.pagination-dock--floating) {
   }
 }
 
-@media (min-width: 768px) {
-  :root {
-    --vn-gutter: 1.5rem;
-    --vn-text-md: 1rem;
-  }
-}
-
-* {
-  box-sizing: border-box;
-  scrollbar-width: thin;
-  scrollbar-color: var(--vn-scrollbar-thumb) var(--vn-scrollbar-track);
-}
-
-html {
-  -webkit-tap-highlight-color: transparent;
-  scrollbar-width: thin;
-  scrollbar-color: var(--vn-scrollbar-thumb) var(--vn-scrollbar-track);
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-  font-family: var(--vn-font);
-  font-size: var(--vn-text-md);
-  line-height: 1.5;
-  color: var(--vn-secondary);
-  background: var(--vn-surface);
-  overflow-x: clip;
-}
-
 /* Admin login: never scroll the document (avoids scrollbar flash). */
 html:has(.admin-login-root),
 body:has(.admin-login-root) {
   overflow: hidden;
   height: 100%;
   overscroll-behavior: none;
-}
-
-*::-webkit-scrollbar {
-  width: var(--vn-scrollbar-size);
-  height: var(--vn-scrollbar-size);
-}
-
-*::-webkit-scrollbar-track {
-  background: var(--vn-scrollbar-track);
-}
-
-*::-webkit-scrollbar-thumb {
-  background: var(--vn-scrollbar-thumb);
-  border-radius: var(--vn-scrollbar-radius);
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background: var(--vn-scrollbar-thumb-hover);
-}
-
-:focus:not(:focus-visible) {
-  outline: none;
-}
-
-:focus-visible {
-  outline: 2px solid var(--vn-primary);
-  outline-offset: 2px;
 }
 
 a {
@@ -163,20 +56,6 @@ input,
 select,
 textarea {
   font: inherit;
-}
-
-.skip-link {
-  position: absolute;
-  left: -9999px;
-  top: 0;
-  background: var(--vn-secondary);
-  color: var(--vn-surface);
-  padding: 0.75rem 1rem;
-  z-index: 100;
-}
-
-.skip-link:focus {
-  left: 0;
 }
 
 .container {

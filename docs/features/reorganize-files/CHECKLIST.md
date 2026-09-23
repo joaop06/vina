@@ -394,12 +394,12 @@ O documento raiz passa a carregar o CSS estrutural e o gancho do tema por arquiv
 
 ### Como
 
-- [ ] Criar `app/styles/reset.css` e mover, verbatim, as regras que valem para todo documento, admin incluído: `html, body` de margem e fonte; scrollbar; `.skip-link`; foco visível estrutural; `box-sizing` se estiver no topo do arquivo. Incluir o comentário dos breakpoints 768/1024 que abre o arquivo, porque ele documenta o contrato do documento.
-- [ ] Criar `app/styles/theme-bridge.css` com o bloco `:root` de variáveis `--vn-*` que `siteThemeStyle` sobrescreve no `style` do `<html>` (cor, raio, fonte, container, espaços). Não colocar regra de classe (`.btn`, `.admin-shell`, `.card-product`) nesse arquivo.
-- [ ] Se uma variável do `:root` for usada só pelo admin ou só pelo kit, ela acompanha o dono na fase correspondente, não o theme-bridge. Na dúvida, deixar no `:root` do theme-bridge e anotar na caixa, em vez de duplicar.
-- [ ] Em `app/layout.tsx`, importar `./styles/reset.css` e `./styles/theme-bridge.css` antes de `./globals.css` e `./layout-tokens.css`. Manter os dois imports antigos.
-- [ ] Apagar de `globals.css` somente o que foi copiado. Conferir que o seletor não ficou nos dois arquivos.
-- [ ] Não apagar `layout-tokens.css`.
+- [x] Criar `app/styles/reset.css` e mover, verbatim, as regras que valem para todo documento, admin incluído: `html, body` de margem e fonte; scrollbar; `.skip-link`; foco visível estrutural; `box-sizing` se estiver no topo do arquivo. Incluir o comentário dos breakpoints 768/1024 que abre o arquivo, porque ele documenta o contrato do documento.
+- [x] Criar `app/styles/theme-bridge.css` com o bloco `:root` de variáveis `--vn-*` que `siteThemeStyle` sobrescreve no `style` do `<html>` (cor, raio, fonte, container, espaços). Não colocar regra de classe (`.btn`, `.admin-shell`, `.card-product`) nesse arquivo.
+- [x] Se uma variável do `:root` for usada só pelo admin ou só pelo kit, ela acompanha o dono na fase correspondente, não o theme-bridge. Na dúvida, deixar no `:root` do theme-bridge e anotar na caixa, em vez de duplicar. Anotação: `--vn-pagination-dock-h` ficou no theme-bridge (uso misto vitrine/admin). `--admin-mobile-bar-h`, `--admin-config-tabs-h` e `--admin-toast-offset-*` ficaram no `:root` residual de `globals.css` (dono admin, fase 5), junto das regras de lift de toast.
+- [x] Em `app/layout.tsx`, importar `./styles/reset.css` e `./styles/theme-bridge.css` antes de `./globals.css` e `./layout-tokens.css`. Manter os dois imports antigos.
+- [x] Apagar de `globals.css` somente o que foi copiado. Conferir que o seletor não ficou nos dois arquivos.
+- [x] Não apagar `layout-tokens.css`.
 
 ### Fora desta fase
 
@@ -408,9 +408,9 @@ O documento raiz passa a carregar o CSS estrutural e o gancho do tema por arquiv
 
 ### Pronto quando
 
-- [ ] Home, catálogo, PDP, admin e login com a mesma aparência.
-- [ ] Inspecionar o `<html>`: `data-layout` presente e variáveis `--vn-*` ainda aplicadas.
-- [ ] Critério de pronto comum.
+- [x] Home, catálogo, PDP, admin e login com a mesma aparência.
+- [x] Inspecionar o `<html>`: `data-layout` presente e variáveis `--vn-*` ainda aplicadas.
+- [x] Critério de pronto comum.
 
 ---
 
