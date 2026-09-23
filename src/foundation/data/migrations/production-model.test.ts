@@ -3,7 +3,7 @@ import { describe, it } from "node:test";
 import {
   applyProductionBaselineToProduct,
   applyProductionBaselineToSite,
-} from "@/src/lib/data/migrations/production-model";
+} from "@/src/foundation/data/migrations/production-model";
 import { productSchema } from "@/src/schemas/product";
 import { siteConfigSchema } from "@/src/schemas/site-config";
 
@@ -89,7 +89,7 @@ describe("production baseline transforms", () => {
   it("converts variantes tamanho/cor to atributos", () => {
     const next = applyProductionBaselineToProduct(productionProduct);
     assert.ok(productSchema.safeParse(next).success);
-    const v = (next as typeof productionProduct).variantes[0] as {
+    const v = (next as unknown as typeof productionProduct).variantes[0] as unknown as {
       atributos: { tamanho: string; cor: string };
       tamanho?: string;
     };

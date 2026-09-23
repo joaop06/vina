@@ -1,12 +1,12 @@
 import {
   applyProductionBaselineToProduct,
   applyProductionBaselineToSite,
-} from "@/src/lib/data/migrations/production-model";
+} from "@/src/foundation/data/migrations/production-model";
 import {
   fileChangeIfMigrated,
   mapJsonDir,
   type DataMigration,
-} from "@/src/lib/data/migrations/types";
+} from "@/src/foundation/data/migrations/types";
 
 const SITE_PATH = "configuracoes/site.json";
 
@@ -18,6 +18,7 @@ export const migrationProductionBaseline: DataMigration = {
   order: 10,
   description:
     "Converte catálogo modelo produção (data-dev) para schema atual: variantes, site.json, WA parts",
+  targets: ["produtos", "configuracoes"],
   async run(ctx) {
     const productChanges = await mapJsonDir(ctx, "produtos", (relativePath, raw) =>
       fileChangeIfMigrated(

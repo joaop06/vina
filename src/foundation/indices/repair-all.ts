@@ -2,7 +2,7 @@ import "server-only";
 import { repairClientIndices } from "@/src/foundation/indices/client-index-mutate";
 import { repairOrderIndices } from "@/src/foundation/indices/order-index-mutate";
 import { repairProductIndices } from "@/src/foundation/indices/product-index-mutate";
-import type { DataMigration } from "@/src/lib/data/migrations/types";
+import type { DataMigration } from "@/src/foundation/data/migrations/types";
 
 export async function repairAllIndices(): Promise<{
   ok: boolean;
@@ -25,6 +25,7 @@ export const migrationIndicesRepair: DataMigration = {
   id: "2026-07-indices-repair",
   order: 90,
   description: "Repair índices derivados a partir dos JSON de entidades",
+  targets: ["indices"],
   async run(ctx) {
     if (ctx.dryRun) {
       return {

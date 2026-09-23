@@ -3,23 +3,58 @@ import { promises as fs } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
-import { migrationProductionBaseline } from "@/src/lib/data/migrations/migrations/2026-07-production-baseline";
-import { jsonDocumentsEqual } from "@/src/lib/data/migrations/json-equal";
+import { migrationProductionBaseline } from "@/src/foundation/data/migrations/migrations/2026-07-production-baseline";
+import { jsonDocumentsEqual } from "@/src/foundation/data/migrations/json-equal";
 import {
   assertRegistryValid,
   DATA_MIGRATIONS,
-} from "@/src/lib/data/migrations/registry";
-import type { MigrationContext } from "@/src/lib/data/migrations/types";
+} from "@/src/foundation/data/migrations/registry";
+import type { MigrationContext } from "@/src/foundation/data/migrations/types";
 import { migrateProductDocument } from "@/src/schemas/product";
 import {
   applyCommitFilesTransactional,
   resolveUnderRoot,
-} from "@/src/lib/data/fs-commit";
+} from "@/src/foundation/data/fs-commit";
 
 describe("data migrations registry", () => {
-  it("has unique ids and orders", () => {
+  it("has unique ids, orders, and non-empty targets", () => {
     assert.doesNotThrow(() => assertRegistryValid(DATA_MIGRATIONS));
     assert.ok(DATA_MIGRATIONS.length >= 1);
+    for (const m of DATA_MIGRATIONS) {
+      assert.ok(m.targets.length > 0, `${m.id} must declare targets`);
+    }
+  });
+
+  it("rejects empty targets", () => {
+    assert.throws(
+      () =>
+        assertRegistryValid([
+          {
+            id: "test-empty-targets",
+            order: 1,
+            description: "fixture",
+            targets: [],
+            run: async () => ({ changes: [], stats: {} }),
+          },
+        ]),
+      /empty targets/,
+    );
+  });
+
+  it("rejects invalid targets", () => {
+    assert.throws(
+      () =>
+        assertRegistryValid([
+          {
+            id: "test-bad-target",
+            order: 1,
+            description: "fixture",
+            targets: ["not-a-folder" as "produtos"],
+            run: async () => ({ changes: [], stats: {} }),
+          },
+        ]),
+      /invalid target/,
+    );
   });
 });
 
@@ -86,10 +121,10 @@ describe("migrationProductionBaseline", () => {
       const ctx: MigrationContext = {
         trigger: "cli",
         dryRun: false,
-        readJson: async (rel) => {
+        readJson: async <T>(rel: string) => {
           try {
             const raw = await fs.readFile(path.join(root, rel), "utf8");
-            return JSON.parse(raw) as unknown;
+            return JSON.parse(raw) as T;
           } catch (e) {
             if ((e as NodeJS.ErrnoException).code === "ENOENT") return null;
             throw e;
@@ -123,7 +158,7 @@ describe("migrationProductionBaseline", () => {
 describe("migrationSplitSiteConfigByTab", () => {
   it("splits site.json into fragments and deletes legacy", async () => {
     const { migrationSplitSiteConfigByTab } = await import(
-      "@/src/lib/data/migrations/migrations/2026-07-split-site-config-by-tab"
+      "@/src/foundation/data/migrations/migrations/2026-07-split-site-config-by-tab"
     );
     const { DEFAULT_SITE_CONFIG } = await import(
       "@/src/config/default-site-config"
@@ -159,7 +194,7 @@ describe("migrationSplitSiteConfigByTab", () => {
 
   it("is a no-op when already split", async () => {
     const { migrationSplitSiteConfigByTab } = await import(
-      "@/src/lib/data/migrations/migrations/2026-07-split-site-config-by-tab"
+      "@/src/foundation/data/migrations/migrations/2026-07-split-site-config-by-tab"
     );
     const files = new Map<string, unknown>([
       [
@@ -183,7 +218,7 @@ describe("migrationSplitSiteConfigByTab", () => {
 describe("migrationMergeGeralConfigTab", () => {
   it("merges identidade + painel into geral and deletes legacy", async () => {
     const { migrationMergeGeralConfigTab } = await import(
-      "@/src/lib/data/migrations/migrations/2026-07-merge-geral-config-tab"
+      "@/src/foundation/data/migrations/migrations/2026-07-merge-geral-config-tab"
     );
     const { SITE_CONFIG_TAB_PATHS } = await import(
       "@/src/schemas/site-config-tabs"
@@ -251,7 +286,7 @@ describe("migrationMergeGeralConfigTab", () => {
 
   it("is a no-op when already merged", async () => {
     const { migrationMergeGeralConfigTab } = await import(
-      "@/src/lib/data/migrations/migrations/2026-07-merge-geral-config-tab"
+      "@/src/foundation/data/migrations/migrations/2026-07-merge-geral-config-tab"
     );
     const files = new Map<string, unknown>([
       [

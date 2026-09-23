@@ -1,11 +1,11 @@
 import { z } from "zod";
-import { readJson } from "@/src/lib/data";
+import { readJson } from "@/src/foundation/data";
 import {
   LEGACY_PRODUCTION_MIGRATION_IDS,
   PRODUCTION_BASELINE_MIGRATION_ID,
-} from "@/src/lib/data/migrations/legacy-ids";
-import { serializeDataJson } from "@/src/lib/data/migrations/json-equal";
-import type { FileChange } from "@/src/lib/data/types";
+} from "@/src/foundation/data/migrations/legacy-ids";
+import { serializeDataJson } from "@/src/foundation/data/migrations/json-equal";
+import type { FileChange } from "@/src/foundation/data/types";
 
 export const MIGRATIONS_STATE_PATH = "configuracoes/migrations.json";
 

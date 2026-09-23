@@ -1,8 +1,8 @@
 import {
   jsonDocumentsEqual,
   serializeDataJson,
-} from "@/src/lib/data/migrations/json-equal";
-import type { FileChange } from "@/src/lib/data/types";
+} from "@/src/foundation/data/migrations/json-equal";
+import type { FileChange } from "@/src/foundation/data/types";
 
 export { jsonDocumentsEqual, serializeDataJson };
 

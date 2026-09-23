@@ -1,7 +1,7 @@
 import {
   serializeDataJson,
   type DataMigration,
-} from "@/src/lib/data/migrations/types";
+} from "@/src/foundation/data/migrations/types";
 import { DEFAULT_SITE_CONFIG } from "@/src/config/default-site-config";
 import {
   SITE_CONFIG_TAB_PATHS,
@@ -39,6 +39,7 @@ export const migrationMergeGeralConfigTab: DataMigration = {
   order: 30,
   description:
     "Une identidade.json + painel.json em geral.json (aba Geral do admin)",
+  targets: ["configuracoes"],
   async run(ctx) {
     const geralExisting = await ctx.readJson<unknown>(GERAL_PATH);
     const identidadeRaw = await ctx.readJson<unknown>(LEGACY_IDENTIDADE_PATH);

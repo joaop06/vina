@@ -43,7 +43,7 @@ Estas escolhas fixam o traçado. Não reabrir no meio de uma fase.
 | `site-config-tabs.ts` | Fase 13, isolada. Não é pré-requisito das fases 1–12. |
 | Fronteiras | Fase 14, com `no-restricted-imports` no ESLint já do repositório. Sem dependência nova. |
 | Observabilidade | [src/lib/observability/](../../../src/lib/observability) vai para `src/foundation/observability/`. O relatório não cita essa pasta; ela existe no código. |
-| Campo `targets` | Lista de pastas de `data/` no tipo `DataMigration`. O arquivo [targets.ts](../../../src/lib/data/migrations/targets.ts) continua sendo o helper `fileChangeIfMigrated`. Não renomear esse módulo. |
+| Campo `targets` | Lista de pastas de `data/` no tipo `DataMigration`. O arquivo [targets.ts](../../../src/foundation/data/migrations/targets.ts) continua sendo o helper `fileChangeIfMigrated`. Não renomear esse módulo. |
 | `src/config/` | Permanece. Defaults de site e de copy não descem para `behaviors/`. O resolver `store-copy.ts` sim. |
 
 ---
@@ -1081,10 +1081,10 @@ Se o `run` também gravar outra pasta, incluir essa pasta. A lista é o que a mi
 
 ### Como
 
-- [ ] Mover o diretório `migrations/` para `src/foundation/data/migrations/`, preservando `registry.ts`, `runner.ts`, `state.ts`, `validate.ts`, `types.ts`, `targets.ts` (helper), `json-equal.ts`, `legacy-ids.ts`, `production-model.ts`, `runner-edge-stub.ts` e a pasta `migrations/<id>.ts`.
-- [ ] Ajustar imports internos para `@/src/foundation/data/...` e `@/src/foundation/indices/...` onde o índice já mora.
-- [ ] Fachada no caminho antigo de cada módulo público (`runner`, `registry`, `types`, stub Edge).
-- [ ] Em `types.ts`, acrescentar ao `DataMigration`:
+- [x] Mover o diretório `migrations/` para `src/foundation/data/migrations/`, preservando `registry.ts`, `runner.ts`, `state.ts`, `validate.ts`, `types.ts`, `targets.ts` (helper), `json-equal.ts`, `legacy-ids.ts`, `production-model.ts`, `runner-edge-stub.ts` e a pasta `migrations/<id>.ts`.
+- [x] Ajustar imports internos para `@/src/foundation/data/...` e `@/src/foundation/indices/...` onde o índice já mora.
+- [x] Fachada no caminho antigo de cada módulo público (`runner`, `registry`, `types`, stub Edge).
+- [x] Em `types.ts`, acrescentar ao `DataMigration`:
 
 ```ts
 export const MIGRATION_TARGETS = [
@@ -1104,11 +1104,11 @@ export type MigrationTarget = (typeof MIGRATION_TARGETS)[number];
 
   e o campo `targets: readonly MigrationTarget[]` no tipo. Não colocar essa lista dentro de `targets.ts` (esse arquivo segue sendo o helper de idempotência).
 
-- [ ] Preencher `targets` nas quatro migrations da tabela, depois de ler o `run`.
-- [ ] No `assertRegistryValid`, rejeitar `targets` vazio e valor fora de `MIGRATION_TARGETS`. `id` e `order` duplicados continuam sendo erro de load.
-- [ ] Atualizar testes do runner para exigir `targets` nos fixtures, se os fixtures constroem `DataMigration` na mão.
-- [ ] Atualizar caminhos em `package.json`.
-- [ ] Não editar `data/configuracoes/migrations.json` nem o seed.
+- [x] Preencher `targets` nas quatro migrations da tabela, depois de ler o `run`.
+- [x] No `assertRegistryValid`, rejeitar `targets` vazio e valor fora de `MIGRATION_TARGETS`. `id` e `order` duplicados continuam sendo erro de load.
+- [x] Atualizar testes do runner para exigir `targets` nos fixtures, se os fixtures constroem `DataMigration` na mão.
+- [x] Atualizar caminhos em `package.json`.
+- [x] Não editar `data/configuracoes/migrations.json` nem o seed.
 
 ### Fora desta fase
 
@@ -1119,10 +1119,10 @@ export type MigrationTarget = (typeof MIGRATION_TARGETS)[number];
 
 ### Pronto quando
 
-- [ ] `npm test` dos testes de migration verdes.
-- [ ] `npm run data:migrate` em `data-dev/` não reaplica migration já registrada no ledger (rodar duas vezes: a segunda não reescreve JSON).
-- [ ] Boot do `npm run dev` não dispara erro de registry.
-- [ ] Critério de pronto comum.
+- [x] `npm test` dos testes de migration verdes.
+- [x] `npm run data:migrate` em `data-dev/` não reaplica migration já registrada no ledger (rodar duas vezes: a segunda não reescreve JSON).
+- [x] Boot do `npm run dev` não dispara erro de registry.
+- [x] Critério de pronto comum.
 
 ---
 

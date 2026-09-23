@@ -1,7 +1,7 @@
 import {
   serializeDataJson,
   type DataMigration,
-} from "@/src/lib/data/migrations/types";
+} from "@/src/foundation/data/migrations/types";
 import { siteConfigSchema } from "@/src/schemas/site-config";
 import {
   SITE_CONFIG_META_PATH,
@@ -21,6 +21,7 @@ export const migrationSplitSiteConfigByTab: DataMigration = {
   order: 20,
   description:
     "Divide configuracoes/site.json em meta + um JSON por aba do admin",
+  targets: ["configuracoes"],
   async run(ctx) {
     const legacyRaw = await ctx.readJson<unknown>(LEGACY_SITE_PATH);
     const metaExisting = await ctx.readJson<unknown>(SITE_CONFIG_META_PATH);
