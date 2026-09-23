@@ -1,0 +1,318 @@
+/* Keep the 1100px queries in sync with ATELIE_DESKTOP_MIN in breakpoints.ts. */
+
+.header {
+  --atelie-bg: #f7f3ec;
+  --atelie-ink: #6e5c49;
+  --atelie-line: rgba(110, 92, 73, 0.45);
+  --atelie-font: var(--font-atelie), "Times New Roman", serif;
+  --atelie-bar-height: 4.75rem;
+  position: sticky;
+  top: 0;
+  z-index: 70;
+  color: var(--atelie-ink);
+  font-family: var(--atelie-font);
+  background: linear-gradient(
+    180deg,
+    var(--atelie-bg) 0%,
+    var(--atelie-bg) calc(100% - 1.05rem),
+    transparent 100%
+  );
+  padding-bottom: 1.05rem;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-height: 4.5rem;
+  padding: 0.7rem 1.15rem;
+  padding-left: max(1.15rem, env(safe-area-inset-left));
+  padding-right: max(1.15rem, env(safe-area-inset-right));
+  background: var(--atelie-bg);
+}
+
+.brandLink {
+  display: flex;
+  min-width: 0;
+  flex-shrink: 1;
+  color: inherit;
+  text-decoration: none;
+}
+
+.brandLink:focus-visible,
+.desktopNav a:focus-visible,
+.cartLink:focus-visible,
+.menuToggle:focus-visible {
+  outline: 1px solid var(--atelie-ink);
+  outline-offset: 4px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.logo {
+  width: 2.85rem;
+  height: 2.85rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--atelie-line);
+}
+
+.brandCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.brandName,
+.brandTag {
+  font-weight: 500;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.brandName {
+  font-size: 0.95rem;
+  letter-spacing: 0.16em;
+}
+
+.brandTag {
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+}
+
+.desktopNav {
+  display: none;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.cart {
+  display: flex;
+  align-items: center;
+}
+
+.cartLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--atelie-ink);
+  border-radius: 50%;
+  color: inherit;
+  text-decoration: none;
+  background: transparent;
+}
+
+.cartLink:hover {
+  background: rgba(110, 92, 73, 0.06);
+}
+
+.cartBadge {
+  position: absolute;
+  top: -0.15rem;
+  right: -0.15rem;
+  min-width: 1.05rem;
+  height: 1.05rem;
+  padding: 0 0.2rem;
+  border-radius: 999px;
+  background: var(--atelie-ink);
+  color: var(--atelie-bg);
+  font-family: var(--atelie-font), "Times New Roman", serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1.05rem;
+  text-align: center;
+}
+
+.mobileNav {
+  display: flex;
+}
+
+.menuToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.menuToggle:active {
+  background: #aad4dc;
+}
+
+.burger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 1.25rem;
+}
+
+.burger span {
+  display: block;
+  height: 1px;
+  background: currentColor;
+}
+
+.panel {
+  position: fixed;
+  top: var(--atelie-bar-height);
+  right: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  max-height: calc(100dvh - var(--atelie-bar-height));
+  margin: 0;
+  padding: 1.7rem 1.5rem 1.9rem;
+  padding-left: max(1.5rem, env(safe-area-inset-left));
+  padding-right: max(1.5rem, env(safe-area-inset-right));
+  padding-bottom: max(1.9rem, env(safe-area-inset-bottom));
+  overflow: auto;
+  background: var(--atelie-bg);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.4s ease,
+    visibility 0.4s ease;
+}
+
+.mobileNav[data-open="true"] .panel {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.header .panel a,
+.header .panel button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 3.25rem;
+  margin: 0;
+  padding: 0.7rem 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--atelie-ink);
+  font-family: var(--atelie-font), "Times New Roman", serif;
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  line-height: 1.2;
+  text-align: left;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.header .panel a:hover,
+.header .panel a:focus-visible,
+.header .panel button:hover,
+.header .panel button:focus-visible {
+  background: transparent;
+  color: var(--atelie-ink);
+  opacity: 0.62;
+}
+
+.header .desktopNav a {
+  color: var(--atelie-ink);
+  font-family: var(--atelie-font), "Times New Roman", serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: transparent;
+}
+
+.header .desktopNav a:hover,
+.header .desktopNav a:focus-visible {
+  color: var(--atelie-ink);
+  background: transparent;
+  opacity: 0.62;
+}
+
+.header .desktopNav div > div,
+.header .desktopNav li > ul {
+  background: var(--atelie-bg);
+  border-color: var(--atelie-line);
+  border-radius: 2px;
+  box-shadow: none;
+}
+
+@media (min-width: 1100px) {
+  .bar {
+    gap: 1.75rem;
+    min-height: 5.1rem;
+    padding: 0.85rem 2.4rem 0.7rem;
+  }
+
+  .logo {
+    width: 3.35rem;
+    height: 3.35rem;
+  }
+
+  .brand {
+    gap: 0.9rem;
+  }
+
+  .brandName {
+    font-size: 1.2rem;
+    letter-spacing: 0.22em;
+  }
+
+  .brandTag {
+    font-size: 0.68rem;
+    letter-spacing: 0.26em;
+  }
+
+  .desktopNav {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1.35rem;
+    min-width: 0;
+    margin-right: 0.85rem;
+  }
+
+  .mobileNav {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    transition: none;
+  }
+}
