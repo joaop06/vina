@@ -907,12 +907,12 @@ Adapters, paths, commit e índices ficam em `src/foundation/data` e `src/foundat
 
 ### Como
 
-- [ ] Mover cada arquivo de `src/lib/data/` que não esteja dentro de `migrations/`.
-- [ ] Mover `src/lib/indices/**` para `src/foundation/indices/**`, testes inclusive (`product-index-*`, `order-index-*`, `client-index-*`, `phase6-anti-patterns`).
-- [ ] Corrigir imports internos para o destino quando os dois lados já estiverem em `foundation`. Onde o arquivo de índice ainda importa `@/src/lib/data/migrations/types`, deixar esse import: a migration muda na fase 9.
-- [ ] Criar a fachada no caminho antigo.
-- [ ] Atualizar a script `test` só para os testes que mudaram de pasta.
-- [ ] `getDataRoot()`, `DATA_DIR_NAME` e `dataRepoPath()` permanecem com o mesmo comportamento. Não aceitar path de loja fora de `data/` / `data-dev/`.
+- [x] Mover cada arquivo de `src/lib/data/` que não esteja dentro de `migrations/`.
+- [x] Mover `src/lib/indices/**` para `src/foundation/indices/**`, testes inclusive (`product-index-*`, `order-index-*`, `client-index-*`, `phase6-anti-patterns`).
+- [x] Corrigir imports internos para o destino quando os dois lados já estiverem em `foundation`. Onde o arquivo de índice ainda importa `@/src/lib/data/migrations/types`, deixar esse import: a migration muda na fase 9.
+- [x] Criar a fachada no caminho antigo.
+- [x] Atualizar a script `test` só para os testes que mudaram de pasta.
+- [x] `getDataRoot()`, `DATA_DIR_NAME` e `dataRepoPath()` permanecem com o mesmo comportamento. Não aceitar path de loja fora de `data/` / `data-dev/`.
 
 ### Fora desta fase
 
@@ -922,9 +922,9 @@ Adapters, paths, commit e índices ficam em `src/foundation/data` e `src/foundat
 
 ### Pronto quando
 
-- [ ] `npm test` com os testes de índice e de `fs-commit` no caminho novo.
-- [ ] `npm run data:migrate` ainda encontra o runner pelo caminho antigo (fachada ou import ainda em `src/lib`).
-- [ ] Critério de pronto comum.
+- [x] `npm test` com os testes de índice e de `fs-commit` no caminho novo.
+- [x] `npm run data:migrate` ainda encontra o runner pelo caminho antigo (fachada ou import ainda em `src/lib`).
+- [x] Critério de pronto comum.
 
 ### Fase 8.2 — Auth, HTTP, cache e admin de fundação
 
@@ -953,11 +953,11 @@ Sessão, erros HTTP, cache ISR e helpers de admin ficam na fundação.
 
 ### Como
 
-- [ ] Mover os diretórios e arquivos da tabela. `cache-tags.ts` entra em `src/foundation/cache/cache-tags.ts`.
-- [ ] `dashboard-aggregates` entra em `src/foundation/admin/`.
-- [ ] Fachada em cada caminho antigo, inclusive `src/lib/api/index` se existir barrel interno: a fachada espelha o que era exportado.
-- [ ] Atualizar `package.json` para os testes movidos.
-- [ ] Confirmar que o bundle Edge ainda importa só o módulo de sessão Edge (não o adapter `fs`). Se o move puxar `server-only` para o middleware, desfazer esse import e manter o arquivo Edge sem dependência de Node.
+- [x] Mover os diretórios e arquivos da tabela. `cache-tags.ts` entra em `src/foundation/cache/cache-tags.ts`.
+- [x] `dashboard-aggregates` entra em `src/foundation/admin/`.
+- [x] Fachada em cada caminho antigo, inclusive `src/lib/api/index` se existir barrel interno: a fachada espelha o que era exportado.
+- [x] Atualizar `package.json` para os testes movidos.
+- [x] Confirmar que o bundle Edge ainda importa só o módulo de sessão Edge (não o adapter `fs`). Se o move puxar `server-only` para o middleware, desfazer esse import e manter o arquivo Edge sem dependência de Node.
 
 ### Fora desta fase
 
@@ -966,10 +966,10 @@ Sessão, erros HTTP, cache ISR e helpers de admin ficam na fundação.
 
 ### Pronto quando
 
-- [ ] Login e logout do admin.
-- [ ] Uma listagem pública ainda usa o cache (home carrega).
-- [ ] Testes de `api`, `cache` e `dashboard-aggregates` verdes no caminho novo.
-- [ ] Critério de pronto comum.
+- [x] Login e logout do admin.
+- [x] Uma listagem pública ainda usa o cache (home carrega).
+- [x] Testes de `api`, `cache` e `dashboard-aggregates` verdes no caminho novo.
+- [x] Critério de pronto comum.
 
 ### Fase 8.3 — Behaviors
 
@@ -988,10 +988,10 @@ Arquivos listados no [mapa](#srclib--srcfoundation). `src/lib/front/breakpoints.
 
 ### Como
 
-- [ ] Mover na ordem da tabela do mapa, uma área por vez, com fachada e teste (`wa`, `wa-template-validation`, `catalog-facets`, `client-filter`, `pagination`, `navigation-admin`).
-- [ ] Atualizar `package.json` a cada teste movido.
-- [ ] `store-copy-defaults` e `default-site-config` ficam em `src/config/`. O resolver `store-copy.ts` vai para `behaviors/copy/` e importa os defaults de `@/src/config/...`.
-- [ ] Schemas continuam em `src/schemas/`. Behavior importa tipo de schema; schema que hoje importa `wa-whatsapp-normalize` pode continuar na fachada até a fase 12. Não inverter a dependência (behavior não passa a importar `components/`).
+- [x] Mover na ordem da tabela do mapa, uma área por vez, com fachada e teste (`wa`, `wa-template-validation`, `catalog-facets`, `client-filter`, `pagination`, `navigation-admin`).
+- [x] Atualizar `package.json` a cada teste movido.
+- [x] `store-copy-defaults` e `default-site-config` ficam em `src/config/`. O resolver `store-copy.ts` vai para `behaviors/copy/` e importa os defaults de `@/src/config/...`.
+- [x] Schemas continuam em `src/schemas/`. Behavior importa tipo de schema; schema que hoje importa `wa-whatsapp-normalize` pode continuar na fachada até a fase 12. Não inverter a dependência (behavior não passa a importar `components/`).
 
 ### Fora desta fase
 
@@ -1000,9 +1000,9 @@ Arquivos listados no [mapa](#srclib--srcfoundation). `src/lib/front/breakpoints.
 
 ### Pronto quando
 
-- [ ] Mensagem de WhatsApp de produto e de carrinho, preço de variante, menu da vitrine e copy de catálogo com o mesmo texto de antes.
-- [ ] Testes de `wa`, facets, client-filter, pagination e navigation-admin verdes.
-- [ ] Critério de pronto comum.
+- [x] Mensagem de WhatsApp de produto e de carrinho, preço de variante, menu da vitrine e copy de catálogo com o mesmo texto de antes.
+- [x] Testes de `wa`, facets, client-filter, pagination e navigation-admin verdes.
+- [x] Critério de pronto comum.
 
 ### Fase 8.4 — Platform e observabilidade
 
@@ -1022,9 +1022,9 @@ Utilitário transversal e métrica de leitura ficam fora da raiz de `src/lib`.
 
 ### Como
 
-- [ ] Mover os arquivos. ViaCEP e endereço juntos em `platform/br/`.
-- [ ] Fachadas. Atualizar a script `test` de `endereco` e `read-metrics`.
-- [ ] `instagram.ts` é helper de URL, não o botão. O botão já está no kit desde a fase 7.
+- [x] Mover os arquivos. ViaCEP e endereço juntos em `platform/br/`.
+- [x] Fachadas. Atualizar a script `test` de `endereco` e `read-metrics`.
+- [x] `instagram.ts` é helper de URL, não o botão. O botão já está no kit desde a fase 7.
 
 ### Fora desta fase
 
@@ -1032,9 +1032,9 @@ Utilitário transversal e métrica de leitura ficam fora da raiz de `src/lib`.
 
 ### Pronto quando
 
-- [ ] Página sobre ainda formata endereço. Rate limit de login ainda responde.
-- [ ] Testes de endereço e de read-metrics verdes.
-- [ ] Critério de pronto comum.
+- [x] Página sobre ainda formata endereço. Rate limit de login ainda responde.
+- [x] Testes de endereço e de read-metrics verdes.
+- [x] Critério de pronto comum.
 
 ---
 
