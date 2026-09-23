@@ -1,6 +1,5 @@
-import type { BannerPosicao } from "@/src/schemas/banner";
-import type { SiteLayoutId } from "@/src/schemas/site-config";
 
+import type { BannerPosicao, SiteLayoutId } from "@/src/schemas";
 export type LayoutBannerSlot = {
   posicao: BannerPosicao;
   label: string;

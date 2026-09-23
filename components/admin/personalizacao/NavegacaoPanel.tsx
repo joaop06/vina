@@ -1,9 +1,7 @@
 "use client";
 
+import { DEFAULT_NAVEGACAO, type Category, type SiteConfig } from "@/src/schemas";
 import { NavegacaoEditor } from "@/components/admin/personalizacao/navegacao/NavegacaoEditor";
-import { DEFAULT_NAVEGACAO } from "@/src/schemas/navigation";
-import type { Category } from "@/src/schemas/category";
-import type { SiteConfig } from "@/src/schemas/site-config";
 
 export function NavegacaoPanel({
   formId,

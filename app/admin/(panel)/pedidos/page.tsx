@@ -1,3 +1,4 @@
+import { orderCanalSchema, orderStatusSchema, indexEntryToOrder, indexEntryToClient } from "@/src/schemas";
 import {
   getCachedClientIndex,
   getCachedOrderIndex,
@@ -9,10 +10,7 @@ import {
   paginateItems,
   PAGINATION,
 } from "@/src/lib/pagination";
-import { orderCanalSchema, orderStatusSchema } from "@/src/schemas/order";
 import { filterOrderIndexEntries } from "@/src/lib/indices/order-index-core";
-import { indexEntryToOrder } from "@/src/schemas/order-index";
-import { indexEntryToClient } from "@/src/schemas/client-index";
 import { setListingReadContext } from "@/src/lib/observability/listing-read";
 
 type Props = {

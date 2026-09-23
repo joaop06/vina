@@ -1,9 +1,9 @@
 "use client";
 
+import type { Client } from "@/src/schemas";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { matchesClientQuery } from "@/src/lib/front/client-filter";
 import { formatBrWhatsApp } from "@/src/lib/wa";
-import type { Client } from "@/src/schemas/client";
 
 function clientLabel(c: Client) {
   const parts = [c.nome];

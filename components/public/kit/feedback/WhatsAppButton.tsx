@@ -1,10 +1,10 @@
 "use client";
 
+import type { WaSource } from "@/src/schemas";
 import type { ReactNode } from "react";
 import { useWhatsAppGate } from "@/components/public/kit/feedback/WhatsAppGateProvider";
 import { useAnalyticsOptional } from "@/components/public/kit/feedback/analytics/AnalyticsProvider";
 import { WhatsAppIcon } from "@/components/public/kit/chrome/icons/StorefrontIcons";
-import type { WaSource } from "@/src/schemas/analytics";
 
 type Props = {
   href: string;

@@ -1,5 +1,6 @@
 "use client";
 
+import { categorySchema, type Category, variantAttr, type Product, type SiteDimensao } from "@/src/schemas";
 import Link from "next/link";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -31,9 +32,6 @@ import {
   flattenCategoryTree,
 } from "@/src/lib/categories-tree";
 import { formatBrl, maskBrlInput, parseBrlInput } from "@/src/lib/front/format";
-import { categorySchema, type Category } from "@/src/schemas/category";
-import { variantAttr, type Product } from "@/src/schemas/product";
-import type { SiteDimensao } from "@/src/schemas/site-personalization";
 
 function sortCategories(list: Category[]) {
   return [...list].sort(

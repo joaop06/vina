@@ -1,20 +1,10 @@
+import { getSiteConfigTab, updateSiteConfig, updateSiteConfigTabs, getSiteConfig } from "@/src/services";
+import { siteConfigUpdateSchema, SITE_CONFIG_TAB_IDS, siteConfigTabIdSchema, type SiteConfigTabId } from "@/src/schemas";
 import { NextRequest } from "next/server";
 import { requireAdmin } from "@/src/lib/auth/session";
 import { jsonError, jsonOk } from "@/src/lib/api/response";
 import { AppError } from "@/src/lib/api/errors";
 import { parseAdminMutationForm } from "@/src/lib/admin/parse-multipart";
-import {
-  getSiteConfigTab,
-  updateSiteConfig,
-  updateSiteConfigTabs,
-} from "@/src/services/site-config.service";
-import { getSiteConfig } from "@/src/services/site-config.service";
-import { siteConfigUpdateSchema } from "@/src/schemas/site-config";
-import {
-  SITE_CONFIG_TAB_IDS,
-  siteConfigTabIdSchema,
-  type SiteConfigTabId,
-} from "@/src/schemas/site-config-tabs";
 import { z } from "zod";
 
 const tabBatchSchema = z.object({

@@ -1,5 +1,6 @@
 "use client";
 
+import type { Category } from "@/src/schemas";
 import {
   useCallback,
   useEffect,
@@ -21,7 +22,6 @@ import {
   countCompactFacetMatches,
   type CompactCatalogFacets,
 } from "@/src/lib/front/catalog-facets";
-import type { Category } from "@/src/schemas/category";
 
 export type CatalogCategoryOption = {
   id: string;

@@ -1,8 +1,7 @@
 "use client";
 
+import type { Product, ProductListItem } from "@/src/schemas";
 import { useEffect, useId, useRef, useState } from "react";
-import type { Product } from "@/src/schemas/product";
-import type { ProductListItem } from "@/src/schemas/product-list";
 
 type SearchHit = Pick<ProductListItem, "id" | "nome" | "referencia" | "status">;
 

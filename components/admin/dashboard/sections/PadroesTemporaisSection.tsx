@@ -1,4 +1,4 @@
-import type { DashboardStats } from "@/src/schemas/dashboard";
+import type { DashboardStats } from "@/src/schemas";
 import { DashEmpty } from "../DashEmpty";
 import { DashSectionCollapsible } from "../DashSectionCollapsible";
 import { HourBarList, SimpleBarList } from "../SimpleBarList";

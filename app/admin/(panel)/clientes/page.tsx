@@ -1,3 +1,4 @@
+import { indexEntryToClient } from "@/src/schemas";
 import { ClientesClient } from "@/components/admin/clientes/ClientesClient";
 import {
   getCachedClientIndex,
@@ -13,7 +14,6 @@ import {
   paginateItems,
   PAGINATION,
 } from "@/src/lib/pagination";
-import { indexEntryToClient } from "@/src/schemas/client-index";
 import { setListingReadContext } from "@/src/lib/observability/listing-read";
 
 type Props = {

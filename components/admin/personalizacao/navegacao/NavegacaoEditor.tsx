@@ -1,5 +1,6 @@
 "use client";
 
+import { DEFAULT_NAVEGACAO, type NavItem, type SiteNavegacao, type Category } from "@/src/schemas";
 import { useId, useState, type KeyboardEvent } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -23,12 +24,6 @@ import {
   surfacesItemsDiffer,
   type NavSurfaceKey,
 } from "@/src/lib/navigation-admin";
-import {
-  DEFAULT_NAVEGACAO,
-  type NavItem,
-  type SiteNavegacao,
-} from "@/src/schemas/navigation";
-import type { Category } from "@/src/schemas/category";
 
 type Props = {
   value: SiteNavegacao;

@@ -1,5 +1,5 @@
-import type { SiteFonteId, SiteTema } from "@/src/schemas/site-personalization";
 
+import type { SiteFonteId, SiteTema } from "@/src/schemas";
 export const LARGURA_PRESETS = [
   {
     id: "compacta" as const,

@@ -1,5 +1,6 @@
 "use client";
 
+import type { SiteConfig } from "@/src/schemas";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import {
@@ -17,7 +18,6 @@ import { getFooterContact } from "@/components/public/kit/chrome/footerContact";
 import { formatEnderecoLinha } from "@/src/lib/br/endereco";
 import { instagramProfileUrl, syncInstagram } from "@/src/lib/instagram";
 import { formatBrWhatsApp, normalizeWaDigits } from "@/src/lib/wa";
-import type { SiteConfig } from "@/src/schemas/site-config";
 import styles from "./ContatoPanel.module.css";
 
 function InstagramGlyph({ size = 18 }: { size?: number }) {

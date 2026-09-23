@@ -1,5 +1,6 @@
 "use client";
 
+import type { SiteConfig } from "@/src/schemas";
 import { productWaMessageFromParts } from "@/src/lib/wa";
 import {
   type ProductWaTemplateParts,
@@ -12,7 +13,6 @@ import { DEFAULT_PRODUCT_WA_TEMPLATE_PARTS } from "@/src/lib/wa-product-template
 import { WhatsAppSectionSplit } from "@/components/admin/personalizacao/WhatsAppSectionSplit";
 import { WhatsAppStorePreview } from "@/components/admin/personalizacao/WhatsAppStorePreview";
 import styles from "@/components/admin/personalizacao/WhatsAppPanel.module.css";
-import type { SiteConfig } from "@/src/schemas/site-config";
 import { Info } from "lucide-react";
 import { useMemo } from "react";
 

@@ -1,5 +1,4 @@
-import { listCategories } from "@/src/services/categories.service";
-import { getSiteConfig } from "@/src/services/site-config.service";
+import { listCategories, getSiteConfig } from "@/src/services";
 import { ProductForm } from "@/components/admin/produtos/ProductForm";
 
 /** Empty form + categories only — never loads the product catalog (Fase 4). */

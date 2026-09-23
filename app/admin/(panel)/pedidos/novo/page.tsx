@@ -1,3 +1,4 @@
+import type { Product } from "@/src/schemas";
 import {
   getCachedClients,
   getCachedProductsByIds,
@@ -7,7 +8,6 @@ import {
   type PedidoInitialLine,
 } from "@/components/admin/pedidos/PedidoForm";
 import { variantSellPrice } from "@/src/lib/front/pricing";
-import type { Product } from "@/src/schemas/product";
 
 type Props = {
   searchParams: Promise<{ itens?: string | string[] }>;

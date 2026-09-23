@@ -1,5 +1,6 @@
 "use client";
 
+import type { SiteConfig } from "@/src/schemas";
 import { useMemo } from "react";
 import { Info } from "lucide-react";
 import { cartWaMessage } from "@/src/lib/wa";
@@ -12,7 +13,6 @@ import {
 import { WhatsAppSectionSplit } from "@/components/admin/personalizacao/WhatsAppSectionSplit";
 import { WhatsAppStorePreview } from "@/components/admin/personalizacao/WhatsAppStorePreview";
 import styles from "@/components/admin/personalizacao/WhatsAppPanel.module.css";
-import type { SiteConfig } from "@/src/schemas/site-config";
 
 const PREVIEW_LINES = [
   {

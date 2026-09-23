@@ -1,5 +1,6 @@
 "use client";
 
+import type { AnalyticsEvent, WaSource, SiteTextosExtended } from "@/src/schemas";
 import {
   createContext,
   useCallback,
@@ -20,8 +21,6 @@ import {
   type ConsentStatus,
 } from "@/src/lib/front/analytics-consent";
 import { getClientLead } from "@/src/lib/front/client-lead";
-import type { AnalyticsEvent, WaSource } from "@/src/schemas/analytics";
-import type { SiteTextosExtended } from "@/src/schemas/site-personalization";
 import { ConsentBanner } from "./ConsentBanner";
 
 type AnalyticsContextValue = {

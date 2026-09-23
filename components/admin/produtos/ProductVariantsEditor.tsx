@@ -1,11 +1,9 @@
 "use client";
 
+import { type Product, variantAttr, type SiteDimensao } from "@/src/schemas";
 import { useState, type KeyboardEvent } from "react";
 import { FieldHint } from "@/components/admin/shell/FieldHint";
 import { formatBrl, maskBrlInput, parseBrlInput } from "@/src/lib/front/format";
-import type { Product } from "@/src/schemas/product";
-import { variantAttr } from "@/src/schemas/product";
-import type { SiteDimensao } from "@/src/schemas/site-personalization";
 import { DEFAULT_DIMENSOES } from "@/src/config/store-copy-defaults";
 
 export type ProductVariantDraft = Product["variantes"][number];

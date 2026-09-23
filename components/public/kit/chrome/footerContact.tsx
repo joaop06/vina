@@ -1,6 +1,6 @@
+import type { SiteConfig } from "@/src/schemas";
 import { formatBrWhatsApp } from "@/src/lib/wa";
 import { formatEnderecoLinha } from "@/src/lib/br/endereco";
-import type { SiteConfig } from "@/src/schemas/site-config";
 
 export type FooterPhone = {
   id: "fixo" | "celular";

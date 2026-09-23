@@ -1,17 +1,12 @@
 "use client";
 
+import { navItemLabel, type NavCategoriasItem, type NavItem, type Category } from "@/src/schemas";
 import { useId, useState } from "react";
 import { GripVertical, MapPinned, X } from "lucide-react";
 import { FieldHint } from "@/components/admin/shell/FieldHint";
 import { listRootCategories } from "@/src/lib/navigation";
 import type { NavSurfaceKey } from "@/src/lib/navigation-admin";
 import { navItemKindLabel } from "@/src/lib/navigation-admin";
-import {
-  navItemLabel,
-  type NavCategoriasItem,
-  type NavItem,
-} from "@/src/schemas/navigation";
-import type { Category } from "@/src/schemas/category";
 import styles from "./NavegacaoEditor.module.css";
 
 function moveItem<T>(list: T[], from: number, to: number): T[] {

@@ -1,5 +1,5 @@
-import type { SiteLayoutId } from "@/src/schemas/site-config";
 
+import type { SiteLayoutId } from "@/src/schemas";
 export type SiteLayoutOption = {
   id: SiteLayoutId;
   nome: string;

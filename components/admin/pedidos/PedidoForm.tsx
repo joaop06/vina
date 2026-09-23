@@ -1,5 +1,6 @@
 "use client";
 
+import { type Client, type Order, type OrderCanal, type Product, type ProductVariant, variantAttr } from "@/src/schemas";
 import Link from "next/link";
 import { useId, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -17,10 +18,6 @@ import {
 } from "@/components/admin/shell/adminToast";
 import { formatBrl } from "@/src/lib/front/format";
 import { variantSellPrice } from "@/src/lib/front/pricing";
-import type { Client } from "@/src/schemas/client";
-import type { Order, OrderCanal } from "@/src/schemas/order";
-import type { Product, ProductVariant } from "@/src/schemas/product";
-import { variantAttr } from "@/src/schemas/product";
 
 type DraftLine = {
   key: string;

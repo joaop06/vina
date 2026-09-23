@@ -1,5 +1,6 @@
 "use client";
 
+import { createCustomNavItem, type NavItem } from "@/src/schemas";
 import { useEffect, useId, useRef, useState } from "react";
 import {
   ExternalLink,
@@ -10,10 +11,6 @@ import {
   Plus,
   Tags,
 } from "lucide-react";
-import {
-  createCustomNavItem,
-  type NavItem,
-} from "@/src/schemas/navigation";
 import styles from "./NavegacaoEditor.module.css";
 
 type Props = {

@@ -1,5 +1,6 @@
 "use client";
 
+import { type Banner, type Category, type SiteConfig, extractTabSlice, mergeTabIntoConfig, type SiteConfigTabApiResponse, type SiteConfigTabId } from "@/src/schemas";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -35,15 +36,6 @@ import {
 import type { ImageMeta } from "@/components/admin/produtos/ImageField";
 import { normalizeWaDigits } from "@/src/lib/wa";
 import { isApiClientError } from "@/src/lib/api/client-error";
-import type { Banner } from "@/src/schemas/banner";
-import type { Category } from "@/src/schemas/category";
-import type { SiteConfig } from "@/src/schemas/site-config";
-import {
-  extractTabSlice,
-  mergeTabIntoConfig,
-  type SiteConfigTabApiResponse,
-  type SiteConfigTabId,
-} from "@/src/schemas/site-config-tabs";
 
 // Stable IDs avoid React 19 useId prefix differences between Next.js SSR and hydration.
 const TABS_ID = "admin-personalizacao";

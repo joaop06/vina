@@ -1,7 +1,8 @@
+import { listCategories } from "@/src/services";
+import { productStatusSchema, type ProductListItem, uuidSchema } from "@/src/schemas";
 import Link from "next/link";
 import { listCachedProductListItems } from "@/src/lib/cache/storefront-reads";
 import { isEffectivelyActive } from "@/src/lib/categories-tree";
-import { listCategories } from "@/src/services/categories.service";
 import { formatBrl, mediaUrl } from "@/src/lib/front/format";
 import {
   estimateJsonPayloadBytes,
@@ -19,9 +20,6 @@ import {
   PAGINATION,
   parseOptionalBooleanParam,
 } from "@/src/lib/pagination";
-import { productStatusSchema } from "@/src/schemas/product";
-import type { ProductListItem } from "@/src/schemas/product-list";
-import { uuidSchema } from "@/src/schemas/common";
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;

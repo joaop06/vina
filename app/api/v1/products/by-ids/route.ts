@@ -1,8 +1,8 @@
+import { getProductsByIds } from "@/src/services";
+import { uuidSchema } from "@/src/schemas";
 import { NextRequest } from "next/server";
 import { jsonError, jsonOk } from "@/src/lib/api/response";
 import { AppError } from "@/src/lib/api/errors";
-import { getProductsByIds } from "@/src/services/products.service";
-import { uuidSchema } from "@/src/schemas/common";
 import { z } from "zod";
 
 const MAX_IDS = 50;

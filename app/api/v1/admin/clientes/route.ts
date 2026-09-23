@@ -1,7 +1,7 @@
+import { listClientsPage } from "@/src/services";
 import { NextRequest } from "next/server";
 import { requireAdmin } from "@/src/lib/auth/session";
 import { jsonError, jsonOk } from "@/src/lib/api/response";
-import { listClientsPage } from "@/src/services/clients.service";
 import { normalizePagination, PAGINATION } from "@/src/lib/pagination";
 
 export async function GET(req: NextRequest) {

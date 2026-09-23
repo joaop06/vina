@@ -1,6 +1,6 @@
+import type { Banner } from "@/src/schemas";
 import Image from "next/image";
 import Link from "next/link";
-import type { Banner } from "@/src/schemas/banner";
 import { mediaUrl } from "@/src/lib/front/format";
 import { IMAGE_SIZES } from "@/src/lib/front/media-image";
 import {

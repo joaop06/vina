@@ -1,5 +1,6 @@
 "use client";
 
+import type { Banner, BannerPosicao, SiteLayoutId } from "@/src/schemas";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useAdminBusy } from "@/components/admin/shell/AdminBusy";
 import { useConfirm } from "@/components/admin/shell/ConfirmDialog";
@@ -26,8 +27,6 @@ import {
 } from "@/components/public/layouts/contract/banner-slots";
 import { DEFAULT_BANNER_CTA } from "@/src/config/store-copy-defaults";
 import { mediaUrl } from "@/src/lib/front/format";
-import type { Banner, BannerPosicao } from "@/src/schemas/banner";
-import type { SiteLayoutId } from "@/src/schemas/site-config";
 
 type SlotDraft = {
   ativo: boolean;

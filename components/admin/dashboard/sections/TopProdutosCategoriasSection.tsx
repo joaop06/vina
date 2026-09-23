@@ -1,5 +1,5 @@
+import type { DashboardStats } from "@/src/schemas";
 import { formatBrl } from "@/src/lib/front/format";
-import type { DashboardStats } from "@/src/schemas/dashboard";
 import { DashEmpty } from "../DashEmpty";
 import { DashSectionCollapsible } from "../DashSectionCollapsible";
 import { SimpleBarList } from "../SimpleBarList";

@@ -1,5 +1,6 @@
 "use client";
 
+import { navItemLabel, type NavItem } from "@/src/schemas";
 import { useEffect, useId, useRef, useState } from "react";
 import {
   ArrowDown,
@@ -12,7 +13,6 @@ import {
   Trash2,
 } from "lucide-react";
 import { navItemKindLabel } from "@/src/lib/navigation-admin";
-import { navItemLabel, type NavItem } from "@/src/schemas/navigation";
 import styles from "./NavegacaoEditor.module.css";
 
 type Props = {

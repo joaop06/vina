@@ -1,15 +1,10 @@
+import { createProduct, getProductById, listProductsPage, listProductsPageFull } from "@/src/services";
+import { productCreateSchema, productStatusSchema } from "@/src/schemas";
 import { NextRequest } from "next/server";
 import { requireAdmin } from "@/src/lib/auth/session";
 import { jsonError, jsonOk } from "@/src/lib/api/response";
 import { AppError } from "@/src/lib/api/errors";
 import { parseAdminMutationForm } from "@/src/lib/admin/parse-multipart";
-import {
-  createProduct,
-  getProductById,
-  listProductsPage,
-  listProductsPageFull,
-} from "@/src/services/products.service";
-import { productCreateSchema, productStatusSchema } from "@/src/schemas/product";
 import { normalizePagination, PAGINATION, parseOptionalBooleanParam } from "@/src/lib/pagination";
 import {
   estimateJsonPayloadBytes,

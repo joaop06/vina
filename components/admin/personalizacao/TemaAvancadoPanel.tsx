@@ -1,5 +1,6 @@
 "use client";
 
+import { type SiteConfig, siteFonteIdSchema, type SiteFonteId } from "@/src/schemas";
 import { useEffect, useState, type CSSProperties } from "react";
 import { FieldHint } from "@/components/admin/shell/FieldHint";
 import { ColorField } from "@/components/admin/personalizacao/ColorField";
@@ -14,11 +15,6 @@ import {
   matchLarguraPreset,
   matchTipografiaPreset,
 } from "@/components/admin/personalizacao/temaPresets";
-import type { SiteConfig } from "@/src/schemas/site-config";
-import {
-  siteFonteIdSchema,
-  type SiteFonteId,
-} from "@/src/schemas/site-personalization";
 import styles from "./TemaAvancadoPanel.module.css";
 
 function TemaPreview({

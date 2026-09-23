@@ -1,8 +1,8 @@
 "use client";
 
+import type { Product, ProductVariant, SiteDimensao, SiteTextosExtended } from "@/src/schemas";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import type { Product, ProductVariant } from "@/src/schemas/product";
 import { formatBrl } from "@/src/lib/front/format";
 import {
   discountPercent,
@@ -23,7 +23,6 @@ import { CartIcon } from "@/components/public/kit/chrome/icons/StorefrontIcons";
 import { useCartOptional } from "@/components/public/kit/cart/CartProvider";
 import { coverImage } from "@/src/lib/front/media";
 import { selecioneVarianteFromDims } from "@/src/lib/front/store-copy";
-import type { SiteDimensao, SiteTextosExtended } from "@/src/schemas/site-personalization";
 
 export type ProductDetailProps = {
   product: Product;

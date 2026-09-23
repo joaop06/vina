@@ -5,3 +5,5 @@ export * from "./site-config.service";
 export * from "./dashboard.service";
 export * from "./upload.service";
 export * from "./clients.service";
+export * from "./orders.service";
+export * from "./analytics.service";

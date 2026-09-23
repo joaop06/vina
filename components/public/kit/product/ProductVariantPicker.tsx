@@ -1,7 +1,6 @@
 "use client";
 
-import type { ProductVariant } from "@/src/schemas/product";
-import { variantAttr } from "@/src/schemas/product";
+import { type ProductVariant, variantAttr, type SiteDimensao, type SiteTextosExtended } from "@/src/schemas";
 import {
   combinationExists,
   findVariant,
@@ -10,8 +9,6 @@ import {
   uniqueDimensionValues,
 } from "@/src/lib/front/variants";
 import { formatEstoqueVarios } from "@/src/lib/front/store-copy";
-import type { SiteDimensao } from "@/src/schemas/site-personalization";
-import type { SiteTextosExtended } from "@/src/schemas/site-personalization";
 import { ProductQuantityStepper } from "@/components/public/kit/product/ProductQuantityStepper";
 import { DEFAULT_DIMENSOES } from "@/src/config/store-copy-defaults";
 

@@ -1,5 +1,6 @@
 "use client";
 
+import type { Client, Order } from "@/src/schemas";
 import Link from "next/link";
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
@@ -17,8 +18,6 @@ import {
   PAGE_SIZE_OPTIONS_ADMIN,
   PAGINATION,
 } from "@/src/lib/pagination";
-import type { Client } from "@/src/schemas/client";
-import type { Order } from "@/src/schemas/order";
 
 const CANAL_LABEL: Record<Order["canal"], string> = {
   whatsapp: "WhatsApp",

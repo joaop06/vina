@@ -1,10 +1,8 @@
+import { DEFAULT_NAVEGACAO, type SiteConfig, type SiteConfigTabId } from "@/src/schemas";
 import type { ImageMeta } from "@/components/admin/produtos/ImageField";
 import { syncInstagram } from "@/src/lib/instagram";
 import { normalizeWaDigits } from "@/src/lib/wa";
 import { DEFAULT_COMPACT_CART_ITEM_PARTS } from "@/src/lib/wa-compact-template";
-import { DEFAULT_NAVEGACAO } from "@/src/schemas/navigation";
-import type { SiteConfig } from "@/src/schemas/site-config";
-import type { SiteConfigTabId } from "@/src/schemas/site-config-tabs";
 
 export function normalizeSiteConfig(initial: SiteConfig): SiteConfig {
   return {

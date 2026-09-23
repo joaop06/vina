@@ -1,5 +1,6 @@
 "use client";
 
+import type { Product, SiteConfig } from "@/src/schemas";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -19,8 +20,6 @@ import {
   WA_MESSAGE_URL_WARN_LENGTH,
   waMessageEncodedLength,
 } from "@/src/lib/wa";
-import type { Product } from "@/src/schemas/product";
-import type { SiteConfig } from "@/src/schemas/site-config";
 
 type ResolvedLine = {
   key: string;

@@ -1,13 +1,9 @@
+import { getDashboardOrdersForExport, periodForPreset, type DashboardPeriodPreset } from "@/src/services";
 import { requireAdmin } from "@/src/lib/auth/session";
 import { AppError, toErrorResponse } from "@/src/lib/api/errors";
 import { csvRow } from "@/src/lib/csv";
 import { parseDateOnly } from "@/src/lib/analytics-date";
 import { orderTotal } from "@/src/lib/dashboard-aggregates";
-import {
-  getDashboardOrdersForExport,
-  periodForPreset,
-  type DashboardPeriodPreset,
-} from "@/src/services/dashboard.service";
 import { NextRequest, NextResponse } from "next/server";
 
 const PRESETS = new Set<DashboardPeriodPreset>([

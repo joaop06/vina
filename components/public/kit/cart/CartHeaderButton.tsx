@@ -1,10 +1,10 @@
 "use client";
 
+import type { SiteLayoutId } from "@/src/schemas";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { CartIcon } from "@/components/public/kit/chrome/icons/StorefrontIcons";
 import { useCartOptional } from "@/components/public/kit/cart/CartProvider";
-import type { SiteLayoutId } from "@/src/schemas/site-config";
 
 type ClassNames = {
   root?: string;

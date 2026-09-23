@@ -1,8 +1,8 @@
+import { upsertClient } from "@/src/services";
+import { clientUpsertSchema } from "@/src/schemas";
 import { NextRequest } from "next/server";
 import { jsonError, jsonOk } from "@/src/lib/api/response";
 import { AppError } from "@/src/lib/api/errors";
-import { upsertClient } from "@/src/services/clients.service";
-import { clientUpsertSchema } from "@/src/schemas/client";
 import { z } from "zod";
 
 export async function POST(req: NextRequest) {

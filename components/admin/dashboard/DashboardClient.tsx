@@ -1,5 +1,6 @@
 "use client";
 
+import type { DashboardPeriodPreset, DashboardStats } from "@/src/schemas";
 import {
   useCallback,
   useEffect,
@@ -24,10 +25,6 @@ import {
 } from "@/components/admin/dashboard/dashboardTabs";
 import { BackToTopButton } from "@/components/ui/BackToTopButton";
 import { apiClientErrorFromResponse } from "@/src/lib/api/client-error";
-import type {
-  DashboardPeriodPreset,
-  DashboardStats,
-} from "@/src/schemas/dashboard";
 
 type DashboardPayload = DashboardStats & { preset?: DashboardPeriodPreset };
 

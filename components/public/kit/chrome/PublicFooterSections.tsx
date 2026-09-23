@@ -1,3 +1,4 @@
+import type { Category, SiteConfig } from "@/src/schemas";
 import Link from "next/link";
 import { FooterContactBlock } from "@/components/public/kit/chrome/footerContact";
 import { FooterSocialLinks } from "@/components/public/kit/chrome/FooterSocialLinks";
@@ -6,8 +7,6 @@ import {
   getSiteNavegacao,
   resolveNavEntries,
 } from "@/src/lib/navigation";
-import type { Category } from "@/src/schemas/category";
-import type { SiteConfig } from "@/src/schemas/site-config";
 
 export type PublicFooterClassNames = {
   footerInner: string;

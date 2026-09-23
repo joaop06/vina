@@ -1,5 +1,6 @@
 "use client";
 
+import type { Category, SiteNavegacao } from "@/src/schemas";
 import {
   Camera,
   MapPin,
@@ -10,8 +11,6 @@ import {
 } from "lucide-react";
 import { resolveNavEntries } from "@/src/lib/navigation";
 import type { NavSurfaceKey } from "@/src/lib/navigation-admin";
-import type { Category } from "@/src/schemas/category";
-import type { SiteNavegacao } from "@/src/schemas/navigation";
 import styles from "./NavegacaoEditor.module.css";
 
 type Props = {

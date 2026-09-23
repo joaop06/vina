@@ -1,10 +1,9 @@
 "use client";
 
+import type { Banner, BannerPosicao, SiteLayoutId } from "@/src/schemas";
 import { useMemo, useState, type CSSProperties } from "react";
 import { mediaUrl } from "@/src/lib/front/format";
 import { DEFAULT_BANNER_CTA } from "@/src/config/store-copy-defaults";
-import type { Banner, BannerPosicao } from "@/src/schemas/banner";
-import type { SiteLayoutId } from "@/src/schemas/site-config";
 import { getBannerSlotsForLayout } from "@/components/public/layouts/contract/banner-slots";
 import styles from "./VitrinePreview.module.css";
 

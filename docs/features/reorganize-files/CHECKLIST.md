@@ -1148,12 +1148,12 @@ Call sites de `app/` e `components/` importam o arquivo (`@/src/services/product
 
 ### Como
 
-- [ ] Em `services/index.ts`, acrescentar `export * from "./orders.service"` e `export * from "./analytics.service"`.
-- [ ] Em `schemas/index.ts`, acrescentar os módulos que hoje ficam de fora e são contrato público: `order`, `navigation`, `analytics`, `dashboard`, `dashboard-catalog-index`, `order-index`, `client-index`, `product-index`, `product-list`, `site-personalization`, `site-config-tabs`. Não exportar arquivo `*.test.ts`.
-- [ ] Se dois módulos exportarem o mesmo nome, não usar `export *` cego nesse par: exportar com alias explícito e anotar o alias neste checklist antes de seguir. Não renomear o símbolo no arquivo de origem.
-- [ ] Trocar imports de `app/**` e `components/**` que apontam para `@/src/services/<arquivo>` ou `@/src/schemas/<arquivo>` para `@/src/services` e `@/src/schemas`.
-- [ ] Não trocar imports internos de `src/services/*.ts` nem de `src/schemas/*.ts`. `dashboard.service` pode continuar importando `analytics.service` pelo arquivo.
-- [ ] Fundação (`src/foundation/**`) pode continuar importando o arquivo de schema pelo caminho, para não obrigar a fundação a passar pelo barrel. Não é dívida: o barrel é a API de `app/` e `components/`.
+- [x] Em `services/index.ts`, acrescentar `export * from "./orders.service"` e `export * from "./analytics.service"`.
+- [x] Em `schemas/index.ts`, acrescentar os módulos que hoje ficam de fora e são contrato público: `order`, `navigation`, `analytics`, `dashboard`, `dashboard-catalog-index`, `order-index`, `client-index`, `product-index`, `product-list`, `site-personalization`, `site-config-tabs`. Não exportar arquivo `*.test.ts`.
+- [x] Se dois módulos exportarem o mesmo nome, não usar `export *` cego nesse par: exportar com alias explícito e anotar o alias neste checklist antes de seguir. Não renomear o símbolo no arquivo de origem.
+- [x] Trocar imports de `app/**` e `components/**` que apontam para `@/src/services/<arquivo>` ou `@/src/schemas/<arquivo>` para `@/src/services` e `@/src/schemas`.
+- [x] Não trocar imports internos de `src/services/*.ts` nem de `src/schemas/*.ts`. `dashboard.service` pode continuar importando `analytics.service` pelo arquivo.
+- [x] Fundação (`src/foundation/**`) pode continuar importando o arquivo de schema pelo caminho, para não obrigar a fundação a passar pelo barrel. Não é dívida: o barrel é a API de `app/` e `components/`.
 
 ### Fora desta fase
 
@@ -1162,9 +1162,9 @@ Call sites de `app/` e `components/` importam o arquivo (`@/src/services/product
 
 ### Pronto quando
 
-- [ ] Busca em `app/` e `components/` por `@/src/services/` e `@/src/schemas/` (com barra depois do nome da pasta) não acha import de arquivo, só o barrel.
-- [ ] `npm test`, em especial `site-config-tabs`, `site-tema`, `banner-cta`, `dashboard-catalog-index`, `site-config-seed`.
-- [ ] Critério de pronto comum.
+- [x] Busca em `app/` e `components/` por `@/src/services/` e `@/src/schemas/` (com barra depois do nome da pasta) não acha import de arquivo, só o barrel.
+- [x] `npm test`, em especial `site-config-tabs`, `site-tema`, `banner-cta`, `dashboard-catalog-index`, `site-config-seed`.
+- [x] Critério de pronto comum.
 
 ---
 

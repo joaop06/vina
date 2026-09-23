@@ -1,5 +1,6 @@
 "use client";
 
+import type { Product } from "@/src/schemas";
 import Image from "next/image";
 import {
   useCallback,
@@ -8,7 +9,6 @@ import {
   useState,
   type PointerEvent as ReactPointerEvent,
 } from "react";
-import type { Product } from "@/src/schemas/product";
 import { mediaUrl } from "@/src/lib/front/format";
 import { IMAGE_SIZES } from "@/src/lib/front/media-image";
 import { sortedProductImages } from "@/src/lib/front/media";

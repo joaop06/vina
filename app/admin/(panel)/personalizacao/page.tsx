@@ -1,15 +1,12 @@
+import { getSiteConfigTab } from "@/src/services";
+import { mergeTabIntoConfig, type Banner, type Category, type SiteConfig } from "@/src/schemas";
 import { PersonalizacaoClient } from "@/components/admin/personalizacao/PersonalizacaoClient";
 import {
   getCachedActiveCategories,
   getCachedAllBanners,
 } from "@/src/lib/cache/storefront-reads";
-import { getSiteConfigTab } from "@/src/services/site-config.service";
 import { parseConfigTab } from "@/components/admin/personalizacao/configTabs";
 import { DEFAULT_SITE_CONFIG } from "@/src/config/default-site-config";
-import { mergeTabIntoConfig } from "@/src/schemas/site-config-tabs";
-import type { Banner } from "@/src/schemas/banner";
-import type { Category } from "@/src/schemas/category";
-import type { SiteConfig } from "@/src/schemas/site-config";
 
 type Props = {
   searchParams: Promise<{ tab?: string | string[] }>;

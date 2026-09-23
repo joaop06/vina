@@ -1,3 +1,4 @@
+import type { Category, SiteConfig, SiteNavegacao } from "@/src/schemas";
 import {
   ConfiguredDesktopNav,
   ConfiguredDrawerNav,
@@ -11,9 +12,6 @@ import {
 } from "@/src/lib/navigation";
 import { formatEnderecoLinha } from "@/src/lib/br/endereco";
 import { formatBrWhatsApp, waLink } from "@/src/lib/wa";
-import type { Category } from "@/src/schemas/category";
-import type { SiteConfig } from "@/src/schemas/site-config";
-import type { SiteNavegacao } from "@/src/schemas/navigation";
 import type { ReactNode } from "react";
 
 export function headerTopbarVisible(site: SiteConfig): boolean {

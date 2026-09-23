@@ -1,6 +1,6 @@
 "use client";
 
-import type { SiteTextosExtended } from "@/src/schemas/site-personalization";
+import type { SiteTextosExtended } from "@/src/schemas";
 import styles from "./ConsentBanner.module.css";
 
 type Props = {

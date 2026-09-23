@@ -1,5 +1,6 @@
 "use client";
 
+import type { SiteTextosExtended } from "@/src/schemas";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import {
   validateClientLeadForm,
@@ -8,7 +9,6 @@ import {
 } from "@/src/lib/front/client-lead";
 import { formatBrWhatsApp, normalizeWaDigits } from "@/src/lib/wa";
 import { WhatsAppIcon } from "@/components/public/kit/chrome/icons/StorefrontIcons";
-import type { SiteTextosExtended } from "@/src/schemas/site-personalization";
 
 type Props = {
   copy: SiteTextosExtended["leadModal"];

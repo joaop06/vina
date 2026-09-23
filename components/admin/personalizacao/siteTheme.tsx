@@ -1,5 +1,5 @@
-import type { SiteConfig, SiteLayoutId } from "@/src/schemas/site-config";
 
+import type { SiteConfig, SiteLayoutId } from "@/src/schemas";
 const HEX3 = /^#[0-9A-Fa-f]{3}$/;
 const HEX4 = /^#[0-9A-Fa-f]{4}$/;
 const HEX6 = /^#[0-9A-Fa-f]{6}$/;

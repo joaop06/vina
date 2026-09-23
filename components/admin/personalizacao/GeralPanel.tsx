@@ -1,5 +1,6 @@
 "use client";
 
+import type { SiteConfig } from "@/src/schemas";
 import {
   useEffect,
   useState,
@@ -22,7 +23,6 @@ import {
   mediaUrl,
   parseBrlInput,
 } from "@/src/lib/front/format";
-import type { SiteConfig } from "@/src/schemas/site-config";
 import styles from "./GeralPanel.module.css";
 
 type ColorKey = keyof SiteConfig["cores"];

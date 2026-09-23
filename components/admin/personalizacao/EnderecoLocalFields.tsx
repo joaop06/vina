@@ -1,5 +1,6 @@
 "use client";
 
+import type { SiteConfig } from "@/src/schemas";
 import { useEffect, useRef, useState } from "react";
 import { CheckCircle2, LoaderCircle, TriangleAlert } from "lucide-react";
 import { FieldHint } from "@/components/admin/shell/FieldHint";
@@ -9,7 +10,6 @@ import {
   syncEnderecoTexto,
 } from "@/src/lib/br/endereco";
 import { fetchEnderecoByCep, ViaCepError } from "@/src/lib/br/viacep";
-import type { SiteConfig } from "@/src/schemas/site-config";
 import styles from "./ContatoPanel.module.css";
 
 type Endereco = SiteConfig["endereco"];

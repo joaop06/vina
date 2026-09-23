@@ -1,3 +1,4 @@
+import { listAllProducts } from "@/src/services";
 import "server-only";
 import { revalidateTag } from "next/cache";
 import { NextRequest } from "next/server";
@@ -18,7 +19,6 @@ import {
   getCachedProductIndex,
   listCachedProductListItems,
 } from "@/src/lib/cache/storefront-reads";
-import { listAllProducts } from "@/src/services/products.service";
 import { listJsonDir } from "@/src/lib/data";
 import {
   validateProductIndexConsistency,

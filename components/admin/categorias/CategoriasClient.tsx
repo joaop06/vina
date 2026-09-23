@@ -1,5 +1,6 @@
 "use client";
 
+import { categorySchema, type Category } from "@/src/schemas";
 import { useRouter } from "next/navigation";
 import { useId, useMemo, useState } from "react";
 import { AdminPageActions } from "@/components/admin/shell/AdminPageActions";
@@ -18,7 +19,6 @@ import {
   flattenCategoryTree,
   hasInactiveAncestor,
 } from "@/src/lib/categories-tree";
-import { categorySchema, type Category } from "@/src/schemas/category";
 
 function initials(nome: string) {
   const parts = nome.trim().split(/\s+/).filter(Boolean);

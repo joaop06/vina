@@ -1,5 +1,6 @@
 "use client";
 
+import type { SiteConfig, SiteDimensao } from "@/src/schemas";
 import { useId, useState, type ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -16,8 +17,6 @@ import {
   Trash2,
 } from "lucide-react";
 import { FieldHint } from "@/components/admin/shell/FieldHint";
-import type { SiteConfig } from "@/src/schemas/site-config";
-import type { SiteDimensao } from "@/src/schemas/site-personalization";
 import styles from "./TextosVitrinePanel.module.css";
 
 type CategoryId =

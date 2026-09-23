@@ -1,13 +1,9 @@
+import { deleteCategory, getCategory, updateCategory } from "@/src/services";
+import { categoryUpdateSchema } from "@/src/schemas";
 import { NextRequest } from "next/server";
 import { requireAdmin } from "@/src/lib/auth/session";
 import { jsonError, jsonOk } from "@/src/lib/api/response";
 import { AppError } from "@/src/lib/api/errors";
-import {
-  deleteCategory,
-  getCategory,
-  updateCategory,
-} from "@/src/services/categories.service";
-import { categoryUpdateSchema } from "@/src/schemas/category";
 import { z } from "zod";
 
 type Ctx = { params: Promise<{ id: string }> };

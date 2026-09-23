@@ -1,5 +1,6 @@
 "use client";
 
+import type { Client } from "@/src/schemas";
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useAdminBusy } from "@/components/admin/shell/AdminBusy";
@@ -24,7 +25,6 @@ import {
   type ClientPeriodPreset,
   type ClientSort,
 } from "@/src/lib/front/client-filter";
-import type { Client } from "@/src/schemas/client";
 import { formatBrWhatsApp } from "@/src/lib/wa";
 
 function initials(nome: string) {

@@ -1,5 +1,6 @@
 "use client";
 
+import type { Category } from "@/src/schemas";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import {
   buildCategoryTree,
@@ -7,7 +8,6 @@ import {
   flattenCategoryTree,
   isEffectivelyActive,
 } from "@/src/lib/categories-tree";
-import type { Category } from "@/src/schemas/category";
 
 type Props = {
   categories: Category[];

@@ -1,5 +1,6 @@
 "use client";
 
+import type { SiteConfig } from "@/src/schemas";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import {
@@ -22,7 +23,6 @@ import {
 } from "@/components/admin/personalizacao/WhatsAppStorePreview";
 import styles from "@/components/admin/personalizacao/WhatsAppPanel.module.css";
 import { formatBrWhatsApp, normalizeWaDigits } from "@/src/lib/wa";
-import type { SiteConfig } from "@/src/schemas/site-config";
 
 function StatusBadge({
   tone,

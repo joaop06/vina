@@ -1,7 +1,7 @@
+import type { Banner } from "@/src/schemas";
 import { NextRequest } from "next/server";
 import { getCachedActiveBanners } from "@/src/lib/cache/storefront-reads";
 import { jsonError, jsonOk } from "@/src/lib/api/response";
-import type { Banner } from "@/src/schemas/banner";
 
 export async function GET(req: NextRequest) {
   try {
