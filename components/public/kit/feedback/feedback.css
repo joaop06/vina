@@ -1,0 +1,192 @@
+/* —— Client lead modal (WhatsApp gate) —— */
+.client-lead-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  background: color-mix(in srgb, var(--vn-secondary) 48%, transparent);
+  backdrop-filter: blur(3px);
+  animation: confirm-dialog-fade 0.16s ease;
+}
+
+.client-lead-modal__panel {
+  position: relative;
+  width: 100%;
+  max-width: 26rem;
+  max-height: min(92dvh, 36rem);
+  overflow: auto;
+  padding: 1.35rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  border-radius: 18px 18px 0 0;
+  background: var(--vn-surface);
+  border: 1px solid var(--vn-border);
+  border-bottom: none;
+  box-shadow: 0 -12px 40px color-mix(in srgb, var(--vn-secondary) 22%, transparent);
+  animation: client-lead-sheet-up 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.client-lead-modal__close {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--vn-muted);
+  color: color-mix(in srgb, var(--vn-secondary) 55%, transparent);
+  cursor: pointer;
+}
+
+.client-lead-modal__close:hover {
+  color: var(--vn-secondary);
+  background: color-mix(in srgb, var(--vn-secondary) 8%, var(--vn-surface));
+}
+
+.client-lead-modal__head {
+  padding-right: 2.5rem;
+  margin-bottom: 1.1rem;
+}
+
+.client-lead-modal__eyebrow {
+  margin: 0 0 0.2rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vn-whatsapp);
+}
+
+.client-lead-modal__title {
+  margin: 0;
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--vn-secondary);
+}
+
+.client-lead-modal__desc {
+  margin: 0.35rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--vn-secondary) 55%, transparent);
+}
+
+.client-lead-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.client-lead-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: color-mix(in srgb, var(--vn-secondary) 65%, transparent);
+}
+
+.client-lead-modal__input {
+  width: 100%;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid var(--vn-border);
+  border-radius: 10px;
+  background: var(--vn-surface);
+  color: var(--vn-secondary);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: normal;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.client-lead-modal__input::placeholder {
+  color: color-mix(in srgb, var(--vn-secondary) 35%, transparent);
+  font-weight: 400;
+}
+
+.client-lead-modal__input:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--vn-whatsapp) 55%, var(--vn-border));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vn-whatsapp) 18%, transparent);
+}
+
+.client-lead-modal__input[aria-invalid="true"] {
+  border-color: var(--vn-primary);
+}
+
+.client-lead-modal__error {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--vn-primary);
+}
+
+.client-lead-modal__error--banner {
+  margin: 0;
+  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--vn-primary) 8%, var(--vn-surface));
+}
+
+.client-lead-modal__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  margin-top: 0.35rem;
+  padding: 0.95rem 1.1rem;
+  font-size: 1.02rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.12s ease, filter 0.12s ease;
+}
+
+.client-lead-modal__submit:hover:not(:disabled) {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.client-lead-modal__submit:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+@keyframes client-lead-sheet-up {
+  from {
+    opacity: 0.6;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 768px) {
+  .client-lead-modal {
+    align-items: center;
+    padding: 1.25rem;
+  }
+
+  .client-lead-modal__panel {
+    border-radius: 16px;
+    border-bottom: 1px solid var(--vn-border);
+    padding: 1.5rem 1.45rem 1.35rem;
+    box-shadow:
+      0 22px 48px color-mix(in srgb, var(--vn-secondary) 20%, transparent),
+      0 2px 8px color-mix(in srgb, var(--vn-secondary) 8%, transparent);
+    animation: confirm-dialog-pop 0.2s ease;
+  }
+}

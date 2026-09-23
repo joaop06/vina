@@ -10,6 +10,9 @@ import "@/components/public/kit/chrome/chrome.css";
 import "@/components/public/kit/product/product.css";
 import "@/components/public/kit/catalog/catalog.css";
 import "@/components/public/kit/catalog/skeletons.css";
+import "@/components/public/kit/catalog/about.css";
+import "@/components/public/kit/cart/cart.css";
+import "@/components/public/kit/feedback/feedback.css";
 
 /** Public shell shares ISR window with page segments. */
 export const revalidate = 120; // keep in sync with STOREFRONT_REVALIDATE_SECONDS

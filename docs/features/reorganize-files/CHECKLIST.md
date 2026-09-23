@@ -487,10 +487,10 @@ Comentário “Cart (public)” em `globals.css` (por volta da linha 7540 antes 
 
 ### Como
 
-- [ ] Mover verbatim todo ruleset cujo seletor seja `.cart-page` ou desça de `.cart-page`, e o que o comentário do carrinho agrupa e não seja admin.
-- [ ] Deixar regras `[data-layout="gallery"] .cart-page…` em `layout-tokens.css` ou em `globals.css` se ainda estiverem lá. Elas saem no fecho do gallery.
-- [ ] Importar `cart.css` em `app/(public)/layout.tsx`.
-- [ ] Apagar o bloco da origem.
+- [x] Mover verbatim todo ruleset cujo seletor seja `.cart-page` ou desça de `.cart-page`, e o que o comentário do carrinho agrupa e não seja admin.
+- [x] Deixar regras `[data-layout="gallery"] .cart-page…` em `layout-tokens.css` ou em `globals.css` se ainda estiverem lá. Elas saem no fecho do gallery.
+- [x] Importar `cart.css` em `app/(public)/layout.tsx`.
+- [x] Apagar o bloco da origem.
 
 ### Fora desta fase
 
@@ -499,8 +499,8 @@ Comentário “Cart (public)” em `globals.css` (por volta da linha 7540 antes 
 
 ### Pronto quando
 
-- [ ] `/carrinho` com itens, vazio e com WhatsApp, em classic e em gallery (o título gallery ainda vem do token antigo).
-- [ ] Critério de pronto comum.
+- [x] `/carrinho` com itens, vazio e com WhatsApp, em classic e em gallery (o título gallery ainda vem do token antigo).
+- [x] Critério de pronto comum.
 
 ### Fase 4.2 — Sobre
 
@@ -520,10 +520,10 @@ A page [app/(public)/sobre/page.tsx](../../../app/(public)/sobre/page.tsx) usa c
 
 ### Como
 
-- [ ] Mover regras `.sobre-page` sem prefixo `[data-layout]`.
-- [ ] Manter `[data-layout="classic"] .sobre-page…` e `[data-layout="split"] .sobre-page…` onde estão, para o fecho.
-- [ ] Importar `about.css` no layout público.
-- [ ] Apagar a origem correspondente.
+- [x] Mover regras `.sobre-page` sem prefixo `[data-layout]`.
+- [x] Manter `[data-layout="classic"] .sobre-page…` e `[data-layout="split"] .sobre-page…` onde estão, para o fecho.
+- [x] Importar `about.css` no layout público.
+- [x] Apagar a origem correspondente.
 
 ### Fora desta fase
 
@@ -531,8 +531,8 @@ A page [app/(public)/sobre/page.tsx](../../../app/(public)/sobre/page.tsx) usa c
 
 ### Pronto quando
 
-- [ ] `/sobre` em classic e em split, com e sem botões de WhatsApp e Instagram.
-- [ ] Critério de pronto comum.
+- [x] `/sobre` em classic e em split, com e sem botões de WhatsApp e Instagram.
+- [x] Critério de pronto comum.
 
 ### Fase 4.3 — Lead, consentimento e toasts da vitrine
 
@@ -552,11 +552,11 @@ Comentário “Client lead modal (WhatsApp gate)” em `globals.css`. O provider
 
 ### Como
 
-- [ ] Mover o bloco do modal de lead verbatim.
-- [ ] Mover o ajuste de toast da vitrine se o seletor não for o Sonner do admin (o Sonner tem comentário próprio e fica na fase 5).
-- [ ] Não mover `ConsentBanner.module.css`.
-- [ ] Importar `feedback.css` no layout público.
-- [ ] Apagar a origem.
+- [x] Mover o bloco do modal de lead verbatim.
+- [x] Mover o ajuste de toast da vitrine se o seletor não for o Sonner do admin (o Sonner tem comentário próprio e fica na fase 5).
+- [x] Não mover `ConsentBanner.module.css`.
+- [x] Importar `feedback.css` no layout público.
+- [x] Apagar a origem.
 
 ### Fora desta fase
 
@@ -564,9 +564,9 @@ Comentário “Client lead modal (WhatsApp gate)” em `globals.css`. O provider
 
 ### Pronto quando
 
-- [ ] Abrir o gate de WhatsApp num produto ou no botão flutuante e ver o modal como antes.
-- [ ] Banner de consentimento como antes.
-- [ ] Critério de pronto comum.
+- [x] Abrir o gate de WhatsApp num produto ou no botão flutuante e ver o modal como antes.
+- [x] Banner de consentimento como antes.
+- [x] Critério de pronto comum.
 
 ---
 

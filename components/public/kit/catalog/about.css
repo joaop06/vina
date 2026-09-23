@@ -1,0 +1,87 @@
+/* Sobre */
+.sobre-page {
+  padding: var(--vn-space-7) 0 var(--vn-space-8);
+  max-width: 40rem;
+}
+
+.sobre-page__title {
+  margin: 0 0 var(--vn-space-4);
+}
+
+.sobre-page__lead {
+  margin: 0 0 var(--vn-space-6);
+  font-size: var(--vn-text-lg);
+  line-height: 1.55;
+}
+
+.sobre-page__list {
+  display: grid;
+  gap: var(--vn-space-4);
+  margin: 0 0 var(--vn-space-6);
+}
+
+.sobre-page__item {
+  margin: 0;
+}
+
+.sobre-page__label {
+  display: block;
+  font-size: var(--vn-text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--vn-secondary) 55%, transparent);
+  margin-bottom: 0.25rem;
+}
+
+.sobre-page__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--vn-touch);
+  color: var(--vn-primary);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.sobre-page__cta {
+  max-width: 28rem;
+}
+
+.sobre-page__cta .btn {
+  width: 100%;
+  max-width: 20rem;
+  min-height: 48px;
+  font-size: var(--vn-text-sm);
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .sobre-page__cta .btn {
+    width: auto;
+    flex: 1;
+    max-width: none;
+  }
+}
+
+/* —— Shared storefront surfaces (from layout-tokens) —— */
+
+.sobre-page {
+  padding: var(--vn-layout-page-pad-top-md, var(--vn-space-7)) 0
+    var(--vn-layout-page-pad-bottom, var(--vn-space-8));
+  max-width: var(--vn-layout-sobre-max, 40rem);
+}
+
+.sobre-page__title {
+  margin: 0 0 var(--vn-layout-section-gap, var(--vn-space-4));
+}
+
+.sobre-page__lead {
+  font-size: var(--vn-layout-sobre-lead-size, var(--vn-text-lg));
+  line-height: var(--vn-layout-sobre-lead-lh, 1.55);
+  margin: 0 0 var(--vn-layout-section-gap, var(--vn-space-6));
+}
+
+.sobre-page__list {
+  gap: var(--vn-layout-section-gap, var(--vn-space-4));
+  margin: 0 0 var(--vn-layout-section-gap, var(--vn-space-6));
+}

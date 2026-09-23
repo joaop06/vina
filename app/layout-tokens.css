@@ -104,29 +104,6 @@
 }
 
 
-/* About */
-
-.sobre-page {
-  padding: var(--vn-layout-page-pad-top-md, var(--vn-space-7)) 0
-    var(--vn-layout-page-pad-bottom, var(--vn-space-8));
-  max-width: var(--vn-layout-sobre-max, 40rem);
-}
-
-.sobre-page__title {
-  margin: 0 0 var(--vn-layout-section-gap, var(--vn-space-4));
-}
-
-.sobre-page__lead {
-  font-size: var(--vn-layout-sobre-lead-size, var(--vn-text-lg));
-  line-height: var(--vn-layout-sobre-lead-lh, 1.55);
-  margin: 0 0 var(--vn-layout-section-gap, var(--vn-space-6));
-}
-
-.sobre-page__list {
-  gap: var(--vn-layout-section-gap, var(--vn-space-4));
-  margin: 0 0 var(--vn-layout-section-gap, var(--vn-space-6));
-}
-
 /* —— Classic-specific refinements —— */
 
 [data-layout="classic"] .catalog-page__count {
