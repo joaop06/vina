@@ -6,6 +6,10 @@ import { getLayout } from "@/components/public/layouts";
 import { WhatsAppGateProvider } from "@/components/public/WhatsAppGateProvider";
 import { CartProvider } from "@/components/public/cart/CartProvider";
 import { AnalyticsProvider } from "@/components/public/analytics/AnalyticsProvider";
+import "@/components/public/kit/chrome/chrome.css";
+import "@/components/public/kit/product/product.css";
+import "@/components/public/kit/catalog/catalog.css";
+import "@/components/public/kit/catalog/skeletons.css";
 
 /** Public shell shares ISR window with page segments. */
 export const revalidate = 120; // keep in sync with STOREFRONT_REVALIDATE_SECONDS

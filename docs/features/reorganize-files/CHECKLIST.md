@@ -32,7 +32,7 @@ Estas escolhas fixam o traçado. Não reabrir no meio de uma fase.
 
 | Tema | Decisão |
 |------|---------|
-| Carga de CSS | O dono importa o próprio CSS. [app/layout.tsx](../../../app/layout.tsx) fica com reset e theme-bridge. O admin importa no layout do painel e no login. O kit global importa em [app/(public)/layout.tsx](../../../app/(public)/layout.tsx). Tokens e pele de um layout importam no `index` daquele módulo. |
+| Carga de CSS | O dono importa o próprio CSS. [app/layout.tsx](../../../app/layout.tsx) fica com reset e theme-bridge. O admin importa `admin.css` em [app/admin/layout.tsx](../../../app/admin/layout.tsx) (primitivos desde a fase 3; shell/Sonner na fase 5). O kit global importa em [app/(public)/layout.tsx](../../../app/(public)/layout.tsx). Tokens e pele de um layout importam no `index` daquele módulo. |
 | Forma do CSS extraído de `globals.css` | Arquivo CSS global (`import "./x.css"`), nunca CSS module. Module reescreve o nome da classe. Os CSS modules que já existem continuam modules. |
 | Seletores | Copiar o ruleset inteiro, com o mesmo seletor, a mesma especificidade e o mesmo `@media`. Não renomear classe, não trocar `px` por token, não “limpar” regra morta nesta leva. |
 | Preview do admin | Slot opcional `Preview` no contrato do layout. O markup esquemático sai de [VitrinePreview.tsx](../../../components/admin/configuracoes/VitrinePreview.tsx) e vai para o módulo. Toolbar, viewport e marcadores de slot ficam no painel. O painel não renderiza o `Home` real. O painel obtém `Preview` por `getLayout(id)`, sem importar `layouts/classic/*` (nem split, gallery, ateliê). |
@@ -426,23 +426,28 @@ Classes globais (`.btn`, `.card-product`, `.catalog-page`, `.product-detail`, `.
 
 O kit ainda não tem pasta. Criar o CSS no destino final para a fase 7 só mover o TypeScript.
 
+**Desvio documentado:** o painel também usa `.btn*` e a base `.pagination-dock` / `.pagination-nav` / `.back-to-top`. Mover só para o kit quebraria o admin. Nesta fase, além do kit, recriar esses primitivos em `components/admin/shell/admin.css` (importado em `app/admin/layout.tsx`). A “uma definição só” vale **por superfície** (kit na vitrine; cópia admin no painel); a busca no repo pode achar o mesmo seletor duas vezes. A fase 5 absorve o restante do CSS admin nesse arquivo já existente.
+
 ### Onde
 
 - Criar `components/public/kit/catalog/catalog.css` — `.catalog-page*`, `.catalog-filters*`, `.grid-products`, `.vn-section-title` quando forem da listagem
 - Criar `components/public/kit/product/product.css` — `.card-product*`, `.product-detail*`, `.product-gallery*`, `.badge`
 - Criar `components/public/kit/chrome/chrome.css` — `.btn` e utilitários de vitrine que não são admin, carrinho, sobre nem lead
 - Criar `components/public/kit/catalog/skeletons.css` — bloco “Storefront loading skeletons”
-- [app/(public)/layout.tsx](../../../app/(public)/layout.tsx) — import desses CSS
+- Criar `components/admin/shell/admin.css` — cópia dos `.btn*` do painel e da base de paginação/back-to-top (desvio)
+- [app/(public)/layout.tsx](../../../app/(public)/layout.tsx) — import desses CSS do kit
+- [app/admin/layout.tsx](../../../app/admin/layout.tsx) — import de `admin.css`
 - `app/globals.css` e `app/layout-tokens.css`
 
 ### Como
 
-- [ ] Localizar cada ruleset pelo seletor, não pela linha. Um ruleset cujo seletor seja só de admin (`.admin-shell`, `.admin-login-root`) não entra aqui, mesmo que esteja no meio do arquivo.
-- [ ] Copiar o ruleset verbatim para o CSS do dono. Um `@media` que misture seletor de vitrine e seletor de admin se divide: a regra de vitrine vai para o kit, a de admin fica para a fase 5.
-- [ ] Mover de `layout-tokens.css` o bloco “Shared storefront surfaces” e as regras seguintes que estilizam `.vn-section-title`, `.grid-products`, `.card-product`, `.catalog-page`, `.catalog-filters`, `.product-detail`, `.product-gallery` sem prefixo `[data-layout]`. Deixar no arquivo os blocos `:root`, `[data-layout="classic"]`, `[data-layout="split"]`, `[data-layout="gallery"]` e os refinamentos que usam esse prefixo, inclusive o `@media (min-width: 1024px)` do grid classic.
-- [ ] Importar os CSS novos em `app/(public)/layout.tsx`. Não importar no `app/layout.tsx` raiz: o painel não precisa desse CSS, e o admin tem as próprias classes.
-- [ ] Apagar os rulesets movidos da origem. Busca no repositório pelo seletor deve achar uma definição só.
-- [ ] Paginação: regras de `.pagination-dock` usadas na vitrine vão para `kit/catalog/catalog.css`. Regras `.admin-shell .pagination-dock…` e `.admin-shell .back-to-top` ficam para a fase 5.
+- [x] Localizar cada ruleset pelo seletor, não pela linha. Um ruleset cujo seletor seja só de admin (`.admin-shell`, `.admin-login-root`) não entra aqui, mesmo que esteja no meio do arquivo.
+- [x] Copiar o ruleset verbatim para o CSS do dono. Um `@media` que misture seletor de vitrine e seletor de admin se divide: a regra de vitrine vai para o kit, a de admin fica para a fase 5 (ou, no caso do hide de `.back-to-top` com toaster, a parte admin já pode viver em `admin.css` / residual em `globals`).
+- [x] Mover de `layout-tokens.css` o bloco “Shared storefront surfaces” e as regras seguintes que estilizam `.vn-section-title`, `.grid-products`, `.card-product`, `.catalog-page`, `.catalog-filters`, `.product-detail`, `.product-gallery` sem prefixo `[data-layout]`. Deixar no arquivo os blocos `:root`, `[data-layout="classic"]`, `[data-layout="split"]`, `[data-layout="gallery"]` e os refinamentos que usam esse prefixo, inclusive o `@media (min-width: 1024px)` do grid classic.
+- [x] Importar os CSS novos em `app/(public)/layout.tsx`. Não importar no `app/layout.tsx` raiz: o painel não precisa do CSS do kit.
+- [x] Apagar os rulesets movidos da origem. Por superfície: definição no kit (vitrine) ou em `admin.css` (painel); sem residual desses seletores base em `globals.css`. Exceção deliberada: o mesmo seletor pode existir em kit e em `admin.css`.
+- [x] Paginação: regras de `.pagination-dock` usadas na vitrine vão para `kit/catalog/catalog.css`. Regras `.admin-shell .pagination-dock…`, `.admin-shell .back-to-top` e `.admin-panel .pagination-nav--dock` ficam em `globals` para a fase 5. A base da paginação também é recriada em `admin.css`.
+- [x] Recriar em `components/admin/shell/admin.css` os primitivos que o admin ainda consome (`.btn` base + primary/dark/ghost + `.btn-icon` / `.btn-sm` / `.btn-ghost-danger` / `.btn-quiet*`, e base `.pagination-*` / `.back-to-top*`) e importar em `app/admin/layout.tsx`.
 
 ### Fora desta fase
 
@@ -453,10 +458,10 @@ O kit ainda não tem pasta. Criar o CSS no destino final para a fase 7 só mover
 
 ### Pronto quando
 
-- [ ] `/`, `/catalogo`, `/catalogo/busca`, um PDP e a paginação pública iguais ao antes, em classic.
-- [ ] Repetir catálogo e PDP com layout split e gallery no `configuracoes` local (ou no seed), porque gallery e split dependem das variáveis que continuam em `layout-tokens.css`.
-- [ ] `/admin` sem regressão grosseira de chrome (o CSS admin ainda está em `globals.css`, carregado pela raiz).
-- [ ] Critério de pronto comum.
+- [x] `/`, `/catalogo`, `/catalogo/busca`, um PDP e a paginação pública iguais ao antes, em classic.
+- [x] Repetir catálogo e PDP com layout split e gallery no `configuracoes` local (ou no seed), porque gallery e split dependem das variáveis que continuam em `layout-tokens.css`.
+- [x] `/admin` sem regressão de botões/paginação (primitivos em `admin.css`) e chrome ainda em `globals.css` pela raiz.
+- [x] Critério de pronto comum.
 
 ---
 
@@ -573,20 +578,21 @@ Login, chrome `.admin-shell`, docks de paginação do painel e Sonner saem de `g
 
 ### Situação atual
 
-[app/admin/layout.tsx](../../../app/admin/layout.tsx) só devolve `children`. O CSS admin entra porque a raiz ainda importa `globals.css`. Seletores de admin aparecem cedo (`.admin-shell` por volta da linha 636 no arquivo original) e de novo depois do comentário “Admin pages”, inclusive aninhados com paginação. O login usa `.admin-login-root` e [AdminLogin.module.css](../../../components/admin/AdminLogin.module.css), que permanece module. Sonner está no fim de `globals.css`.
+[components/admin/shell/admin.css](../../../components/admin/shell/admin.css) **já existe** desde a fase 3, com a cópia dos primitivos compartilhados (`.btn*` do painel e base de paginação/back-to-top), e já é importado em [app/admin/layout.tsx](../../../app/admin/layout.tsx) (cobre painel e login). O restante do CSS admin ainda entra porque a raiz importa `globals.css`: `.admin-shell`, busy-bar, `.admin-loading*`, overrides `.admin-shell .pagination-dock…` / `.admin-shell .back-to-top` / `.admin-panel .pagination-nav--dock`, login overflow, Sonner, etc. O login usa `.admin-login-root` e [AdminLogin.module.css](../../../components/admin/AdminLogin.module.css), que permanece module.
+
+**Não** procurar em `globals.css` a definição base de `.btn`, `.pagination-dock`, `.pagination-nav` ou `.back-to-top` — saíram na fase 3 (kit + cópia em `admin.css`).
 
 ### Onde
 
-- Criar `components/admin/shell/admin.css`
-- [app/admin/(panel)/layout.tsx](../../../app/admin/(panel)/layout.tsx)
-- [app/admin/login/layout.tsx](../../../app/admin/login/layout.tsx) ou [app/admin/login/page.tsx](../../../app/admin/login/page.tsx)
+- Acrescentar em `components/admin/shell/admin.css` (não criar do zero)
+- [app/admin/layout.tsx](../../../app/admin/layout.tsx) — import já presente; não duplicar no painel/login salvo necessidade pontual
 - `app/globals.css`
 
 ### Como
 
-- [ ] Mover para `admin.css` todo ruleset cujo seletor contenha `.admin-shell`, `.admin-login-root`, `html:has(.admin-login-root)`, ou o bloco Sonner do admin. Incluir `.admin-shell .pagination-dock…` e `.admin-shell .back-to-top`.
+- [ ] Acrescentar em `admin.css` todo ruleset cujo seletor contenha `.admin-shell`, `.admin-login-root`, `html:has(.admin-login-root)`, `.admin-busy-bar*`, `.admin-loading*`, ou o bloco Sonner do admin. Incluir `.admin-shell .pagination-dock…`, `.admin-shell .back-to-top` e `.admin-panel .pagination-nav--dock`.
 - [ ] Se um `@media` ou um ruleset misturar seletor de vitrine que já deveria ter saído nas fases 3 e 4, não duplicar: a parte de vitrine já está no kit; só a parte admin entra aqui.
-- [ ] Importar `admin.css` no layout do painel e no layout (ou page) de login. Não importar em `app/layout.tsx`.
+- [ ] Manter o import de `admin.css` em `app/admin/layout.tsx`. Não importar em `app/layout.tsx`.
 - [ ] Apagar esses rulesets de `globals.css`.
 - [ ] Se `globals.css` ficar vazio ou só com comentário, apagar o arquivo e o import em `app/layout.tsx`. Se ainda restar regra de layout (`body[data-layout="gallery"]` ou refinamento `[data-layout]`), o arquivo permanece até o fecho.
 - [ ] `layout-tokens.css` continua importado na raiz.
@@ -596,6 +602,7 @@ Login, chrome `.admin-shell`, docks de paginação do painel e Sonner saem de `g
 - Não mover os componentes do shell (fase 6.1).
 - Não renomear classe `admin-shell`.
 - Não alterar `AdminLogin.module.css` além de, se o import do CSS global de login precisar ficar ao lado dele, um import side-effect. O module em si não vira CSS global.
+- Não reextrair `.btn` nem a base de paginação de `globals` (já tratados na fase 3).
 
 ### Pronto quando
 
