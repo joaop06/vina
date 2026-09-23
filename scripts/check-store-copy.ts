@@ -24,7 +24,7 @@ const SCAN_DIRS = [
 ];
 
 const ALLOWLIST = new Set([
-  "components/public/layouts/options.ts",
+  "components/public/layouts/contract/options.ts",
 ]);
 
 function walk(dir: string, out: string[] = []): string[] {

@@ -20,7 +20,7 @@ import {
   type CartLine,
   type CartState,
 } from "@/src/lib/front/cart";
-import { CartToast } from "@/components/public/cart/CartToast";
+import { CartToast } from "@/components/public/kit/cart/CartToast";
 
 type CartContextValue = {
   enabled: boolean;

@@ -3,9 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { WhatsAppButton } from "@/components/public/WhatsAppButton";
-import { CartIcon } from "@/components/public/icons/StorefrontIcons";
-import { useCart } from "@/components/public/cart/CartProvider";
+import { WhatsAppButton } from "@/components/public/kit/feedback/WhatsAppButton";
+import { CartIcon } from "@/components/public/kit/chrome/icons/StorefrontIcons";
+import { useCart } from "@/components/public/kit/cart/CartProvider";
 import { cartLineKey, type CartLine } from "@/src/lib/front/cart";
 import { formatBrl, mediaUrl } from "@/src/lib/front/format";
 import { coverImage } from "@/src/lib/front/media";

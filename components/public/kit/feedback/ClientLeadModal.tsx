@@ -7,7 +7,7 @@ import {
   type ClientLeadFormErrors,
 } from "@/src/lib/front/client-lead";
 import { formatBrWhatsApp, normalizeWaDigits } from "@/src/lib/wa";
-import { WhatsAppIcon } from "@/components/public/icons/StorefrontIcons";
+import { WhatsAppIcon } from "@/components/public/kit/chrome/icons/StorefrontIcons";
 import type { SiteTextosExtended } from "@/src/schemas/site-personalization";
 
 type Props = {

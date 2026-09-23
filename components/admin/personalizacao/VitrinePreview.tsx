@@ -5,7 +5,7 @@ import { mediaUrl } from "@/src/lib/front/format";
 import { DEFAULT_BANNER_CTA } from "@/src/config/store-copy-defaults";
 import type { Banner, BannerPosicao } from "@/src/schemas/banner";
 import type { SiteLayoutId } from "@/src/schemas/site-config";
-import { getBannerSlotsForLayout } from "@/components/public/layouts/banner-slots";
+import { getBannerSlotsForLayout } from "@/components/public/layouts/contract/banner-slots";
 import styles from "./VitrinePreview.module.css";
 
 type Viewport = "desktop" | "mobile";

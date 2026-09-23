@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { FooterContactBlock } from "@/components/public/footerContact";
-import { FooterSocialLinks } from "@/components/public/FooterSocialLinks";
-import { StoreBrand } from "@/components/public/StoreBrand";
+import { FooterContactBlock } from "@/components/public/kit/chrome/footerContact";
+import { FooterSocialLinks } from "@/components/public/kit/chrome/FooterSocialLinks";
+import { StoreBrand } from "@/components/public/kit/chrome/StoreBrand";
 import {
   getSiteNavegacao,
   resolveNavEntries,

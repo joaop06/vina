@@ -2,7 +2,7 @@ import { GalleryFooter } from "./GalleryFooter";
 import { GalleryHeader } from "./GalleryHeader";
 import { GalleryHome } from "./GalleryHome";
 import { GalleryNotFound } from "./GalleryNotFound";
-import type { SiteLayoutModule } from "../types";
+import type { SiteLayoutModule } from "../contract/types";
 
 export { GalleryCarousel } from "./GalleryCarousel";
 export { GalleryFooter, GalleryHeader, GalleryHome, GalleryNotFound };

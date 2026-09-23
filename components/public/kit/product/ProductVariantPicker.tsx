@@ -12,7 +12,7 @@ import {
 import { formatEstoqueVarios } from "@/src/lib/front/store-copy";
 import type { SiteDimensao } from "@/src/schemas/site-personalization";
 import type { SiteTextosExtended } from "@/src/schemas/site-personalization";
-import { ProductQuantityStepper } from "@/components/public/ProductQuantityStepper";
+import { ProductQuantityStepper } from "@/components/public/kit/product/ProductQuantityStepper";
 import { DEFAULT_DIMENSOES } from "@/src/config/store-copy-defaults";
 
 type Props = {

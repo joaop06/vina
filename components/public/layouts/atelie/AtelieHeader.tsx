@@ -1,6 +1,6 @@
 import Link from "next/link";
-import type { ChromeProps } from "../types";
-import { resolveHeaderNav } from "@/components/public/layouts/headerNav";
+import type { ChromeProps } from "../contract/types";
+import { resolveHeaderNav } from "@/components/public/kit/chrome/headerNav";
 import { AtelieBrand } from "./header/AtelieBrand";
 import { AtelieCartButton } from "./header/AtelieCartButton";
 import { AtelieDesktopNav } from "./header/AtelieDesktopNav";

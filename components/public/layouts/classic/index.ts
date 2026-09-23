@@ -2,7 +2,7 @@ import { ClassicFooter } from "./ClassicFooter";
 import { ClassicHeader } from "./ClassicHeader";
 import { ClassicHome } from "./ClassicHome";
 import { ClassicNotFound } from "./ClassicNotFound";
-import type { SiteLayoutModule } from "../types";
+import type { SiteLayoutModule } from "../contract/types";
 
 export { ClassicFooter, ClassicHeader, ClassicHome, ClassicNotFound };
 

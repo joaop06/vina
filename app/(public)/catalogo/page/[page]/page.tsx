@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { CatalogPageView } from "@/components/public/CatalogPageView";
+import { CatalogPageView } from "@/components/public/kit/catalog/CatalogPageView";
 import { getLayout } from "@/components/public/layouts";
 import {
   CATALOG_STATIC_PAGE_LIMIT,

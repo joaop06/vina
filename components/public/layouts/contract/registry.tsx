@@ -1,7 +1,7 @@
-import { atelieLayout } from "./atelie";
-import { classicLayout } from "./classic";
-import { galleryLayout } from "./gallery";
-import { splitLayout } from "./split";
+import { atelieLayout } from "../atelie";
+import { classicLayout } from "../classic";
+import { galleryLayout } from "../gallery";
+import { splitLayout } from "../split";
 import type { SiteLayoutModule } from "./types";
 import type { SiteLayoutId } from "@/src/schemas/site-config";
 

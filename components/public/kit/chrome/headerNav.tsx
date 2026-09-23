@@ -1,9 +1,9 @@
 import {
   ConfiguredDesktopNav,
   ConfiguredDrawerNav,
-} from "@/components/public/CategoryNav";
-import { InstagramButton } from "@/components/public/InstagramButton";
-import { WhatsAppButton } from "@/components/public/WhatsAppButton";
+} from "@/components/public/kit/catalog/CategoryNav";
+import { InstagramButton } from "@/components/public/kit/feedback/InstagramButton";
+import { WhatsAppButton } from "@/components/public/kit/feedback/WhatsAppButton";
 import {
   getSiteNavegacao,
   resolveSurfaceEntries,

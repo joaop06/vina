@@ -7,7 +7,7 @@ import {
 } from "@/src/lib/cache/storefront-reads";
 import { getSiteUrl } from "@/src/lib/env";
 import { getLayout } from "@/components/public/layouts";
-import { ProductDetailClient } from "@/components/public/ProductDetailClient";
+import { ProductDetailClient } from "@/components/public/kit/product/ProductDetailClient";
 import ProductLoading from "./loading";
 
 type Props = {

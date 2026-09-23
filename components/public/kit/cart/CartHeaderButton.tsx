@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { CartIcon } from "@/components/public/icons/StorefrontIcons";
-import { useCartOptional } from "@/components/public/cart/CartProvider";
+import { CartIcon } from "@/components/public/kit/chrome/icons/StorefrontIcons";
+import { useCartOptional } from "@/components/public/kit/cart/CartProvider";
 import type { SiteLayoutId } from "@/src/schemas/site-config";
 
 type ClassNames = {

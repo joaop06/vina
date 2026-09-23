@@ -1,4 +1,4 @@
-import { CatalogPageView } from "@/components/public/CatalogPageView";
+import { CatalogPageView } from "@/components/public/kit/catalog/CatalogPageView";
 import { getLayout } from "@/components/public/layouts";
 import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
 import { seoTitleFromTemplate } from "@/src/lib/front/store-copy";

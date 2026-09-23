@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { CartPageClient } from "@/components/public/cart/CartPageClient";
+import { CartPageClient } from "@/components/public/kit/cart/CartPageClient";
 import { getLayout } from "@/components/public/layouts";
 import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
 export const metadata = { title: "Carrinho" };

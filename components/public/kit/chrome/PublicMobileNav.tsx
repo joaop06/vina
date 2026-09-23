@@ -11,7 +11,7 @@ import {
   type TransitionEvent,
 } from "react";
 import { createPortal } from "react-dom";
-import type { SiteLayoutId } from "./types";
+import type { SiteLayoutId } from "@/components/public/layouts/contract/types";
 import styles from "./PublicMobileNav.module.css";
 
 /** Stable id — avoid React.useId() (Next 15.5 / React 19 SSR↔CSR mismatch). */

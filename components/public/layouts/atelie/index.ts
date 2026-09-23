@@ -2,7 +2,7 @@ import { AtelieFooter } from "./AtelieFooter";
 import { AtelieHeader } from "./AtelieHeader";
 import { AtelieHome } from "./AtelieHome";
 import { AtelieNotFound } from "./AtelieNotFound";
-import type { SiteLayoutModule } from "../types";
+import type { SiteLayoutModule } from "../contract/types";
 
 export { AtelieFooter, AtelieHeader, AtelieHome, AtelieNotFound };
 

@@ -23,7 +23,7 @@ import {
   getBannerSlotsForLayout,
   getPublishedSlotCapacity,
   type LayoutBannerSlot,
-} from "@/components/public/layouts/banner-slots";
+} from "@/components/public/layouts/contract/banner-slots";
 import { DEFAULT_BANNER_CTA } from "@/src/config/store-copy-defaults";
 import { mediaUrl } from "@/src/lib/front/format";
 import type { Banner, BannerPosicao } from "@/src/schemas/banner";

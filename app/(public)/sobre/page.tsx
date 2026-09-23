@@ -3,8 +3,8 @@ import { formatEnderecoLinha } from "@/src/lib/br/endereco";
 import { seoTitleFromTemplate, sobrePageTitle } from "@/src/lib/front/store-copy";
 import { waLink } from "@/src/lib/wa";
 import { getLayout } from "@/components/public/layouts";
-import { InstagramButton } from "@/components/public/InstagramButton";
-import { WhatsAppButton } from "@/components/public/WhatsAppButton";
+import { InstagramButton } from "@/components/public/kit/feedback/InstagramButton";
+import { WhatsAppButton } from "@/components/public/kit/feedback/WhatsAppButton";
 
 export const revalidate = 120; // keep in sync with STOREFRONT_REVALIDATE_SECONDS
 

@@ -12,8 +12,8 @@ import {
   flattenCategoryTree,
   getFilterCategoryIds,
 } from "@/src/lib/categories-tree";
-import { ProductCard } from "@/components/public/ProductCard";
-import { CatalogFilters } from "@/components/public/CatalogFilters";
+import { ProductCard } from "@/components/public/kit/product/ProductCard";
+import { CatalogFilters } from "@/components/public/kit/catalog/CatalogFilters";
 import { catalogoContagemLabel } from "@/src/lib/front/store-copy";
 import { PaginationNav } from "@/components/ui/PaginationNav";
 import {

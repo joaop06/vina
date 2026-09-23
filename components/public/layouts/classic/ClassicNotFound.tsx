@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { NotFoundProps } from "../types";
+import type { NotFoundProps } from "../contract/types";
 import styles from "./classic.module.css";
 
 export function ClassicNotFound({ site }: NotFoundProps) {

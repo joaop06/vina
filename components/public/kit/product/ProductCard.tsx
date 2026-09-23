@@ -10,7 +10,7 @@ import {
 } from "@/src/schemas/product-list";
 import type { SiteTextosExtended } from "@/src/schemas/site-personalization";
 import { DEFAULT_SITE_TEXTOS_PRODUTO } from "@/src/config/store-copy-defaults";
-import { CartCatalogAction } from "@/components/public/cart/CartCatalogAction";
+import { CartCatalogAction } from "@/components/public/kit/cart/CartCatalogAction";
 
 export function ProductCard({
   product,

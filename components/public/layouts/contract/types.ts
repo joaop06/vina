@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import type { CatalogViewQuery } from "@/components/public/CatalogPageView";
-import type { ProductDetailProps } from "@/components/public/ProductDetailClient";
+import type { CatalogViewQuery } from "@/components/public/kit/catalog/CatalogPageView";
+import type { ProductDetailProps } from "@/components/public/kit/product/ProductDetailClient";
 import type { Banner } from "@/src/schemas/banner";
 import type { Category } from "@/src/schemas/category";
 import type { ProductListItem } from "@/src/schemas/product-list";

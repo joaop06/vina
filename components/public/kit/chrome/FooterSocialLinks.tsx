@@ -1,7 +1,7 @@
 "use client";
 
-import { WhatsAppButton } from "@/components/public/WhatsAppButton";
-import { WhatsAppIcon as WhatsAppGlyph } from "@/components/public/icons/StorefrontIcons";
+import { WhatsAppButton } from "@/components/public/kit/feedback/WhatsAppButton";
+import { WhatsAppIcon as WhatsAppGlyph } from "@/components/public/kit/chrome/icons/StorefrontIcons";
 import { waLink } from "@/src/lib/wa";
 import type { SiteConfig } from "@/src/schemas/site-config";
 

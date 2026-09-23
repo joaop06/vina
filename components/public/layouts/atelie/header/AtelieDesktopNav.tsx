@@ -1,4 +1,4 @@
-import { HeaderDesktopNav } from "@/components/public/layouts/headerNav";
+import { HeaderDesktopNav } from "@/components/public/kit/chrome/headerNav";
 import type { ResolvedNavEntry } from "@/src/lib/navigation";
 import styles from "./atelie-header.module.css";
 

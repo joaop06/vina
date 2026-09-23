@@ -5,7 +5,7 @@ import { buildMutationFiles } from "@/src/lib/data/commit-mutation";
 import { AppError } from "@/src/lib/api/errors";
 import { CACHE_TAGS } from "@/src/lib/cache-tags";
 import { revalidateStorefront } from "@/src/lib/admin/revalidate-storefront";
-import { getSlotDef } from "@/components/public/layouts/banner-slots";
+import { getSlotDef } from "@/components/public/layouts/contract/banner-slots";
 import {
   BANNER_POSICAO_LABELS,
   bannerSchema,

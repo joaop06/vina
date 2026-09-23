@@ -1,6 +1,6 @@
 "use client";
 
-import { HeaderDrawerNav } from "@/components/public/layouts/headerNav";
+import { HeaderDrawerNav } from "@/components/public/kit/chrome/headerNav";
 import type { ResolvedNavEntry } from "@/src/lib/navigation";
 import styles from "./atelie-header.module.css";
 import { useAtelieMenu } from "./use-atelie-menu";

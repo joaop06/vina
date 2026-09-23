@@ -6,7 +6,7 @@ import { FieldHint } from "@/components/admin/shell/FieldHint";
 import { ConfigGuide } from "@/components/admin/personalizacao/ConfigGuide";
 import { LayoutPreview } from "@/components/admin/personalizacao/siteTheme";
 import { VitrinePreview } from "@/components/admin/personalizacao/VitrinePreview";
-import { SITE_LAYOUT_OPTIONS } from "@/components/public/layouts/options";
+import { SITE_LAYOUT_OPTIONS } from "@/components/public/layouts/contract/options";
 import type { Banner } from "@/src/schemas/banner";
 import type { SiteConfig, SiteLayoutId } from "@/src/schemas/site-config";
 import styles from "./VitrinePanel.module.css";

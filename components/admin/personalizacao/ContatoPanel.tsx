@@ -13,7 +13,7 @@ import {
 import { FieldHint } from "@/components/admin/shell/FieldHint";
 import { EnderecoLocalFields } from "@/components/admin/personalizacao/EnderecoLocalFields";
 import { configTabHref } from "@/components/admin/personalizacao/configTabs";
-import { getFooterContact } from "@/components/public/footerContact";
+import { getFooterContact } from "@/components/public/kit/chrome/footerContact";
 import { formatEnderecoLinha } from "@/src/lib/br/endereco";
 import { instagramProfileUrl, syncInstagram } from "@/src/lib/instagram";
 import { formatBrWhatsApp, normalizeWaDigits } from "@/src/lib/wa";

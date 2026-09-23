@@ -1,4 +1,4 @@
-import { CartHeaderButton } from "@/components/public/cart/CartHeaderButton";
+import { CartHeaderButton } from "@/components/public/kit/cart/CartHeaderButton";
 import { AtelieBagIcon } from "./AtelieBagIcon";
 import styles from "./atelie-header.module.css";
 

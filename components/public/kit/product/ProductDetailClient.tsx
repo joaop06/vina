@@ -16,11 +16,11 @@ import {
 import { clampQuantity, productWaMessageFromParts, waLink } from "@/src/lib/wa";
 import type { ProductWaTemplateParts } from "@/src/lib/wa-product-template";
 import type { CompactCartItemParts } from "@/src/lib/wa-compact-template";
-import { ProductGallery } from "@/components/public/ProductGallery";
-import { ProductVariantPicker } from "@/components/public/ProductVariantPicker";
-import { WhatsAppButton } from "@/components/public/WhatsAppButton";
-import { CartIcon } from "@/components/public/icons/StorefrontIcons";
-import { useCartOptional } from "@/components/public/cart/CartProvider";
+import { ProductGallery } from "@/components/public/kit/product/ProductGallery";
+import { ProductVariantPicker } from "@/components/public/kit/product/ProductVariantPicker";
+import { WhatsAppButton } from "@/components/public/kit/feedback/WhatsAppButton";
+import { CartIcon } from "@/components/public/kit/chrome/icons/StorefrontIcons";
+import { useCartOptional } from "@/components/public/kit/cart/CartProvider";
 import { coverImage } from "@/src/lib/front/media";
 import { selecioneVarianteFromDims } from "@/src/lib/front/store-copy";
 import type { SiteDimensao, SiteTextosExtended } from "@/src/schemas/site-personalization";

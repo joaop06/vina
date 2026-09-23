@@ -1,5 +1,5 @@
-import { PublicFooterSections } from "@/components/public/PublicFooterSections";
-import type { ChromeProps } from "../types";
+import { PublicFooterSections } from "@/components/public/kit/chrome/PublicFooterSections";
+import type { ChromeProps } from "../contract/types";
 import styles from "./gallery.module.css";
 
 export function GalleryFooter({ site, categories }: ChromeProps) {

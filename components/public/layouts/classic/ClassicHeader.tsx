@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { PublicMobileNav } from "../PublicMobileNav";
-import type { ChromeProps } from "../types";
-import { StoreBrand } from "@/components/public/StoreBrand";
-import { CartHeaderButton } from "@/components/public/cart/CartHeaderButton";
+import { PublicMobileNav } from "@/components/public/kit/chrome/PublicMobileNav";
+import type { ChromeProps } from "../contract/types";
+import { StoreBrand } from "@/components/public/kit/chrome/StoreBrand";
+import { CartHeaderButton } from "@/components/public/kit/cart/CartHeaderButton";
 import {
   HeaderDesktopNav,
   HeaderDrawerNav,
@@ -10,7 +10,7 @@ import {
   HeaderTopbarMeta,
   headerTopbarVisible,
   resolveHeaderNav,
-} from "../headerNav";
+} from "@/components/public/kit/chrome/headerNav";
 import styles from "./classic.module.css";
 
 export function ClassicHeader({ site, categories }: ChromeProps) {

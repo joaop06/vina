@@ -1,5 +1,5 @@
-import { PublicFooterSections } from "@/components/public/PublicFooterSections";
-import type { ChromeProps } from "../types";
+import { PublicFooterSections } from "@/components/public/kit/chrome/PublicFooterSections";
+import type { ChromeProps } from "../contract/types";
 import styles from "./split.module.css";
 
 export function SplitFooter({ site, categories }: ChromeProps) {

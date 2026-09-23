@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCartOptional } from "@/components/public/cart/CartProvider";
+import { useCartOptional } from "@/components/public/kit/cart/CartProvider";
 import type { ProductListItem } from "@/src/schemas/product-list";
 
 export function CartCatalogAction({

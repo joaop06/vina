@@ -856,15 +856,15 @@ Arquivos na raiz e em `cart/`, `analytics/`, `icons/`, mais `headerNav` e `Publi
 
 ### Como
 
-- [ ] Mover cada arquivo da tabela para o destino. CSS module junto do componente (`CategoryNav.module.css`, `StoreBrand.module.css`, `ConsentBanner.module.css`, `PublicMobileNav.module.css`).
-- [ ] Atualizar imports internos do kit (o card importa filtros? o PDP importa galeria, ícones e `useCart`). Preferir caminho `@/components/public/kit/...`.
-- [ ] Atualizar imports dos quatro layouts. Layout pode importar `@/components/public/kit/chrome/headerNav` (e o restante do kit). Layout não passa a importar outro layout nesse ajuste.
-- [ ] Atualizar `app/(public)/layout.tsx`: providers em `kit/cart` e `kit/feedback`. O provider continua montado nesse layout.
-- [ ] Atualizar pages de catálogo, produto e carrinho para os caminhos novos do fallback da fase 1.
-- [ ] Atualizar o admin que importa peça pública (`BannerSlots`, `media` não; `VitrinePreview` usa `mediaUrl` de `src/lib/front`, não um componente do kit — só mexer se algum painel importar componente movido).
-- [ ] Buscar `components/public/ProductCard`, `CatalogPageView`, `WhatsAppButton`, `cart/Cart`, `layouts/headerNav`, `layouts/PublicMobileNav`, `SiteChrome`, `SiteHeader`, `SiteFooter`.
-- [ ] Apagar `SiteChrome.tsx` quando a busca desses três nomes não achar consumidor.
-- [ ] Manter os imports de CSS global do kit no layout público. Se um CSS estiver ao lado do componente movido, o caminho do import no layout muda e o arquivo não se duplica.
+- [x] Mover cada arquivo da tabela para o destino. CSS module junto do componente (`CategoryNav.module.css`, `StoreBrand.module.css`, `ConsentBanner.module.css`, `PublicMobileNav.module.css`).
+- [x] Atualizar imports internos do kit (o card importa filtros? o PDP importa galeria, ícones e `useCart`). Preferir caminho `@/components/public/kit/...`.
+- [x] Atualizar imports dos quatro layouts. Layout pode importar `@/components/public/kit/chrome/headerNav` (e o restante do kit). Layout não passa a importar outro layout nesse ajuste.
+- [x] Atualizar `app/(public)/layout.tsx`: providers em `kit/cart` e `kit/feedback`. O provider continua montado nesse layout.
+- [x] Atualizar pages de catálogo, produto e carrinho para os caminhos novos do fallback da fase 1.
+- [x] Atualizar o admin que importa peça pública (`BannerSlots`, `media` não; `VitrinePreview` usa `mediaUrl` de `src/lib/front`, não um componente do kit — só mexer se algum painel importar componente movido).
+- [x] Buscar `components/public/ProductCard`, `CatalogPageView`, `WhatsAppButton`, `cart/Cart`, `layouts/headerNav`, `layouts/PublicMobileNav`, `SiteChrome`, `SiteHeader`, `SiteFooter`.
+- [x] Apagar `SiteChrome.tsx` quando a busca desses três nomes não achar consumidor.
+- [x] Manter os imports de CSS global do kit no layout público. Se um CSS estiver ao lado do componente movido, o caminho do import no layout muda e o arquivo não se duplica.
 
 ### Fora desta fase
 
@@ -875,10 +875,10 @@ Arquivos na raiz e em `cart/`, `analytics/`, `icons/`, mais `headerNav` e `Publi
 
 ### Pronto quando
 
-- [ ] Raiz de `components/public/` sem `.tsx` solto (pastas `kit/` e `layouts/` apenas).
-- [ ] Home dos quatro layouts, catálogo, PDP, carrinho, sobre, gate de WhatsApp, consentimento e botão do carrinho no header.
-- [ ] `SiteChrome.tsx` ausente.
-- [ ] Critério de pronto comum.
+- [x] Raiz de `components/public/` sem `.tsx` solto (pastas `kit/` e `layouts/` apenas).
+- [x] Home dos quatro layouts, catálogo, PDP, carrinho, sobre, gate de WhatsApp, consentimento e botão do carrinho no header.
+- [x] `SiteChrome.tsx` ausente.
+- [x] Critério de pronto comum.
 
 ---
 

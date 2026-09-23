@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { BannerFaixa, BannerPromo } from "@/components/public/BannerSlots";
-import { InstagramButton } from "@/components/public/InstagramButton";
-import { ProductCard } from "@/components/public/ProductCard";
-import { WhatsAppButton } from "@/components/public/WhatsAppButton";
+import { BannerFaixa, BannerPromo } from "@/components/public/kit/chrome/BannerSlots";
+import { InstagramButton } from "@/components/public/kit/feedback/InstagramButton";
+import { ProductCard } from "@/components/public/kit/product/ProductCard";
+import { WhatsAppButton } from "@/components/public/kit/feedback/WhatsAppButton";
 import { mediaUrl } from "@/src/lib/front/format";
 import { IMAGE_SIZES } from "@/src/lib/front/media-image";
 import { bannerCtaTexto, bannerHref, pickBanner } from "@/src/lib/front/media";
-import type { HomeProps } from "../types";
+import type { HomeProps } from "../contract/types";
 import { FootMark } from "./FootMark";
 import styles from "./split.module.css";
 

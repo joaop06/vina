@@ -14,8 +14,8 @@ import {
   withClientGreeting,
   type ClientLead,
 } from "@/src/lib/front/client-lead";
-import { ClientLeadModal } from "@/components/public/ClientLeadModal";
-import { useAnalyticsOptional } from "@/components/public/analytics/AnalyticsProvider";
+import { ClientLeadModal } from "@/components/public/kit/feedback/ClientLeadModal";
+import { useAnalyticsOptional } from "@/components/public/kit/feedback/analytics/AnalyticsProvider";
 import type { SiteTextosExtended } from "@/src/schemas/site-personalization";
 
 type WhatsAppGateContextValue = {
