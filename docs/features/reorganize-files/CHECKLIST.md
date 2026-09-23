@@ -1278,11 +1278,11 @@ Não é pré-requisito das fases anteriores. Fazer só agora, com a fundação j
 
 ### Como
 
-- [ ] Extrair paths para `site-config-paths.ts` sem mudar string de path (`configuracoes/geral.json` e as demais, `configuracoes/meta.json`).
-- [ ] Extrair schemas e tipos de fragmento para `site-config-fragments.ts`.
-- [ ] Deixar em `site-config-tabs.ts` as funções de split/merge/parse e reexportar paths e tipos, para os call sites e o barrel não precisarem saber da divisão. Se preferir que o barrel exporte os três arquivos, atualizar `schemas/index.ts` e os imports de `app/` e `components/` na mesma fase.
-- [ ] O teste existente cobre o comportamento. Não reduzir asserções. Acrescentar asserção só se algum símbolo deixar de ser reexportado e o teste ainda importar o símbolo pelo arquivo antigo.
-- [ ] Rodar o teste de tabs e o de seed (`site-config-seed.test.ts`).
+- [x] Extrair paths para `site-config-paths.ts` sem mudar string de path (`configuracoes/geral.json` e as demais, `configuracoes/meta.json`).
+- [x] Extrair schemas e tipos de fragmento para `site-config-fragments.ts`.
+- [x] Deixar em `site-config-tabs.ts` as funções de split/merge/parse e reexportar paths e tipos, para os call sites e o barrel não precisarem saber da divisão. Se preferir que o barrel exporte os três arquivos, atualizar `schemas/index.ts` e os imports de `app/` e `components/` na mesma fase.
+- [x] O teste existente cobre o comportamento. Não reduzir asserções. Acrescentar asserção só se algum símbolo deixar de ser reexportado e o teste ainda importar o símbolo pelo arquivo antigo.
+- [x] Rodar o teste de tabs e o de seed (`site-config-seed.test.ts`).
 
 ### Fora desta fase
 
@@ -1292,10 +1292,10 @@ Não é pré-requisito das fases anteriores. Fazer só agora, com a fundação j
 
 ### Pronto quando
 
-- [ ] `site-config-tabs.ts` não declara `SITE_CONFIG_TAB_PATHS` nem os `z.object` de fragmento (eles vivem nos arquivos novos e podem ser reexportados).
-- [ ] Testes de tabs, tema e seed verdes.
-- [ ] Salvar duas abas diferentes na personalização e ver que a aba não tocada permanece no disco.
-- [ ] Critério de pronto comum.
+- [x] `site-config-tabs.ts` não declara `SITE_CONFIG_TAB_PATHS` nem os `z.object` de fragmento (eles vivem nos arquivos novos e podem ser reexportados).
+- [x] Testes de tabs, tema e seed verdes.
+- [x] Salvar duas abas diferentes na personalização e ver que a aba não tocada permanece no disco.
+- [x] Critério de pronto comum.
 
 ---
 
