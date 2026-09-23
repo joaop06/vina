@@ -5,7 +5,7 @@ import {
 import {
   PedidoForm,
   type PedidoInitialLine,
-} from "@/components/admin/PedidoForm";
+} from "@/components/admin/pedidos/PedidoForm";
 import { variantSellPrice } from "@/src/lib/front/pricing";
 import type { Product } from "@/src/schemas/product";
 

@@ -1,10 +1,10 @@
-import { PersonalizacaoClient } from "@/components/admin/PersonalizacaoClient";
+import { PersonalizacaoClient } from "@/components/admin/personalizacao/PersonalizacaoClient";
 import {
   getCachedActiveCategories,
   getCachedAllBanners,
 } from "@/src/lib/cache/storefront-reads";
 import { getSiteConfigTab } from "@/src/services/site-config.service";
-import { parseConfigTab } from "@/components/admin/configuracoes/configTabs";
+import { parseConfigTab } from "@/components/admin/personalizacao/configTabs";
 import { DEFAULT_SITE_CONFIG } from "@/src/config/default-site-config";
 import { mergeTabIntoConfig } from "@/src/schemas/site-config-tabs";
 import type { Banner } from "@/src/schemas/banner";

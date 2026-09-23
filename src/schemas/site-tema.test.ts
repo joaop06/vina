@@ -4,11 +4,11 @@ import {
   containerPreviewWidth,
   matchLarguraPreset,
   matchTipografiaPreset,
-} from "@/components/admin/configuracoes/temaPresets";
+} from "@/components/admin/personalizacao/temaPresets";
 import {
   expandHexIfComplete,
   normalizeHexForPicker,
-} from "@/components/admin/configuracoes/siteTheme";
+} from "@/components/admin/personalizacao/siteTheme";
 import {
   siteContainerWidthSchema,
   siteHexColorSchema,

@@ -7,9 +7,9 @@ import {
   estimateJsonPayloadBytes,
   runWithListingReadMetrics,
 } from "@/src/lib/observability/listing-read";
-import { AdminNavRow } from "@/components/admin/AdminNavRow";
-import { AdminPageActions } from "@/components/admin/AdminPageActions";
-import { DeleteProductButton } from "@/components/admin/DeleteProductButton";
+import { AdminNavRow } from "@/components/admin/shell/AdminNavRow";
+import { AdminPageActions } from "@/components/admin/shell/AdminPageActions";
+import { DeleteProductButton } from "@/components/admin/produtos/DeleteProductButton";
 import { PaginationNav } from "@/components/ui/PaginationNav";
 import {
   buildPageSizeSelectOptions,

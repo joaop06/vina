@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { DashboardClient } from "@/components/admin/DashboardClient";
+import { DashboardClient } from "@/components/admin/dashboard/DashboardClient";
 import {
   getDashboardStats,
   periodForPreset,

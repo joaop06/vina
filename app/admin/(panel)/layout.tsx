@@ -1,7 +1,7 @@
-import { AdminBusyProvider } from "@/components/admin/AdminBusy";
-import { AdminSidebar } from "@/components/admin/AdminSidebar";
-import { AdminToaster } from "@/components/admin/AdminToaster";
-import { ConfirmProvider } from "@/components/admin/ConfirmDialog";
+import { AdminBusyProvider } from "@/components/admin/shell/AdminBusy";
+import { AdminSidebar } from "@/components/admin/shell/AdminSidebar";
+import { AdminToaster } from "@/components/admin/shell/AdminToaster";
+import { ConfirmProvider } from "@/components/admin/shell/ConfirmDialog";
 import { mediaUrl } from "@/src/lib/front/format";
 import { getCachedSiteBranding } from "@/src/lib/cache/storefront-reads";
 import { clearSession } from "@/src/lib/auth/session";

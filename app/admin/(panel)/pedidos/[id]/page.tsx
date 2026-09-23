@@ -4,7 +4,7 @@ import {
   getCachedProductsByIds,
 } from "@/src/lib/cache/storefront-reads";
 import { getOrder } from "@/src/services/orders.service";
-import { PedidoForm } from "@/components/admin/PedidoForm";
+import { PedidoForm } from "@/components/admin/pedidos/PedidoForm";
 
 type Props = { params: Promise<{ id: string }> };
 

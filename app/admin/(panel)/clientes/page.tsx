@@ -1,4 +1,4 @@
-import { ClientesClient } from "@/components/admin/ClientesClient";
+import { ClientesClient } from "@/components/admin/clientes/ClientesClient";
 import {
   getCachedClientIndex,
   getCachedOrderIndex,

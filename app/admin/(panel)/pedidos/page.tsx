@@ -2,7 +2,7 @@ import {
   getCachedClientIndex,
   getCachedOrderIndex,
 } from "@/src/lib/cache/storefront-reads";
-import { PedidosClient } from "@/components/admin/PedidosClient";
+import { PedidosClient } from "@/components/admin/pedidos/PedidosClient";
 import {
   firstSearchParam,
   normalizePagination,

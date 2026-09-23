@@ -636,10 +636,10 @@ Arquivos listados na tabela “shell” da seção [Mapa](#admin-flat--pastas-de
 
 ### Como
 
-- [ ] Mover cada arquivo da tabela shell. `AdminLogin.module.css` vai junto de `AdminLoginShell.tsx`.
-- [ ] Atualizar imports relativos dentro dos arquivos movidos (`./FieldHint`, `./adminToast`).
-- [ ] Atualizar imports de `app/admin/(panel)/layout.tsx`, `app/admin/login/page.tsx` e de qualquer painel que use `ConfirmDialog`, `AdminPageActions`, `LoadingButton`, `FieldHint`, `AdminBusy`.
-- [ ] Decidir `DashboardClient.tsx`: mover para `dashboard/DashboardClient.tsx` e corrigir a page `/admin`, ou deixar na raiz e anotar aqui que ficou de fora. Não deixar o arquivo pela metade (página apontando para os dois caminhos).
+- [x] Mover cada arquivo da tabela shell. `AdminLogin.module.css` vai junto de `AdminLoginShell.tsx`.
+- [x] Atualizar imports relativos dentro dos arquivos movidos (`./FieldHint`, `./adminToast`).
+- [x] Atualizar imports de `app/admin/(panel)/layout.tsx`, `app/admin/login/page.tsx` e de qualquer painel que use `ConfirmDialog`, `AdminPageActions`, `LoadingButton`, `FieldHint`, `AdminBusy`.
+- [x] Decidir `DashboardClient.tsx`: mover para `dashboard/DashboardClient.tsx` e corrigir a page `/admin`, ou deixar na raiz e anotar aqui que ficou de fora. Não deixar o arquivo pela metade (página apontando para os dois caminhos). Movido para `dashboard/DashboardClient.tsx`.
 
 ### Fora desta fase
 
@@ -648,8 +648,8 @@ Arquivos listados na tabela “shell” da seção [Mapa](#admin-flat--pastas-de
 
 ### Pronto quando
 
-- [ ] Login, sidebar, toast de sucesso/erro e um dialog de confirmação.
-- [ ] Critério de pronto comum.
+- [x] Login, sidebar, toast de sucesso/erro e um dialog de confirmação.
+- [x] Critério de pronto comum.
 
 ### Fase 6.2 — Produtos
 
@@ -668,9 +668,9 @@ Forms e peças de produto ficam em `components/admin/produtos/`.
 
 ### Como
 
-- [ ] Mover os sete arquivos.
-- [ ] Se `ImageField` ou `CategoryMultiSelect` também forem importados por categorias ou personalização, o destino continua `produtos/` nesta fase (um dono só). Os outros passam a importar `@/components/admin/produtos/ImageField`. Não criar uma pasta `shared/` .
-- [ ] Atualizar imports. Não mudar campos do form.
+- [x] Mover os sete arquivos.
+- [x] Se `ImageField` ou `CategoryMultiSelect` também forem importados por categorias ou personalização, o destino continua `produtos/` nesta fase (um dono só). Os outros passam a importar `@/components/admin/produtos/ImageField`. Não criar uma pasta `shared/` .
+- [x] Atualizar imports. Não mudar campos do form.
 
 ### Fora desta fase
 
@@ -678,8 +678,8 @@ Forms e peças de produto ficam em `components/admin/produtos/`.
 
 ### Pronto quando
 
-- [ ] Listar, criar, editar, galeria, variantes e excluir produto.
-- [ ] Critério de pronto comum.
+- [x] Listar, criar, editar, galeria, variantes e excluir produto.
+- [x] Critério de pronto comum.
 
 ### Fase 6.3 — Categorias
 
@@ -698,8 +698,8 @@ Forms e peças de produto ficam em `components/admin/produtos/`.
 
 ### Como
 
-- [ ] Mover o client e o CSS module se houver.
-- [ ] Atualizar o import da page e o que o client importar do shell ou de `produtos/` (multiselect).
+- [x] Mover o client e o CSS module se houver.
+- [x] Atualizar o import da page e o que o client importar do shell ou de `produtos/` (multiselect).
 
 ### Fora desta fase
 
@@ -707,8 +707,8 @@ Forms e peças de produto ficam em `components/admin/produtos/`.
 
 ### Pronto quando
 
-- [ ] Árvore de categorias abre, cria e edita como antes.
-- [ ] Critério de pronto comum.
+- [x] Árvore de categorias abre, cria e edita como antes.
+- [x] Critério de pronto comum.
 
 ### Fase 6.4 — Clientes
 
@@ -727,8 +727,8 @@ Lista e combobox de cliente ficam em `components/admin/clientes/`.
 
 ### Como
 
-- [ ] Mover os dois arquivos.
-- [ ] Atualizar imports da page de clientes e de `PedidoForm.tsx`.
+- [x] Mover os dois arquivos.
+- [x] Atualizar imports da page de clientes e de `PedidoForm.tsx`.
 
 ### Fora desta fase
 
@@ -736,8 +736,8 @@ Lista e combobox de cliente ficam em `components/admin/clientes/`.
 
 ### Pronto quando
 
-- [ ] Lista de clientes e o combobox dentro do pedido.
-- [ ] Critério de pronto comum.
+- [x] Lista de clientes e o combobox dentro do pedido.
+- [x] Critério de pronto comum.
 
 ### Fase 6.5 — Pedidos
 
@@ -756,8 +756,8 @@ Ambos na raiz. Pages em `app/admin/(panel)/pedidos/**`.
 
 ### Como
 
-- [ ] Mover os dois arquivos e CSS module se houver.
-- [ ] Atualizar imports, inclusive `ClientCombobox` e peças de produto já movidas.
+- [x] Mover os dois arquivos e CSS module se houver.
+- [x] Atualizar imports, inclusive `ClientCombobox` e peças de produto já movidas.
 
 ### Fora desta fase
 
@@ -765,8 +765,8 @@ Ambos na raiz. Pages em `app/admin/(panel)/pedidos/**`.
 
 ### Pronto quando
 
-- [ ] Listar, abrir e criar pedido.
-- [ ] Critério de pronto comum.
+- [x] Listar, abrir e criar pedido.
+- [x] Critério de pronto comum.
 
 ### Fase 6.6 — HTTP do admin
 
@@ -785,8 +785,8 @@ Ambos na raiz. Pages em `app/admin/(panel)/pedidos/**`.
 
 ### Como
 
-- [ ] Mover os dois arquivos.
-- [ ] Atualizar imports nos forms, na personalização e no dashboard. Buscar a string `mutationFetch` e `uploadClient` no repositório.
+- [x] Mover os dois arquivos.
+- [x] Atualizar imports nos forms, na personalização e no dashboard. Buscar a string `mutationFetch` e `uploadClient` no repositório.
 
 ### Fora desta fase
 
@@ -794,8 +794,8 @@ Ambos na raiz. Pages em `app/admin/(panel)/pedidos/**`.
 
 ### Pronto quando
 
-- [ ] Salvar um produto (mutation) e enviar uma imagem (upload).
-- [ ] Critério de pronto comum.
+- [x] Salvar um produto (mutation) e enviar uma imagem (upload).
+- [x] Critério de pronto comum.
 
 ### Fase 6.7 — Personalização
 
@@ -815,12 +815,12 @@ UI em `components/admin/configuracoes/**`. [NavegacaoEditor.tsx](../../../compon
 
 ### Como
 
-- [ ] Mover `configuracoes/**` para `personalizacao/**`, preservando `navegacao/`, CSS modules e o teste.
-- [ ] Mover `PersonalizacaoClient.tsx` para `personalizacao/PersonalizacaoClient.tsx`.
-- [ ] Mover `NavegacaoEditor.tsx` para `personalizacao/navegacao/NavegacaoEditor.tsx` e apontar o CSS module `./NavegacaoEditor.module.css`.
-- [ ] Mover `BannersClient.tsx` para `personalizacao/BannersClient.tsx` se alguma page ainda o importar. Se nenhuma page importar, mover mesmo assim (o destino é a personalização) e corrigir o import restante, ou apagar só se a busca mostrar zero referências e o arquivo for código morto. Não apagar se houver dúvida: mover.
-- [ ] Atualizar imports da page, dos painéis e do teste. Atualizar o caminho do teste em `package.json`.
-- [ ] Buscar a string `components/admin/configuracoes` e `NavegacaoEditor` até zerar o caminho antigo.
+- [x] Mover `configuracoes/**` para `personalizacao/**`, preservando `navegacao/`, CSS modules e o teste.
+- [x] Mover `PersonalizacaoClient.tsx` para `personalizacao/PersonalizacaoClient.tsx`.
+- [x] Mover `NavegacaoEditor.tsx` para `personalizacao/navegacao/NavegacaoEditor.tsx` e apontar o CSS module `./NavegacaoEditor.module.css`.
+- [x] Mover `BannersClient.tsx` para `personalizacao/BannersClient.tsx` se alguma page ainda o importar. Se nenhuma page importar, mover mesmo assim (o destino é a personalização) e corrigir o import restante, ou apagar só se a busca mostrar zero referências e o arquivo for código morto. Não apagar se houver dúvida: mover.
+- [x] Atualizar imports da page, dos painéis e do teste. Atualizar o caminho do teste em `package.json`.
+- [x] Buscar a string `components/admin/configuracoes` e `NavegacaoEditor` até zerar o caminho antigo.
 
 ### Fora desta fase
 
@@ -830,9 +830,9 @@ UI em `components/admin/configuracoes/**`. [NavegacaoEditor.tsx](../../../compon
 
 ### Pronto quando
 
-- [ ] `/admin/personalizacao`: abas geral, WhatsApp, contato, vitrine, navegação, textos e tema. A prévia de banners continua com heróis de classic, split e gallery, e vazia no ateliê.
-- [ ] Editor de navegação abre com o mesmo CSS.
-- [ ] Critério de pronto comum.
+- [x] `/admin/personalizacao`: abas geral, WhatsApp, contato, vitrine, navegação, textos e tema. A prévia de banners continua com heróis de classic, split e gallery, e vazia no ateliê.
+- [x] Editor de navegação abre com o mesmo CSS.
+- [x] Critério de pronto comum.
 
 ---
 

@@ -3,7 +3,7 @@ import {
   AdminLoginFormSkeleton,
   AdminLoginShell,
   type AdminLoginBrand,
-} from "@/components/admin/AdminLoginShell";
+} from "@/components/admin/shell/AdminLoginShell";
 import { mediaUrl } from "@/src/lib/front/format";
 import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
 import LoginForm from "./LoginForm";

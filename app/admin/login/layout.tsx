@@ -1,4 +1,4 @@
-import { AdminToaster } from "@/components/admin/AdminToaster";
+import { AdminToaster } from "@/components/admin/shell/AdminToaster";
 
 /**
  * Locks the login route to the viewport before CSS modules load,
