@@ -129,6 +129,8 @@ export function VitrinePreview({
             <span className={styles.nav}>Menu</span>
           </header>
 
+          {layout === "atelie" ? null : (
+            <>
           {layout === "classic" ? (
             <section className={styles.classicHero}>
               {heroSrc ? (
@@ -274,13 +276,17 @@ export function VitrinePreview({
               ficam guardadas e voltam se você mudar de layout.
             </p>
           )}
+            </>
+          )}
         </div>
       </div>
 
-      <p className={styles.note}>
-        Os números {slots.map((_, i) => i + 1).join(", ")} batem com as áreas
-        abaixo. A prévia usa as imagens ativas já salvas.
-      </p>
+      {slots.length > 0 ? (
+        <p className={styles.note}>
+          Os números {slots.map((_, i) => i + 1).join(", ")} batem com as áreas
+          abaixo. A prévia usa as imagens ativas já salvas.
+        </p>
+      ) : null}
     </div>
   );
 }

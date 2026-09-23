@@ -256,6 +256,10 @@ export function LayoutPreview({
     );
   }
 
+  if (id === "atelie") {
+    return <svg viewBox="0 0 160 88" aria-hidden="true" />;
+  }
+
   if (id === "gallery") {
     return (
       <svg viewBox="0 0 160 88" aria-hidden="true">

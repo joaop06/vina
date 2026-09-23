@@ -1,3 +1,4 @@
+import { atelieLayout } from "./atelie";
 import { classicLayout } from "./classic";
 import { galleryLayout } from "./gallery";
 import { splitLayout } from "./split";
@@ -16,6 +17,7 @@ const LAYOUTS: Record<SiteLayoutId, SiteLayoutModule> = {
   split: splitLayout,
   classic: classicLayout,
   gallery: galleryLayout,
+  atelie: atelieLayout,
 };
 
 export function getLayout(id: SiteLayoutId | undefined | null): SiteLayoutModule {

@@ -108,6 +108,7 @@ export const LAYOUT_BANNER_SLOTS: Record<SiteLayoutId, LayoutBannerSlot[]> = {
       required: false,
     },
   ],
+  atelie: [],
 };
 
 export function getBannerSlotsForLayout(

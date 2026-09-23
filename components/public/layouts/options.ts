@@ -53,6 +53,14 @@ export const SITE_LAYOUT_OPTIONS: SiteLayoutOption[] = [
       "Sem faixa nem promoção neste modelo",
     ],
   },
+  {
+    id: "atelie",
+    nome: "Ateliê",
+    descricao: "",
+    impacto: "",
+    areasResumo: "",
+    destaques: [],
+  },
 ];
 
 export function getLayoutOption(id: SiteLayoutId): SiteLayoutOption {

@@ -74,7 +74,7 @@ export const siteInstagramSchema = z
       }),
   );
 
-export const siteLayoutSchema = z.enum(["classic", "split", "gallery"]);
+export const siteLayoutSchema = z.enum(["classic", "split", "gallery", "atelie"]);
 export type SiteLayoutId = z.infer<typeof siteLayoutSchema>;
 
 export const siteLogoSchema = z.object({
