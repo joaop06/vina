@@ -1377,8 +1377,8 @@ Os campos espelham o que [VitrinePreview.tsx](../../../components/admin/configur
 `Marker` e `Placeholder` podem permanecer no painel e ser passados como props, ou ser copiados para o módulo se o JSX do herói os incluir. Escolher uma das duas e usar a mesma nos quatro layouts. Não duplicar a lógica de “qual banner está ativo”.
 
 - [x] Tipos acima no contrato, chave opcional.
-- [ ] `VitrinePreview` chama `getLayout(layout).Preview`. Se `Preview` faltar, não desenha herói (é o caso do ateliê até a caixa do ateliê, e de qualquer id futuro).
-- [ ] Remover de `VitrinePreview` os blocos `layout === "classic" | "split" | "gallery" | "atelie"` depois que os quatro `Preview` existirem. A nota de gallery sobre faixa e promoção guardadas permanece no painel, porque é texto de admin, não pele do módulo: hoje ela está no ramo `layout === "gallery"`. Movê-la para uma condição `slots` sem faixa/promo, ou para o `Preview` do gallery se o JSX fizer parte do herói. O texto visível permanece o mesmo.
+- [x] `VitrinePreview` chama `getLayout(layout).Preview`. Se `Preview` faltar, não desenha herói (é o caso do ateliê até a caixa do ateliê, e de qualquer id futuro).
+- [x] Remover de `VitrinePreview` os blocos `layout === "classic" | "split" | "gallery" | "atelie"` depois que os quatro `Preview` existirem. A nota de gallery sobre faixa e promoção guardadas permanece no painel, porque é texto de admin, não pele do módulo: hoje ela está no ramo `layout === "gallery"`. Movê-la para uma condição `slots` sem faixa/promo, ou para o `Preview` do gallery se o JSX fizer parte do herói. O texto visível permanece o mesmo.
 - [x] Admin não ganha import de `layouts/classic/ClassicPreview` (nem dos outros). Só `getLayout`.
 
 ### Classic
@@ -1502,20 +1502,20 @@ Header decomposto em `layouts/atelie/header/` (marca, nav, menu, sacola, Cormora
 
 ### Como
 
-- [ ] Criar `atelie.css` com um bloco `[data-layout="atelie"]` vazio ou só com comentário de que a pele de catálogo/PDP/carrinho/sobre é a do kit. Não inventar token de raio, título ou grade. Não copiar o bloco do classic para “ter algo”.
-- [ ] Importar `./atelie.css` em `atelie/index.ts`.
-- [ ] `AteliePreview` retorna `null` (ou um fragmento vazio), que é o que a prévia faz hoje. Registrar `Preview: AteliePreview` para o painel não depender de “ausência da chave” como único jeito de não desenhar herói. A ausência de slots continua vinda de `banner-slots.ts`.
-- [ ] Não criar regras `.catalog-page` nem `.product-detail` no ateliê.
-- [ ] Não mover `header/fonts`, `header/breakpoints.ts` nem o CSS module do header.
-- [ ] Não implementar `CatalogPage`, `ProductDetail`, `CartPage`, `AboutPage`.
-- [ ] Não preencher `Home`, `Footer` nem `NotFound` além do stub atual.
+- [x] Criar `atelie.css` com um bloco `[data-layout="atelie"]` vazio ou só com comentário de que a pele de catálogo/PDP/carrinho/sobre é a do kit. Não inventar token de raio, título ou grade. Não copiar o bloco do classic para “ter algo”.
+- [x] Importar `./atelie.css` em `atelie/index.ts`.
+- [x] `AteliePreview` retorna `null` (ou um fragmento vazio), que é o que a prévia faz hoje. Registrar `Preview: AteliePreview` para o painel não depender de “ausência da chave” como único jeito de não desenhar herói. A ausência de slots continua vinda de `banner-slots.ts`.
+- [x] Não criar regras `.catalog-page` nem `.product-detail` no ateliê.
+- [x] Não mover `header/fonts`, `header/breakpoints.ts` nem o CSS module do header.
+- [x] Não implementar `CatalogPage`, `ProductDetail`, `CartPage`, `AboutPage`.
+- [x] Não preencher `Home`, `Footer` nem `NotFound` além do stub atual.
 
 ### Pronto quando
 
-- [ ] Vitrine ateliê: header atual, home stub, catálogo e PDP com a pele default do kit (as classes do kit, sem override ateliê).
-- [ ] Prévia do admin no ateliê sem herói de banner, como hoje.
-- [ ] Breakpoint do header continua 1100, e o default 768/1024 continua em `src/foundation/behaviors/viewport/breakpoints.ts`.
-- [ ] Critério de pronto comum.
+- [x] Vitrine ateliê: header atual, home stub, catálogo e PDP com a pele default do kit (as classes do kit, sem override ateliê).
+- [x] Prévia do admin no ateliê sem herói de banner, como hoje.
+- [x] Breakpoint do header continua 1100, e o default 768/1024 continua em `src/foundation/behaviors/viewport/breakpoints.ts`.
+- [x] Critério de pronto comum.
 
 ### Pronto do fecho inteiro
 

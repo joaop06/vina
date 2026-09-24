@@ -139,7 +139,7 @@ export function VitrinePreview({
             <span className={styles.nav}>Menu</span>
           </header>
 
-          {layout === "atelie" ? null : (
+          {slots.length === 0 ? null : (
             <>
           {Preview ? (
             <Preview
