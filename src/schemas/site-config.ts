@@ -14,6 +14,7 @@ import {
   compactCartItemPartsSchema,
   productWaTemplatePartsSchema,
 } from "@/src/foundation/behaviors/whatsapp/wa-template-validation";
+import { atelieLayoutConfigSchema } from "@/src/schemas/atelie-hero";
 import {
   migrateSitePersonalizationInput,
   siteComportamentoSchema,
@@ -135,6 +136,8 @@ const siteConfigCoreSchema = z.object({
   assinatura: z.string().min(1),
   slogan: z.string().min(1),
   layout: siteLayoutSchema.default("classic"),
+  /** Layout Ateliê: hero da home. Outros layouts ignoram. */
+  atelie: atelieLayoutConfigSchema,
   cores: z.object({
     primaria: siteHexColorSchema,
     secundaria: siteHexColorSchema,

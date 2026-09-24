@@ -12,6 +12,8 @@ const MIME: Record<string, string> = {
   ".png": "image/png",
   ".webp": "image/webp",
   ".gif": "image/gif",
+  ".mp4": "video/mp4",
+  ".webm": "video/webm",
 };
 
 const REVALIDATE_SECONDS = 3600;
@@ -58,7 +60,8 @@ export async function GET(_req: NextRequest, ctx: Ctx) {
       { status: 404 },
     );
   }
-  const relative = ["imagens", ...parts].join("/");
+  const relative =
+    parts[0] === "videos" ? parts.join("/") : ["imagens", ...parts].join("/");
   let entry: CachedMedia;
   try {
     entry = await getCachedMediaEntry(relative);
@@ -90,9 +93,34 @@ export async function GET(_req: NextRequest, ctx: Ctx) {
   }
 
   const ext = path.extname(relative).toLowerCase();
+  const contentType = MIME[ext] ?? "application/octet-stream";
+  const range = _req.headers.get("range");
+  if (range && (ext === ".mp4" || ext === ".webm")) {
+    const match = /^bytes=(\d+)-(\d*)$/.exec(range.trim());
+    if (match) {
+      const start = Number(match[1]);
+      const end = match[2] ? Number(match[2]) : body.length - 1;
+      if (start <= end && end < body.length) {
+        const chunk = body.subarray(start, end + 1);
+        return new NextResponse(chunk as BodyInit, {
+          status: 206,
+          headers: {
+            "Content-Type": contentType,
+            "Content-Range": `bytes ${start}-${end}/${body.length}`,
+            "Accept-Ranges": "bytes",
+            "Content-Length": String(chunk.length),
+            "Cache-Control":
+              "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400",
+          },
+        });
+      }
+    }
+  }
+
   return new NextResponse(body as BodyInit, {
     headers: {
-      "Content-Type": MIME[ext] ?? "application/octet-stream",
+      "Content-Type": contentType,
+      "Accept-Ranges": "bytes",
       "Cache-Control":
         "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400",
     },

@@ -37,6 +37,7 @@ import {
 } from "@/src/schemas/site-config-tabs";
 import {
   prepareImageBinary,
+  prepareVideoBinary,
   type PendingBinary,
 } from "@/src/services/upload.service";
 import type { z } from "zod";
@@ -415,6 +416,83 @@ type TabPatchInput = {
   data: unknown;
 };
 
+function asRecord(value: unknown): Record<string, unknown> | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  return value as Record<string, unknown>;
+}
+
+/**
+ * Turns a pending hero file into a stored path and drops the previous file
+ * when the merchant replaces or clears it.
+ */
+async function resolveAtelieHeroMidia(
+  data: unknown,
+  pendingBinaries: Map<string, PendingBinary>,
+  currentPath: string | null,
+): Promise<{
+  data: unknown;
+  binaryWrites: { path: string; bytes: Buffer }[];
+  deletes: string[];
+}> {
+  const root = asRecord(data);
+  const atelie = asRecord(root?.atelie);
+  const hero = asRecord(atelie?.hero);
+  const midia = asRecord(hero?.midia);
+  if (!root || !atelie || !hero || !midia) {
+    return { data, binaryWrites: [], deletes: [] };
+  }
+
+  const tipo = midia.tipo;
+  const origem = midia.origem;
+  const arquivo = asRecord(midia.arquivo);
+  const binaryWrites: { path: string; bytes: Buffer }[] = [];
+  const deletes: string[] = [];
+  let nextArquivo: { id: string; path: string } | null = null;
+
+  const keepUpload =
+    (tipo === "foto" || tipo === "video") && origem === "upload" && arquivo;
+
+  if (keepUpload && arquivo.pending) {
+    const id = typeof arquivo.id === "string" ? arquivo.id : "";
+    const pending = id ? pendingBinaries.get(id) : undefined;
+    if (!pending) {
+      throw new AppError(
+        "VALIDATION_ERROR",
+        "Arquivo pendente não enviado para a mídia do topo",
+        400,
+      );
+    }
+    const prepared =
+      tipo === "video"
+        ? prepareVideoBinary(pending, id)
+        : prepareImageBinary(pending, "site", id);
+    nextArquivo = { id: prepared.id, path: prepared.path };
+    binaryWrites.push({ path: prepared.path, bytes: prepared.bytes });
+  } else if (keepUpload && typeof arquivo.path === "string" && arquivo.path) {
+    const id = typeof arquivo.id === "string" ? arquivo.id : "";
+    nextArquivo = { id, path: arquivo.path };
+  }
+
+  if (currentPath && currentPath !== nextArquivo?.path) {
+    deletes.push(currentPath);
+  }
+
+  const next = {
+    ...root,
+    atelie: {
+      ...atelie,
+      hero: {
+        ...hero,
+        midia: {
+          ...midia,
+          arquivo: nextArquivo,
+        },
+      },
+    },
+  };
+  return { data: next, binaryWrites, deletes };
+}
+
 /**
  * Atomically update one or more tab fragments in a single commit.
  * `versao` is checked once against meta and bumped once.
@@ -503,11 +581,20 @@ export async function updateSiteConfigTabs(
         break;
       }
       case "vitrine": {
-        const s = parseTabFragment("vitrine", patch.data);
+        const currentPath = next.atelie.hero.midia.arquivo?.path ?? null;
+        const resolved = await resolveAtelieHeroMidia(
+          patch.data,
+          pendingBinaries,
+          currentPath,
+        );
+        binaryWrites = [...binaryWrites, ...resolved.binaryWrites];
+        deletes.push(...resolved.deletes);
+        const s = parseTabFragment("vitrine", resolved.data);
         next = {
           ...next,
           layout: s.layout,
           vitrine: s.vitrine,
+          atelie: s.atelie,
         };
         break;
       }

@@ -133,6 +133,7 @@ function tabFingerprintSlice(
       return {
         layout: config.layout ?? "classic",
         vitrine: config.vitrine,
+        atelie: config.atelie,
       };
     case "navegacao":
       return {

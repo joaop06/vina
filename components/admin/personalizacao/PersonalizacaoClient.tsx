@@ -17,6 +17,7 @@ import {
   buildMutationFormData,
   revokePreviewUrl,
 } from "@/components/admin/http/uploadClient";
+import type { AtelieMidiaDraft } from "@/components/admin/personalizacao/AtelieHeroFields";
 import {
   listDirtyTabs,
   logoFromConfig,
@@ -133,6 +134,7 @@ function tabPayload(
   config: SiteConfig,
   tab: SiteConfigTabId,
   logoDraft: ImageMeta | null,
+  midiaDraft: AtelieMidiaDraft | null,
 ): unknown {
   const slice = extractTabSlice(config, tab);
   if (tab === "geral") {
@@ -189,6 +191,25 @@ function tabPayload(
       horarios: config.horarios,
     };
   }
+  if (tab === "vitrine" && midiaDraft) {
+    const vitrine = extractTabSlice(config, "vitrine");
+    const midia = vitrine.atelie.hero.midia;
+    if (midia.origem === "upload" && midia.arquivo?.id === midiaDraft.id) {
+      return {
+        ...vitrine,
+        atelie: {
+          ...vitrine.atelie,
+          hero: {
+            ...vitrine.atelie.hero,
+            midia: {
+              ...midia,
+              arquivo: { id: midiaDraft.id, path: "", pending: true as const },
+            },
+          },
+        },
+      };
+    }
+  }
   return slice;
 }
 
@@ -227,6 +248,7 @@ export function PersonalizacaoClient({
   const [logoDraft, setLogoDraft] = useState<ImageMeta | null>(() =>
     logoFromConfig(initialConfig),
   );
+  const [midiaDraft, setMidiaDraft] = useState<AtelieMidiaDraft | null>(null);
   // Plain array (not Set): Client Component state must stay JSON-serializable
   // across SSR → hydration on Next/Vercel production builds.
   const [loadedTabs, setLoadedTabs] = useState<ConfiguracoesTabId[]>(
@@ -571,6 +593,7 @@ export function PersonalizacaoClient({
     applySiteTheme(committedTheme.current);
     setConfig(next);
     setLogoDraft(nextLogo);
+    setMidiaDraft(null);
     setBaselineByTab(tabBaselineFingerprints(next, nextLogo, loadedTabs));
     setBaselineLayout(next.layout ?? "classic");
   }
@@ -588,11 +611,15 @@ export function PersonalizacaoClient({
 
     setSaving(true);
     try {
-      const pendingFiles = logoDraft?.file
-        ? [{ id: logoDraft.id, file: logoDraft.file }]
-        : [];
-      const hasUploads =
-        tabsToSave.includes("geral") && pendingFiles.length > 0;
+      const pendingFiles = [
+        ...(tabsToSave.includes("geral") && logoDraft?.file
+          ? [{ id: logoDraft.id, file: logoDraft.file }]
+          : []),
+        ...(tabsToSave.includes("vitrine") && midiaDraft
+          ? [{ id: midiaDraft.id, file: midiaDraft.file }]
+          : []),
+      ];
+      const hasUploads = pendingFiles.length > 0;
 
       await runMutation(
         {
@@ -602,7 +629,7 @@ export function PersonalizacaoClient({
         async ({ setProgress }) => {
           const tabsPayload: Record<string, unknown> = {};
           for (const t of tabsToSave) {
-            tabsPayload[t] = tabPayload(config, t, logoDraft);
+            tabsPayload[t] = tabPayload(config, t, logoDraft, midiaDraft);
           }
 
           const payload = {
@@ -653,6 +680,7 @@ export function PersonalizacaoClient({
           applySiteTheme(committedTheme.current);
           setConfig(next);
           setLogoDraft(nextLogo);
+          setMidiaDraft(null);
           setBaselineByTab(
             tabBaselineFingerprints(next, nextLogo, loadedTabs),
           );
@@ -863,6 +891,8 @@ export function PersonalizacaoClient({
                   primaryColor={colorPickerValue}
                   initialBanners={banners}
                   disabled={saving}
+                  midiaDraft={midiaDraft}
+                  onMidiaDraft={setMidiaDraft}
                   onSubmit={save}
                   onConfigChange={onConfigChange}
                 />

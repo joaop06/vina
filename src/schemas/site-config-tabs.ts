@@ -52,6 +52,7 @@ export function splitSiteConfig(config: SiteConfig): SiteConfigFragments {
     vitrine: {
       layout: config.layout,
       vitrine: config.vitrine,
+      atelie: config.atelie,
     },
     navegacao: {
       navegacao: config.navegacao ?? DEFAULT_NAVEGACAO,
@@ -93,6 +94,7 @@ export function composeSiteConfigRaw(fragments: SiteConfigFragments): unknown {
     horarios: contato.horarios,
     layout: vitrine.layout,
     vitrine: vitrine.vitrine,
+    atelie: vitrine.atelie,
     navegacao: navegacao.navegacao,
     textos: {
       sobre:
@@ -186,6 +188,7 @@ export function mergeTabIntoConfig(
         ...next,
         layout: s.layout,
         vitrine: s.vitrine,
+        atelie: s.atelie,
       };
     }
     case "navegacao": {

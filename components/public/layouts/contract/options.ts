@@ -56,10 +56,15 @@ export const SITE_LAYOUT_OPTIONS: SiteLayoutOption[] = [
   {
     id: "atelie",
     nome: "Ateliê",
-    descricao: "",
-    impacto: "",
-    areasResumo: "",
-    destaques: [],
+    descricao:
+      "Texto à esquerda e uma foto ou vídeo emoldurado à direita, com botões configuráveis.",
+    impacto: "A mídia principal fica ao lado do texto (no celular, abaixo).",
+    areasResumo: "Foto ou vídeo no topo",
+    destaques: [
+      "Título, parágrafo e nota editáveis",
+      "Até dois botões: link ou WhatsApp",
+      "Cartão de legenda sobre a foto",
+    ],
   },
 ];
 

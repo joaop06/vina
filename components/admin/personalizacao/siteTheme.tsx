@@ -257,7 +257,19 @@ export function LayoutPreview({
   }
 
   if (id === "atelie") {
-    return <svg viewBox="0 0 160 88" aria-hidden="true" />;
+    return (
+      <svg viewBox="0 0 160 88" aria-hidden="true">
+        <rect width="160" height="88" fill="#f7f3ec" />
+        <rect x="8" y="28" width="46" height="4" fill="#9a7b45" />
+        <rect x="8" y="36" width="62" height="7" fill="#2c261f" />
+        <rect x="8" y="46" width="54" height="4" fill="#9a7b45" />
+        <rect x="8" y="56" width="48" height="3" fill="#6d6256" />
+        <rect x="8" y="66" width="22" height="8" fill="#8a6b38" />
+        <rect x="33" y="66" width="22" height="8" fill="none" stroke="#8a6b38" />
+        <rect x="92" y="16" width="58" height="64" fill="#f3eee6" stroke="#cfc4b4" />
+        <rect x="96" y="20" width="50" height="56" fill="#d9cfc2" />
+      </svg>
+    );
   }
 
   if (id === "gallery") {

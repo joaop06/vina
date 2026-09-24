@@ -16,6 +16,7 @@ import {
   siteTextosRodapeSchema,
   siteVitrineSchema,
 } from "@/src/schemas/site-personalization";
+import { atelieLayoutConfigSchema } from "@/src/schemas/atelie-hero";
 import {
   siteInstagramSchema,
   siteLayoutSchema,
@@ -125,6 +126,7 @@ export const siteContatoFragmentSchema = z.object({
 export const siteVitrineFragmentSchema = z.object({
   layout: siteLayoutSchema.default("classic"),
   vitrine: siteVitrineSchema,
+  atelie: atelieLayoutConfigSchema,
 });
 
 export const siteNavegacaoFragmentSchema = z.object({

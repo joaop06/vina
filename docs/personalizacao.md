@@ -36,6 +36,7 @@ Checklist rápido pós-save:
 | Campo JSON | Onde aparece | Desktop / mobile |
 |------------|--------------|------------------|
 | `nomeLoja`, `assinatura`, `slogan`, `logo` | Header, footer, hero, metadata | Responsivo (CSS layout) |
+| `atelie.hero` | Hero do layout Ateliê: textos, botões e mídia (foto ou vídeo, por upload ou link) | Texto à esquerda e moldura à direita a partir de 1100px; coluna única abaixo |
 | `cores.*`, `tema.*` | `--vn-*` em `app/layout.tsx` | Mesmas vars |
 | `layout` | `data-layout` + `layout-tokens.css` | Grids 2→3→4 em `globals.css` @768/@1024 |
 | `textos.home.*` | `*Home.tsx` (classic, split, gallery) | Idem |

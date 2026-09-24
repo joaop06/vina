@@ -16,6 +16,7 @@ import {
   DEFAULT_SITE_TEXTOS_RODAPE,
   DEFAULT_SITE_VITRINE,
 } from "@/src/config/store-copy-defaults";
+import { DEFAULT_ATELIE_HERO } from "@/src/schemas/atelie-hero";
 import { DEFAULT_NAVEGACAO } from "@/src/schemas/navigation";
 import type { SiteConfig } from "@/src/schemas/site-config";
 
@@ -28,6 +29,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   assinatura: "Catálogo online",
   slogan: "Configure sua vitrine no painel admin e comece a vender pelo WhatsApp.",
   layout: "classic",
+  atelie: { hero: { ...DEFAULT_ATELIE_HERO } },
   cores: {
     primaria: "#111111",
     secundaria: "#111111",

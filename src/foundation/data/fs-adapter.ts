@@ -216,6 +216,7 @@ export async function ensureDataDirs() {
     "imagens/produtos",
     "imagens/banners",
     "imagens/site",
+    "videos/site",
     "indices",
   ];
   for (const d of dirs) {

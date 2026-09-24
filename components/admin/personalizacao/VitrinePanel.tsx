@@ -2,6 +2,7 @@
 
 import type { Banner, SiteConfig, SiteLayoutId } from "@/src/schemas";
 import { useState } from "react";
+import { AtelieHeroFields, type AtelieMidiaDraft } from "@/components/admin/personalizacao/AtelieHeroFields";
 import { BannersClient } from "@/components/admin/personalizacao/BannersClient";
 import { FieldHint } from "@/components/admin/shell/FieldHint";
 import { ConfigGuide } from "@/components/admin/personalizacao/ConfigGuide";
@@ -32,6 +33,8 @@ export function VitrinePanel({
   primaryColor,
   initialBanners,
   disabled,
+  midiaDraft,
+  onMidiaDraft,
   onSubmit,
   onConfigChange,
 }: {
@@ -41,6 +44,8 @@ export function VitrinePanel({
   primaryColor: string;
   initialBanners: Banner[];
   disabled?: boolean;
+  midiaDraft: AtelieMidiaDraft | null;
+  onMidiaDraft: (next: AtelieMidiaDraft | null) => void;
   onSubmit: (e: React.FormEvent) => void;
   onConfigChange: (next: SiteConfig) => void;
 }) {
@@ -161,6 +166,16 @@ export function VitrinePanel({
                   }
                   ).
                 </p>
+              ) : null}
+
+              {selectedLayout === "atelie" ? (
+                <AtelieHeroFields
+                  config={config}
+                  disabled={disabled}
+                  midiaDraft={midiaDraft}
+                  onMidiaDraft={onMidiaDraft}
+                  onConfigChange={onConfigChange}
+                />
               ) : null}
             </div>
 
