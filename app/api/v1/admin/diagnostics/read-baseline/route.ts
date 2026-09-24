@@ -1,33 +1,33 @@
+import { listAllProducts } from "@/src/services";
 import "server-only";
 import { revalidateTag } from "next/cache";
 import { NextRequest } from "next/server";
-import { requireAdmin } from "@/src/lib/auth/session";
-import { jsonError, jsonOk } from "@/src/lib/api/response";
-import { AppError } from "@/src/lib/api/errors";
-import { CACHE_TAGS } from "@/src/lib/cache-tags";
-import { getDataBackend } from "@/src/lib/env";
+import { requireAdmin } from "@/src/foundation/auth/session";
+import { jsonError, jsonOk } from "@/src/foundation/http/response";
+import { AppError } from "@/src/foundation/http/errors";
+import { CACHE_TAGS } from "@/src/foundation/cache/cache-tags";
+import { getDataBackend } from "@/src/foundation/platform/env";
 import {
   formatBytes,
   isReadMetricsEnabled,
   runWithReadMetrics,
   toPublicReadMetrics,
   type ReadMetricsSnapshot,
-} from "@/src/lib/observability/read-metrics";
+} from "@/src/foundation/observability/read-metrics";
 import {
   getCachedAllProducts,
   getCachedProductIndex,
   listCachedProductListItems,
-} from "@/src/lib/cache/storefront-reads";
-import { listAllProducts } from "@/src/services/products.service";
-import { listJsonDir } from "@/src/lib/data";
+} from "@/src/foundation/cache/storefront-reads";
+import { listJsonDir } from "@/src/foundation/data";
 import {
   validateProductIndexConsistency,
-} from "@/src/lib/indices/product-index-io";
+} from "@/src/foundation/indices/product-index-io";
 import {
   estimateJsonPayloadBytes,
   runWithListingReadMetrics,
-} from "@/src/lib/observability/listing-read";
-import { PAGINATION } from "@/src/lib/pagination";
+} from "@/src/foundation/observability/listing-read";
+import { PAGINATION } from "@/src/foundation/behaviors/catalog/pagination";
 
 export const dynamic = "force-dynamic";
 

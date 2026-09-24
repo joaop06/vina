@@ -4,11 +4,11 @@ import {
   listJsonDir,
   readJson,
   commitFiles,
-} from "@/src/lib/data";
-import { buildMutationFiles } from "@/src/lib/data/commit-mutation";
-import { AppError } from "@/src/lib/api/errors";
-import { CACHE_TAGS } from "@/src/lib/cache-tags";
-import { revalidateStorefront } from "@/src/lib/admin/revalidate-storefront";
+} from "@/src/foundation/data";
+import { buildMutationFiles } from "@/src/foundation/data/commit-mutation";
+import { AppError } from "@/src/foundation/http/errors";
+import { CACHE_TAGS } from "@/src/foundation/cache/cache-tags";
+import { revalidateStorefront } from "@/src/foundation/admin/revalidate-storefront";
 import {
   clientSchema,
   type Client,
@@ -19,18 +19,18 @@ import {
   paginateItems,
   PAGINATION,
   type PaginatedResult,
-} from "@/src/lib/pagination";
-import { getClientIndexState } from "@/src/lib/indices/client-index-io";
+} from "@/src/foundation/behaviors/catalog/pagination";
+import { getClientIndexState } from "@/src/foundation/indices/client-index-io";
 import {
   filterClientIndexEntries,
   normalizeEmail,
-} from "@/src/lib/indices/client-index-core";
+} from "@/src/foundation/indices/client-index-core";
 import { indexEntryToClient } from "@/src/schemas/client-index";
 import {
   clientIndexWritesAfterUpsert,
   clientIndexWritesAfterRemove,
   loadClientIndexForMutation,
-} from "@/src/lib/indices/client-index-mutate";
+} from "@/src/foundation/indices/client-index-mutate";
 
 const DIR = "clientes";
 

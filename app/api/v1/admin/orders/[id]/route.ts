@@ -1,9 +1,9 @@
+import { getOrder, updateOrder } from "@/src/services";
+import { orderUpdateSchema } from "@/src/schemas";
 import { NextRequest } from "next/server";
-import { requireAdmin } from "@/src/lib/auth/session";
-import { jsonError, jsonOk } from "@/src/lib/api/response";
-import { AppError } from "@/src/lib/api/errors";
-import { getOrder, updateOrder } from "@/src/services/orders.service";
-import { orderUpdateSchema } from "@/src/schemas/order";
+import { requireAdmin } from "@/src/foundation/auth/session";
+import { jsonError, jsonOk } from "@/src/foundation/http/response";
+import { AppError } from "@/src/foundation/http/errors";
 import { z } from "zod";
 
 type Ctx = { params: Promise<{ id: string }> };

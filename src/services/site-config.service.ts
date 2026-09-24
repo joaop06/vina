@@ -1,12 +1,12 @@
 import "server-only";
 import { cache } from "react";
-import { commitFiles, readBinary, readJson } from "@/src/lib/data";
-import { buildMutationFiles } from "@/src/lib/data/commit-mutation";
-import { AppError } from "@/src/lib/api/errors";
-import { CACHE_TAGS } from "@/src/lib/cache-tags";
-import { revalidateStorefront } from "@/src/lib/admin/revalidate-storefront";
-import { syncEnderecoTexto } from "@/src/lib/br/endereco";
-import { normalizeWaDigits } from "@/src/lib/wa";
+import { commitFiles, readBinary, readJson } from "@/src/foundation/data";
+import { buildMutationFiles } from "@/src/foundation/data/commit-mutation";
+import { AppError } from "@/src/foundation/http/errors";
+import { CACHE_TAGS } from "@/src/foundation/cache/cache-tags";
+import { revalidateStorefront } from "@/src/foundation/admin/revalidate-storefront";
+import { syncEnderecoTexto } from "@/src/foundation/platform/br/endereco";
+import { normalizeWaDigits } from "@/src/foundation/behaviors/whatsapp/wa";
 import { DEFAULT_SITE_CONFIG } from "@/src/config/default-site-config";
 import {
   siteConfigSchema,

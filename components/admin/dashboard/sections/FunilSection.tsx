@@ -1,4 +1,4 @@
-import type { DashboardStats } from "@/src/schemas/dashboard";
+import type { DashboardStats } from "@/src/schemas";
 import { FunnelStrip } from "../FunnelStrip";
 import { DashSectionCollapsible } from "../DashSectionCollapsible";
 

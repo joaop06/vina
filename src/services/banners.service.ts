@@ -1,19 +1,19 @@
 import "server-only";
 import { cache } from "react";
-import { commitFiles, listJsonDir, readBinary, readJson } from "@/src/lib/data";
-import { buildMutationFiles } from "@/src/lib/data/commit-mutation";
-import { AppError } from "@/src/lib/api/errors";
-import { CACHE_TAGS } from "@/src/lib/cache-tags";
-import { revalidateStorefront } from "@/src/lib/admin/revalidate-storefront";
-import { getSlotDef } from "@/components/public/layouts/banner-slots";
+import { commitFiles, listJsonDir, readBinary, readJson } from "@/src/foundation/data";
+import { buildMutationFiles } from "@/src/foundation/data/commit-mutation";
+import { AppError } from "@/src/foundation/http/errors";
+import { CACHE_TAGS } from "@/src/foundation/cache/cache-tags";
+import { revalidateStorefront } from "@/src/foundation/admin/revalidate-storefront";
 import {
   BANNER_POSICAO_LABELS,
   bannerSchema,
+  getSlotDef,
   type Banner,
   type BannerPosicao,
   type bannerCreateSchema,
   type bannerUpdateSchema,
-} from "@/src/schemas/banner";
+} from "@/src/schemas";
 import { getSiteConfig } from "@/src/services/site-config.service";
 import {
   prepareImageBinary,

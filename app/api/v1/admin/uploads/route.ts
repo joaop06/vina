@@ -1,8 +1,8 @@
+import { uploadImage, type UploadDomain } from "@/src/services";
 import { NextRequest } from "next/server";
-import { requireAdmin } from "@/src/lib/auth/session";
-import { jsonError, jsonOk } from "@/src/lib/api/response";
-import { AppError } from "@/src/lib/api/errors";
-import { uploadImage, type UploadDomain } from "@/src/services/upload.service";
+import { requireAdmin } from "@/src/foundation/auth/session";
+import { jsonError, jsonOk } from "@/src/foundation/http/response";
+import { AppError } from "@/src/foundation/http/errors";
 
 /** @deprecated Prefer deferred upload via entity multipart save. */
 export async function POST(req: NextRequest) {

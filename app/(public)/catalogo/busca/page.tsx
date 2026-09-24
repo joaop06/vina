@@ -1,11 +1,16 @@
-import { CatalogPageView } from "@/components/public/CatalogPageView";
-import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
-import { seoTitleFromTemplate } from "@/src/lib/front/store-copy";
+import {
+  getCatalogPageModel,
+  type CatalogViewQuery,
+} from "@/src/foundation/behaviors/view-models";
+import { CatalogPageView } from "@/components/public/kit/catalog/CatalogPageView";
+import { getLayout } from "@/components/public/layouts";
+import { getCachedSiteConfig } from "@/src/foundation/cache/storefront-reads";
+import { seoTitleFromTemplate } from "@/src/foundation/behaviors/copy/store-copy";
 import {
   firstSearchParam,
   normalizePagination,
   PAGINATION,
-} from "@/src/lib/pagination";
+} from "@/src/foundation/behaviors/catalog/pagination";
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -26,6 +31,7 @@ export async function generateMetadata() {
 }
 
 export default async function CatalogoBuscaPage({ searchParams }: Props) {
+  const site = await getCachedSiteConfig();
   const sp = await searchParams;
   const categoria = firstSearchParam(sp.categoria);
   const tamanho = firstSearchParam(sp.tamanho);
@@ -39,9 +45,9 @@ export default async function CatalogoBuscaPage({ searchParams }: Props) {
     { defaultPageSize: PAGINATION.PUBLIC_DEFAULT_PAGE_SIZE },
   );
 
-  return (
-    <CatalogPageView
-      query={{ page, pageSize, q, categoria, tamanho, cor }}
-    />
-  );
+  const { CatalogPage } = getLayout(site.layout);
+  const query: CatalogViewQuery = { page, pageSize, q, categoria, tamanho, cor };
+  const model = await getCatalogPageModel(query);
+  const Surface = CatalogPage ?? CatalogPageView;
+  return <Surface {...model} />;
 }

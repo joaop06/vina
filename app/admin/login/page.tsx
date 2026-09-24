@@ -3,9 +3,9 @@ import {
   AdminLoginFormSkeleton,
   AdminLoginShell,
   type AdminLoginBrand,
-} from "@/components/admin/AdminLoginShell";
-import { mediaUrl } from "@/src/lib/front/format";
-import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
+} from "@/components/admin/shell/AdminLoginShell";
+import { mediaUrl } from "@/src/foundation/behaviors/media/format";
+import { getCachedSiteConfig } from "@/src/foundation/cache/storefront-reads";
 import LoginForm from "./LoginForm";
 
 function locationLabel(endereco: {

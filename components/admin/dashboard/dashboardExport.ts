@@ -1,5 +1,5 @@
-import type { DashboardPeriodPreset } from "@/src/schemas/dashboard";
 
+import type { DashboardPeriodPreset } from "@/src/schemas";
 export function dashboardExportHref(
   preset: DashboardPeriodPreset,
   from: string,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import type { PageSizeSelectOption } from "@/src/lib/pagination";
+import type { PageSizeSelectOption } from "@/src/foundation/behaviors/catalog/pagination";
 
 type Props = {
   value: number;

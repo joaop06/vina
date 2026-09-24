@@ -5,10 +5,10 @@ import {
   readJson,
   writeJson,
   deleteJson,
-} from "@/src/lib/data";
-import { AppError } from "@/src/lib/api/errors";
-import { CACHE_TAGS } from "@/src/lib/cache-tags";
-import { revalidateStorefront } from "@/src/lib/admin/revalidate-storefront";
+} from "@/src/foundation/data";
+import { AppError } from "@/src/foundation/http/errors";
+import { CACHE_TAGS } from "@/src/foundation/cache/cache-tags";
+import { revalidateStorefront } from "@/src/foundation/admin/revalidate-storefront";
 import {
   CATEGORY_MAX_DEPTH,
   depthUnderParent,
@@ -17,16 +17,16 @@ import {
   getDescendantIds,
   hasChildren,
   wouldCreateCycle,
-} from "@/src/lib/categories-tree";
-import { slugify } from "@/src/lib/slug";
+} from "@/src/foundation/behaviors/catalog/categories-tree";
+import { slugify } from "@/src/foundation/platform/slug";
 import {
   categorySchema,
   type Category,
   type categoryCreateSchema,
   type categoryUpdateSchema,
 } from "@/src/schemas/category";
-import { getProductIndexState } from "@/src/lib/indices/product-index-io";
-import { categoryHasProducts } from "@/src/lib/indices/product-index-core";
+import { getProductIndexState } from "@/src/foundation/indices/product-index-io";
+import { categoryHasProducts } from "@/src/foundation/indices/product-index-core";
 import type { z } from "zod";
 
 const DIR = "categorias";

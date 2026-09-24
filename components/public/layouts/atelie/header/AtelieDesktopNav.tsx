@@ -1,5 +1,5 @@
-import { HeaderDesktopNav } from "@/components/public/layouts/headerNav";
-import type { ResolvedNavEntry } from "@/src/lib/navigation";
+import { HeaderDesktopNav } from "@/components/public/kit/chrome/headerNav";
+import type { ResolvedNavEntry } from "@/src/foundation/behaviors/navigation/navigation";
 import styles from "./atelie-header.module.css";
 
 export function AtelieDesktopNav({ entries }: { entries: ResolvedNavEntry[] }) {

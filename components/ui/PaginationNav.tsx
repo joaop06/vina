@@ -5,7 +5,7 @@ import {
   buildPageNumberItems,
   totalPages,
   type PageSizeSelectOption,
-} from "@/src/lib/pagination";
+} from "@/src/foundation/behaviors/catalog/pagination";
 
 type Props = {
   page: number;

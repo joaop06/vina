@@ -1,5 +1,6 @@
 "use client";
 
+import type { Banner } from "@/src/schemas";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -8,10 +9,9 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
-import type { Banner } from "@/src/schemas/banner";
-import { mediaUrl } from "@/src/lib/front/format";
-import { IMAGE_SIZES } from "@/src/lib/front/media-image";
-import { bannerCtaTexto, bannerHref } from "@/src/lib/front/media";
+import { mediaUrl } from "@/src/foundation/behaviors/media/format";
+import { IMAGE_SIZES } from "@/src/foundation/behaviors/media/media-image";
+import { bannerCtaTexto, bannerHref } from "@/src/foundation/behaviors/media/media";
 import styles from "./gallery.module.css";
 
 const AUTOPLAY_MS = 5500;

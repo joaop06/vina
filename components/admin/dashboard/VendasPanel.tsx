@@ -1,4 +1,4 @@
-import type { DashboardStats } from "@/src/schemas/dashboard";
+import type { DashboardStats } from "@/src/schemas";
 import { CanalCard } from "./CanalCard";
 import { DashSectionCollapsible } from "./DashSectionCollapsible";
 import { EvolucaoDiariaSection } from "./sections/EvolucaoDiariaSection";

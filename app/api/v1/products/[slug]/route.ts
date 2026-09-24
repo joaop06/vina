@@ -1,6 +1,6 @@
-import { getCachedProductBySlug } from "@/src/lib/cache/storefront-reads";
-import { jsonError, jsonOk } from "@/src/lib/api/response";
-import { AppError } from "@/src/lib/api/errors";
+import { getCachedProductBySlug } from "@/src/foundation/cache/storefront-reads";
+import { jsonError, jsonOk } from "@/src/foundation/http/response";
+import { AppError } from "@/src/foundation/http/errors";
 
 type Ctx = { params: Promise<{ slug: string }> };
 

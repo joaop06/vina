@@ -1,9 +1,6 @@
+import { getDashboardStats, periodForPreset } from "@/src/services";
 import { Suspense } from "react";
-import { DashboardClient } from "@/components/admin/DashboardClient";
-import {
-  getDashboardStats,
-  periodForPreset,
-} from "@/src/services/dashboard.service";
+import { DashboardClient } from "@/components/admin/dashboard/DashboardClient";
 
 export default async function AdminDashboardPage() {
   const period = periodForPreset("7d");

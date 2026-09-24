@@ -1,13 +1,9 @@
-import { requireAdmin } from "@/src/lib/auth/session";
-import { AppError, toErrorResponse } from "@/src/lib/api/errors";
-import { csvRow } from "@/src/lib/csv";
-import { parseDateOnly } from "@/src/lib/analytics-date";
-import { orderTotal } from "@/src/lib/dashboard-aggregates";
-import {
-  getDashboardOrdersForExport,
-  periodForPreset,
-  type DashboardPeriodPreset,
-} from "@/src/services/dashboard.service";
+import { getDashboardOrdersForExport, periodForPreset, type DashboardPeriodPreset } from "@/src/services";
+import { requireAdmin } from "@/src/foundation/auth/session";
+import { AppError, toErrorResponse } from "@/src/foundation/http/errors";
+import { csvRow } from "@/src/foundation/platform/csv";
+import { parseDateOnly } from "@/src/foundation/platform/analytics-date";
+import { orderTotal } from "@/src/foundation/admin/dashboard-aggregates";
 import { NextRequest, NextResponse } from "next/server";
 
 const PRESETS = new Set<DashboardPeriodPreset>([

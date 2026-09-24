@@ -1,12 +1,13 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
+import { getProductDetailModel } from "@/src/foundation/behaviors/view-models";
 import {
-  getCachedProductBySlug,
   getCachedPublicProductSlugs,
+  getCachedProductBySlug,
   getCachedSiteConfig,
-} from "@/src/lib/cache/storefront-reads";
-import { getSiteUrl } from "@/src/lib/env";
-import { ProductDetailClient } from "@/components/public/ProductDetailClient";
+} from "@/src/foundation/cache/storefront-reads";
+import { getLayout } from "@/components/public/layouts";
+import { ProductDetailClient } from "@/components/public/kit/product/ProductDetailClient";
 import ProductLoading from "./loading";
 
 type Props = {
@@ -36,34 +37,18 @@ export async function generateMetadata({ params }: Props) {
  */
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const [product, site] = await Promise.all([
-    getCachedProductBySlug(slug),
+  const [model, site] = await Promise.all([
+    getProductDetailModel(slug),
     getCachedSiteConfig(),
   ]);
-  if (!product) notFound();
+  if (!model) notFound();
+
+  const { ProductDetail } = getLayout(site.layout);
+  const Surface = ProductDetail ?? ProductDetailClient;
 
   return (
     <Suspense fallback={<ProductLoading />}>
-      <ProductDetailClient
-        product={product}
-        productCopy={site.textos.produto}
-        dimensoes={site.rotulos.dimensoes}
-        whatsappCurto={site.textos.home.whatsappCurto}
-        waPhone={site.whatsapp.telefone}
-        waProductParts={site.whatsapp.mensagemProdutoParts}
-        waIncluirReferencia={Boolean(
-          site.whatsapp.mensagemProdutoIncluirReferencia,
-        )}
-        waProdutoFormatoItens={
-          site.whatsapp.mensagemProdutoFormatoItens ?? "produto"
-        }
-        waProdutoItemCompactoParts={
-          site.whatsapp.mensagemProdutoItemCompactoParts
-        }
-        showWhatsApp={site.whatsapp.mostrar}
-        siteUrl={getSiteUrl()}
-        mostrarCarrinho={site.mostrarCarrinho}
-      />
+      <Surface {...model} />
     </Suspense>
   );
 }

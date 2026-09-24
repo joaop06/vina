@@ -1,4 +1,4 @@
-import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
+import { getCachedSiteConfig } from "@/src/foundation/cache/storefront-reads";
 import { getLayout } from "@/components/public/layouts";
 
 export default async function PublicNotFound() {

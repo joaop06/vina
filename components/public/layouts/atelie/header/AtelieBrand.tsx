@@ -1,6 +1,6 @@
+import type { SiteConfig } from "@/src/schemas";
 import Image from "next/image";
-import { mediaUrl } from "@/src/lib/front/format";
-import type { SiteConfig } from "@/src/schemas/site-config";
+import { mediaUrl } from "@/src/foundation/behaviors/media/format";
 import styles from "./atelie-header.module.css";
 
 type Props = {

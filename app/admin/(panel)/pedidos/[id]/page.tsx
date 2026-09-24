@@ -1,10 +1,10 @@
+import { getOrder } from "@/src/services";
 import { notFound } from "next/navigation";
 import {
   getCachedClients,
   getCachedProductsByIds,
-} from "@/src/lib/cache/storefront-reads";
-import { getOrder } from "@/src/services/orders.service";
-import { PedidoForm } from "@/components/admin/PedidoForm";
+} from "@/src/foundation/cache/storefront-reads";
+import { PedidoForm } from "@/components/admin/pedidos/PedidoForm";
 
 type Props = { params: Promise<{ id: string }> };
 

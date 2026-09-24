@@ -1,8 +1,10 @@
+import "./classic.css";
 import { ClassicFooter } from "./ClassicFooter";
 import { ClassicHeader } from "./ClassicHeader";
 import { ClassicHome } from "./ClassicHome";
 import { ClassicNotFound } from "./ClassicNotFound";
-import type { SiteLayoutModule } from "../types";
+import { ClassicPreview } from "./ClassicPreview";
+import type { SiteLayoutModule } from "../contract/types";
 
 export { ClassicFooter, ClassicHeader, ClassicHome, ClassicNotFound };
 
@@ -12,4 +14,5 @@ export const classicLayout: SiteLayoutModule = {
   Footer: ClassicFooter,
   Home: ClassicHome,
   NotFound: ClassicNotFound,
+  Preview: ClassicPreview,
 };

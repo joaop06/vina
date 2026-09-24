@@ -1,14 +1,10 @@
+import { deleteProduct, getProductById, updateProduct } from "@/src/services";
+import { productUpdateSchema } from "@/src/schemas";
 import { NextRequest } from "next/server";
-import { requireAdmin } from "@/src/lib/auth/session";
-import { jsonError, jsonOk } from "@/src/lib/api/response";
-import { AppError } from "@/src/lib/api/errors";
-import { parseAdminMutationForm } from "@/src/lib/admin/parse-multipart";
-import {
-  deleteProduct,
-  getProductById,
-  updateProduct,
-} from "@/src/services/products.service";
-import { productUpdateSchema } from "@/src/schemas/product";
+import { requireAdmin } from "@/src/foundation/auth/session";
+import { jsonError, jsonOk } from "@/src/foundation/http/response";
+import { AppError } from "@/src/foundation/http/errors";
+import { parseAdminMutationForm } from "@/src/foundation/admin/parse-multipart";
 import { z } from "zod";
 
 type Ctx = { params: Promise<{ id: string }> };

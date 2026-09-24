@@ -1,8 +1,6 @@
+import { getProductById, listCategories, getSiteConfig } from "@/src/services";
 import { notFound } from "next/navigation";
-import { getProductById } from "@/src/services/products.service";
-import { listCategories } from "@/src/services/categories.service";
-import { getSiteConfig } from "@/src/services/site-config.service";
-import { ProductForm } from "@/components/admin/ProductForm";
+import { ProductForm } from "@/components/admin/produtos/ProductForm";
 
 type Props = { params: Promise<{ id: string }> };
 

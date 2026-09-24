@@ -1,11 +1,11 @@
 import {
   getCachedActiveCategories,
   getCachedSiteConfig,
-} from "@/src/lib/cache/storefront-reads";
+} from "@/src/foundation/cache/storefront-reads";
 import { getLayout } from "@/components/public/layouts";
-import { WhatsAppGateProvider } from "@/components/public/WhatsAppGateProvider";
-import { CartProvider } from "@/components/public/cart/CartProvider";
-import { AnalyticsProvider } from "@/components/public/analytics/AnalyticsProvider";
+import { WhatsAppGateProvider } from "@/components/public/kit/feedback/WhatsAppGateProvider";
+import { CartProvider } from "@/components/public/kit/cart/CartProvider";
+import { AnalyticsProvider } from "@/components/public/kit/feedback/analytics/AnalyticsProvider";
 
 export default async function RootNotFound() {
   const [site, categories] = await Promise.all([

@@ -3,7 +3,7 @@ import path from "node:path";
 
 const runnerStub = path.join(
   process.cwd(),
-  "src/lib/data/migrations/runner-edge-stub.ts",
+  "src/foundation/data/migrations/runner-edge-stub.ts",
 );
 
 const nextConfig: NextConfig = {
@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
     if (nextRuntime !== "nodejs") {
       config.plugins.push(
         new webpack.NormalModuleReplacementPlugin(
-          /[/\\]src[/\\]lib[/\\]data[/\\]migrations[/\\]runner\.ts$/,
+          /[/\\]src[/\\]foundation[/\\]data[/\\]migrations[/\\]runner\.ts$/,
           runnerStub,
         ),
       );

@@ -1,12 +1,12 @@
 import "server-only";
 import { cache } from "react";
-import { commitFiles, listJsonDir, readBinary, readJson } from "@/src/lib/data";
-import { buildMutationFiles } from "@/src/lib/data/commit-mutation";
-import { AppError } from "@/src/lib/api/errors";
-import { CACHE_TAGS } from "@/src/lib/cache-tags";
-import { revalidateStorefront } from "@/src/lib/admin/revalidate-storefront";
-import { slugify } from "@/src/lib/slug";
-import { normalizeProductReferencia } from "@/src/lib/product-referencia";
+import { commitFiles, listJsonDir, readBinary, readJson } from "@/src/foundation/data";
+import { buildMutationFiles } from "@/src/foundation/data/commit-mutation";
+import { AppError } from "@/src/foundation/http/errors";
+import { CACHE_TAGS } from "@/src/foundation/cache/cache-tags";
+import { revalidateStorefront } from "@/src/foundation/admin/revalidate-storefront";
+import { slugify } from "@/src/foundation/platform/slug";
+import { normalizeProductReferencia } from "@/src/foundation/behaviors/catalog/product-referencia";
 import {
   productSchema,
   type Product,
@@ -22,28 +22,28 @@ import {
   paginateItems,
   type PaginatedResult,
   PAGINATION,
-} from "@/src/lib/pagination";
+} from "@/src/foundation/behaviors/catalog/pagination";
 import {
   prepareImageBinary,
   type PendingBinary,
 } from "@/src/services/upload.service";
-import { isEffectivelyActive } from "@/src/lib/categories-tree";
+import { isEffectivelyActive } from "@/src/foundation/behaviors/catalog/categories-tree";
 import { listCategories } from "./categories.service";
 import {
   filterProductIndexEntries,
   findReferenciaConflict,
   findSlugConflict,
   indexEntryToListItem,
-} from "@/src/lib/indices/product-index-core";
+} from "@/src/foundation/indices/product-index-core";
 import {
   getProductIndexState,
   resolveProductIdBySlug,
-} from "@/src/lib/indices/product-index-io";
+} from "@/src/foundation/indices/product-index-io";
 import {
   indexWritesAfterRemove,
   indexWritesAfterUpsert,
   loadProductIndexForMutation,
-} from "@/src/lib/indices/product-index-mutate";
+} from "@/src/foundation/indices/product-index-mutate";
 
 export type ListProductsFilters = {
   q?: string;

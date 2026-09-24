@@ -1,6 +1,6 @@
 import "server-only";
-import { listJsonDir, readJson, writeJson } from "@/src/lib/data";
-import { eachDateInclusive } from "@/src/lib/analytics-date";
+import { listJsonDir, readJson, writeJson } from "@/src/foundation/data";
+import { eachDateInclusive } from "@/src/foundation/platform/analytics-date";
 import {
   dailyAnalyticsSchema,
   type AnalyticsBatch,

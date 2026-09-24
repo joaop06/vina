@@ -1,5 +1,5 @@
-import { CategoriasClient } from "@/components/admin/CategoriasClient";
-import { listCategories } from "@/src/services/categories.service";
+import { listCategories } from "@/src/services";
+import { CategoriasClient } from "@/components/admin/categorias/CategoriasClient";
 
 export default async function AdminCategoriasPage() {
   const items = await listCategories();

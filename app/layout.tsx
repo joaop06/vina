@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, Inter, Poppins } from "next/font/google";
-import "./globals.css";
-import "./layout-tokens.css";
-import { getCachedSiteConfig } from "@/src/lib/cache/storefront-reads";
-import { siteThemeStyle } from "@/src/lib/front/site-theme-css";
+import "./styles/reset.css";
+import "./styles/theme-bridge.css";
+import { getCachedSiteConfig } from "@/src/foundation/cache/storefront-reads";
+import { siteThemeStyle } from "@/src/foundation/behaviors/theme/site-theme-css";
 
 const poppins = Poppins({
   subsets: ["latin"],

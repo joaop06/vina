@@ -1,6 +1,6 @@
+import type { DashboardStats } from "@/src/schemas";
 import Link from "next/link";
-import { formatBrl } from "@/src/lib/front/format";
-import type { DashboardStats } from "@/src/schemas/dashboard";
+import { formatBrl } from "@/src/foundation/behaviors/media/format";
 import { BarChart, Sparkline } from "./charts";
 import { DashEmpty } from "./DashEmpty";
 import { DashSectionCollapsible } from "./DashSectionCollapsible";

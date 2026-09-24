@@ -82,10 +82,10 @@ async function rebuildProductsViaFs(
   const { productSchema } = await import("@/src/schemas/product");
   const { productToIndexEntry } = await import("@/src/schemas/product-index");
   const { stateFromEntries, serializeProductIndexWrites } = await import(
-    "@/src/lib/indices/product-index-core"
+    "@/src/foundation/indices/product-index-core"
   );
   const { diffIndexEntryAgainstProduct } = await import(
-    "@/src/lib/indices/product-index-entry-match"
+    "@/src/foundation/indices/product-index-entry-match"
   );
 
   const produtosDir = path.join(dataRoot, "produtos");
@@ -157,10 +157,10 @@ async function rebuildOrdersViaFs(
   const { orderSchema } = await import("@/src/schemas/order");
   const { orderToIndexEntry } = await import("@/src/schemas/order-index");
   const { stateFromOrderEntries, serializeOrderIndexWrites } = await import(
-    "@/src/lib/indices/order-index-core"
+    "@/src/foundation/indices/order-index-core"
   );
   const { diffIndexEntryAgainstOrder } = await import(
-    "@/src/lib/indices/order-index-core"
+    "@/src/foundation/indices/order-index-core"
   );
 
   const dir = path.join(dataRoot, "pedidos");
@@ -237,10 +237,10 @@ async function rebuildClientsViaFs(
   const { clientSchema } = await import("@/src/schemas/client");
   const { clientToIndexEntry } = await import("@/src/schemas/client-index");
   const { stateFromClientEntries, serializeClientIndexWrites } = await import(
-    "@/src/lib/indices/client-index-core"
+    "@/src/foundation/indices/client-index-core"
   );
   const { diffIndexEntryAgainstClient } = await import(
-    "@/src/lib/indices/client-index-core"
+    "@/src/foundation/indices/client-index-core"
   );
 
   const dir = path.join(dataRoot, "clientes");
@@ -316,10 +316,10 @@ async function validateViaFs(dataRoot: string) {
     "@/src/schemas/product-index"
   );
   const { stateFromEntries, parseManifestEntries } = await import(
-    "@/src/lib/indices/product-index-core"
+    "@/src/foundation/indices/product-index-core"
   );
   const { diffIndexEntryAgainstProduct } = await import(
-    "@/src/lib/indices/product-index-entry-match"
+    "@/src/foundation/indices/product-index-entry-match"
   );
 
   const issues: Array<Record<string, unknown>> = [];
@@ -462,13 +462,13 @@ async function validateViaFs(dataRoot: string) {
 
 async function rebuildViaCommit(repair: boolean) {
   const { rebuildAndCommitProductIndices, repairProductIndices } = await import(
-    "@/src/lib/indices/product-index-mutate"
+    "@/src/foundation/indices/product-index-mutate"
   );
   const { rebuildAndCommitOrderIndices, repairOrderIndices } = await import(
-    "@/src/lib/indices/order-index-mutate"
+    "@/src/foundation/indices/order-index-mutate"
   );
   const { rebuildAndCommitClientIndices, repairClientIndices } = await import(
-    "@/src/lib/indices/client-index-mutate"
+    "@/src/foundation/indices/client-index-mutate"
   );
 
   const products = repair
@@ -498,12 +498,12 @@ async function rebuildViaCommit(repair: boolean) {
 
 async function validateViaCommit() {
   const { readProductIndexState, validateProductIndexConsistency } =
-    await import("@/src/lib/indices/product-index-io");
+    await import("@/src/foundation/indices/product-index-io");
   const { readOrderIndexState, validateOrderIndexConsistency } = await import(
-    "@/src/lib/indices/order-index-io"
+    "@/src/foundation/indices/order-index-io"
   );
   const { readClientIndexState, validateClientIndexConsistency } = await import(
-    "@/src/lib/indices/client-index-io"
+    "@/src/foundation/indices/client-index-io"
   );
 
   const productState = await readProductIndexState();

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { isoDateSchema, uuidSchema } from "./common";
-import { normalizeWaDigits } from "@/src/lib/wa";
+import { normalizeWaDigits } from "@/src/foundation/behaviors/whatsapp/wa";
 
 const celularStoredSchema = z
   .string()

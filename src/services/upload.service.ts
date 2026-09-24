@@ -1,5 +1,5 @@
 import "server-only";
-import { AppError } from "@/src/lib/api/errors";
+import { AppError } from "@/src/foundation/http/errors";
 
 const ALLOWED = new Set(["image/jpeg", "image/png"]);
 const EXT: Record<string, string> = {
@@ -57,7 +57,7 @@ export async function uploadImage(
   file: File,
   dominio: UploadDomain,
 ): Promise<{ id: string; path: string }> {
-  const { writeBinary } = await import("@/src/lib/data");
+  const { writeBinary } = await import("@/src/foundation/data");
   const bytes = Buffer.from(await file.arrayBuffer());
   const prepared = prepareImageBinary(
     { bytes, mime: file.type },

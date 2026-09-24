@@ -1,0 +1,102 @@
+/*
+  Breakpoints canônicos (mobile-first):
+  - md: 768px  — topbar completa, grids 2→3, filtros sheet→painel
+  - lg: 1024px — nav inline no cabeçalho, grid 4 cols, hero split confortável
+  - micro: 360px — empilhar CTAs extremos
+*/
+
+* {
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: var(--vn-scrollbar-thumb) var(--vn-scrollbar-track);
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  scrollbar-width: thin;
+  scrollbar-color: var(--vn-scrollbar-thumb) var(--vn-scrollbar-track);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: var(--vn-font);
+  font-size: var(--vn-text-md);
+  line-height: 1.5;
+  color: var(--vn-secondary);
+  background: var(--vn-surface);
+  overflow-x: clip;
+}
+
+*::-webkit-scrollbar {
+  width: var(--vn-scrollbar-size);
+  height: var(--vn-scrollbar-size);
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--vn-scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--vn-scrollbar-thumb);
+  border-radius: var(--vn-scrollbar-radius);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--vn-scrollbar-thumb-hover);
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--vn-primary);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--vn-secondary);
+  color: var(--vn-surface);
+  padding: 0.75rem 1rem;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
