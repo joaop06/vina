@@ -1,4 +1,4 @@
-/** Canonical breakpoints — keep in sync with app/globals.css */
+/** Canonical breakpoints — keep in sync with app/styles/reset.css */
 export const BP_MD = 768;
 export const BP_LG = 1024;
 export const BP_MD_MAX = BP_MD - 0.02;

@@ -1519,13 +1519,13 @@ Header decomposto em `layouts/atelie/header/` (marca, nav, menu, sacola, Cormora
 
 ### Pronto do fecho inteiro
 
-- [ ] `app/layout-tokens.css` apagado, e o import removido de `app/layout.tsx`.
-- [ ] `app/globals.css` apagado se não restar regra. `app/layout.tsx` importa só `styles/reset.css` e `styles/theme-bridge.css`, além das fontes.
-- [ ] `VitrinePreview` não contém `layout === "classic"` nem split, gallery ou ateliê.
-- [ ] Os quatro módulos expõem `Preview`. Nenhum expõe `CatalogPage`, `ProductDetail`, `CartPage` ou `AboutPage`.
+- [x] `app/layout-tokens.css` apagado, e o import removido de `app/layout.tsx`.
+- [x] `app/globals.css` apagado se não restar regra. `app/layout.tsx` importa só `styles/reset.css` e `styles/theme-bridge.css`, além das fontes.
+- [x] `VitrinePreview` não contém `layout === "classic"` nem split, gallery ou ateliê.
+- [x] Os quatro módulos expõem `Preview`. Nenhum expõe `CatalogPage`, `ProductDetail`, `CartPage` ou `AboutPage`.
 - [ ] Prévia do admin: classic, split (desktop e mobile), gallery (dots e nota), ateliê (sem herói).
 - [ ] Vitrine nos quatro layouts: home, catálogo, PDP, carrinho e sobre, sem diff visual em relação ao início do fecho.
-- [ ] `npm test`, `npm run lint`, `npx tsc --noEmit`.
+- [x] `npm test`, `npm run lint`, `npx tsc --noEmit`.
 
 ---
 

@@ -4,4 +4,4 @@ export {
   getPublishedSlotCapacity,
   getSlotDef,
   type LayoutBannerSlot,
-} from "@/src/schemas/layout-banner-slots";
+} from "@/src/schemas";

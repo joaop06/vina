@@ -1,5 +1,0 @@
-/*
-  Layout design tokens — scoped by [data-layout] on html/body.
-  Choosing classic | split | gallery in admin applies these across the whole storefront.
-  :root holds classic defaults as fallback when data-layout is absent.
-*/
