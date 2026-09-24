@@ -3,7 +3,6 @@ import { Bebas_Neue, Inter, Poppins } from "next/font/google";
 import "./styles/reset.css";
 import "./styles/theme-bridge.css";
 import "./globals.css";
-import "./layout-tokens.css";
 import { getCachedSiteConfig } from "@/src/foundation/cache/storefront-reads";
 import { siteThemeStyle } from "@/src/foundation/behaviors/theme/site-theme-css";
 

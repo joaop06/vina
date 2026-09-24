@@ -11,6 +11,7 @@ export type {
   CatalogPageProps,
   ChromeProps,
   HomeProps,
+  LayoutPreviewProps,
   NotFoundProps,
   ProductDetailProps,
   SiteLayoutId,

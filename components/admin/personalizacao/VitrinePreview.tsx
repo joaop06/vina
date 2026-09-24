@@ -4,6 +4,7 @@ import type { Banner, BannerPosicao, SiteLayoutId } from "@/src/schemas";
 import { useMemo, useState, type CSSProperties } from "react";
 import { mediaUrl } from "@/src/foundation/behaviors/media/format";
 import { DEFAULT_BANNER_CTA } from "@/src/config/store-copy-defaults";
+import { getLayout } from "@/components/public/layouts";
 import { getBannerSlotsForLayout } from "@/components/public/layouts/contract/banner-slots";
 import styles from "./VitrinePreview.module.css";
 
@@ -82,6 +83,13 @@ export function VitrinePreview({
   const slotIndex = (posicao: BannerPosicao) =>
     slots.findIndex((s) => s.posicao === posicao) + 1;
 
+  const Preview = getLayout(layout).Preview;
+  const previewHeroes = heroes.map((slide) => ({
+    id: slide.id,
+    src: bannerSrc(slide),
+    cta: slide.ctaTexto?.trim() || "Ver coleção",
+  }));
+
   const style = {
     "--preview-primary": primaryColor,
   } as CSSProperties;
@@ -130,27 +138,18 @@ export function VitrinePreview({
 
           {layout === "atelie" ? null : (
             <>
-          {layout === "classic" ? (
-            <section className={styles.classicHero}>
-              {heroSrc ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={heroSrc} alt="" className={styles.coverImg} />
-              ) : (
-                <div className={styles.classicGradient} />
-              )}
-              <div className={styles.classicScrim} />
-              <div className={styles.classicCopy}>
-                <Marker
-                  label="Topo"
-                  step={slotIndex("hero") || 1}
-                  empty={!heroSrc}
-                />
-                <strong>{storeName || "Minha loja"}</strong>
-                <span className={styles.ctaChip}>
-                  {hero?.ctaTexto?.trim() || "Ver coleção"}
-                </span>
-              </div>
-            </section>
+          {Preview ? (
+            <Preview
+              viewport={viewport}
+              storeName={storeName}
+              heroSrc={heroSrc}
+              heroes={previewHeroes}
+              faixaSrc={faixaSrc}
+              promoSrc={promoSrc}
+              faixaCta={faixa?.ctaTexto?.trim() || DEFAULT_BANNER_CTA}
+              promoCta={promo?.ctaTexto?.trim() || DEFAULT_BANNER_CTA}
+              slotIndex={slotIndex}
+            />
           ) : null}
 
           {layout === "split" ? (

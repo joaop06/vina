@@ -29,6 +29,18 @@ export type CartPageProps = CartPageModel;
 
 export type AboutPageProps = AboutPageModel;
 
+export type LayoutPreviewProps = {
+  viewport: "desktop" | "mobile";
+  storeName: string;
+  heroSrc: string | null;
+  heroes: { id: string; src: string | null; cta: string }[];
+  faixaSrc: string | null;
+  promoSrc: string | null;
+  faixaCta: string;
+  promoCta: string;
+  slotIndex: (posicao: "hero" | "faixa" | "promo") => number;
+};
+
 export type SiteLayoutModule = {
   id: SiteLayoutId;
   Header: (props: ChromeProps) => ReactNode;
@@ -39,4 +51,5 @@ export type SiteLayoutModule = {
   ProductDetail?: (props: ProductDetailProps) => ReactNode;
   CartPage?: (props: CartPageProps) => ReactNode;
   AboutPage?: (props: AboutPageProps) => ReactNode;
+  Preview?: (props: LayoutPreviewProps) => ReactNode;
 };

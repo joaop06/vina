@@ -3,6 +3,7 @@ import {
   getCachedSiteConfig,
 } from "@/src/foundation/cache/storefront-reads";
 import { getLayout } from "@/components/public/layouts";
+import "./layout-tokens.css";
 import { WhatsAppGateProvider } from "@/components/public/kit/feedback/WhatsAppGateProvider";
 import { CartProvider } from "@/components/public/kit/cart/CartProvider";
 import { AnalyticsProvider } from "@/components/public/kit/feedback/analytics/AnalyticsProvider";

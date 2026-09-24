@@ -1,0 +1,101 @@
+.classicHero {
+  position: relative;
+  min-height: 7.5rem;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background: #1a1a1a;
+}
+
+.classicHeroMobile {
+  min-height: 6.5rem;
+}
+
+.classicGradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--preview-primary, var(--vn-primary)) 75%, #111),
+    #111 70%
+  );
+}
+
+.classicScrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 20%,
+    color-mix(in srgb, #000 58%, transparent) 100%
+  );
+  pointer-events: none;
+}
+
+.coverImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  display: block;
+}
+
+.classicCopy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.7rem 0.75rem;
+  color: #fff;
+  width: 100%;
+}
+
+.classicCopy strong {
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.ctaChip {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 0.28rem 0.55rem;
+  border-radius: 999px;
+  background: #fff;
+  color: #111;
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+.marker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  align-self: flex-start;
+  padding: 0.18rem 0.45rem 0.18rem 0.18rem;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #111;
+  background: color-mix(in srgb, #fff 88%, transparent);
+  box-shadow: 0 1px 4px color-mix(in srgb, #000 16%, transparent);
+}
+
+.markerEmpty {
+  opacity: 0.78;
+}
+
+.markerStep {
+  display: grid;
+  place-items: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  background: var(--vn-secondary);
+  color: #fff;
+  font-size: 0.62rem;
+}

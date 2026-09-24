@@ -4,50 +4,6 @@
   :root holds classic defaults as fallback when data-layout is absent.
 */
 
-:root,
-[data-layout="classic"] {
-  --vn-radius: 8px;
-  --vn-layout-radius-card: 8px;
-  --vn-layout-title-size: clamp(1.5rem, 5vw, 2.25rem);
-  --vn-layout-title-tracking: 0.04em;
-  --vn-layout-section-gap: var(--vn-space-5);
-  --vn-layout-page-pad-top: var(--vn-space-5);
-  --vn-layout-page-pad-bottom: var(--vn-space-8);
-  --vn-layout-page-pad-top-md: var(--vn-space-7);
-  --vn-layout-grid-gap: var(--vn-space-4);
-  --vn-layout-grid-gap-md: var(--vn-space-5);
-  --vn-layout-card-gap: var(--vn-space-2);
-  --vn-layout-name-size: var(--vn-text-sm);
-  --vn-layout-name-weight: 700;
-  --vn-layout-price-size: var(--vn-text-sm);
-  --vn-layout-badge-radius: 4px;
-  --vn-layout-pdp-title-font: var(--vn-font);
-  --vn-layout-pdp-title-size: clamp(1.35rem, 4.5vw, 1.85rem);
-  --vn-layout-pdp-title-size-md: clamp(1.5rem, 2.5vw, 2rem);
-  --vn-layout-pdp-title-weight: 700;
-  --vn-layout-pdp-title-tracking: 0;
-  --vn-layout-pdp-title-transform: none;
-  --vn-layout-pdp-gap: 1.25rem;
-  --vn-layout-pdp-gap-md: 2.5rem;
-  --vn-layout-pdp-info-gap: 0.65rem;
-  --vn-layout-pdp-cta-radius: var(--vn-radius);
-  --vn-layout-pdp-cta-font-size: var(--vn-text-sm);
-  --vn-layout-pdp-cta-tracking: 0.02em;
-  --vn-layout-pdp-cta-transform: none;
-  --vn-layout-sobre-max: 40rem;
-  --vn-layout-sobre-lead-size: var(--vn-text-lg);
-  --vn-layout-sobre-lead-lh: 1.55;
-  --vn-layout-filter-chip-radius: 999px;
-  --vn-layout-filter-gap: 0.45rem;
-  --vn-layout-home-section-y: var(--vn-space-6);
-  --vn-layout-home-section-y-md: var(--vn-space-7);
-  --vn-scrollbar-size: 8px;
-  --vn-scrollbar-radius: 8px;
-  --vn-scrollbar-track: transparent;
-  --vn-scrollbar-thumb: color-mix(in srgb, var(--vn-primary) 45%, transparent);
-  --vn-scrollbar-thumb-hover: color-mix(in srgb, var(--vn-primary) 70%, transparent);
-}
-
 [data-layout="split"] {
   --vn-radius: 4px;
   --vn-layout-radius-card: 4px;
@@ -101,21 +57,6 @@
   --vn-scrollbar-track: transparent;
   --vn-scrollbar-thumb: color-mix(in srgb, var(--vn-primary) 28%, transparent);
   --vn-scrollbar-thumb-hover: color-mix(in srgb, var(--vn-primary) 50%, transparent);
-}
-
-
-/* —— Classic-specific refinements —— */
-
-[data-layout="classic"] .catalog-page__count {
-  font-weight: 500;
-}
-
-[data-layout="classic"] .sobre-page__label {
-  letter-spacing: 0.08em;
-}
-
-[data-layout="classic"] .product-detail__price {
-  font-size: 1.45rem;
 }
 
 /* —— Split-specific refinements —— */
@@ -180,11 +121,4 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 400;
-}
-
-@media (min-width: 1024px) {
-  /* Classic: airy 4-col. Split: denser feeling via tighter gaps (already set). */
-  [data-layout="classic"] .grid-products {
-    gap: var(--vn-space-6);
-  }
 }

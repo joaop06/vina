@@ -1376,10 +1376,10 @@ Os campos espelham o que [VitrinePreview.tsx](../../../components/admin/configur
 
 `Marker` e `Placeholder` podem permanecer no painel e ser passados como props, ou ser copiados para o módulo se o JSX do herói os incluir. Escolher uma das duas e usar a mesma nos quatro layouts. Não duplicar a lógica de “qual banner está ativo”.
 
-- [ ] Tipos acima no contrato, chave opcional.
+- [x] Tipos acima no contrato, chave opcional.
 - [ ] `VitrinePreview` chama `getLayout(layout).Preview`. Se `Preview` faltar, não desenha herói (é o caso do ateliê até a caixa do ateliê, e de qualquer id futuro).
 - [ ] Remover de `VitrinePreview` os blocos `layout === "classic" | "split" | "gallery" | "atelie"` depois que os quatro `Preview` existirem. A nota de gallery sobre faixa e promoção guardadas permanece no painel, porque é texto de admin, não pele do módulo: hoje ela está no ramo `layout === "gallery"`. Movê-la para uma condição `slots` sem faixa/promo, ou para o `Preview` do gallery se o JSX fizer parte do herói. O texto visível permanece o mesmo.
-- [ ] Admin não ganha import de `layouts/classic/ClassicPreview` (nem dos outros). Só `getLayout`.
+- [x] Admin não ganha import de `layouts/classic/ClassicPreview` (nem dos outros). Só `getLayout`.
 
 ### Classic
 
@@ -1401,12 +1401,12 @@ Tokens e refinamentos classic saem de `layout-tokens.css` para a pasta do classi
 
 ### Como
 
-- [ ] Criar `classic.css` com o bloco `:root, [data-layout="classic"]` verbatim e os refinamentos `[data-layout="classic"]`, inclusive o pedaço do `@media (min-width: 1024px)` que só cita classic.
-- [ ] Importar `./classic.css` em `classic/index.ts` (side-effect), para o módulo carregar o CSS.
-- [ ] Apagar esses blocos de `layout-tokens.css`.
-- [ ] Criar `ClassicPreview` com o JSX do ramo classic de `VitrinePreview`, mesmas classes do module da prévia. Se as classes forem do `VitrinePreview.module.css`, o preview do classic importa esse module (o admin pode ser importado pelo layout? Não: o layout não importa o admin). Copiar as classes usadas pelo herói para `classic/preview.module.css`, com os mesmos valores, e apontar o JSX para elas. Não deixar o layout importar arquivo de `components/admin/`.
-- [ ] Registrar `Preview: ClassicPreview` em `classicLayout`.
-- [ ] Não adicionar `CatalogPage`, `ProductDetail`, `CartPage`, `AboutPage`.
+- [x] Criar `classic.css` com o bloco `:root, [data-layout="classic"]` verbatim e os refinamentos `[data-layout="classic"]`, inclusive o pedaço do `@media (min-width: 1024px)` que só cita classic.
+- [x] Importar `./classic.css` em `classic/index.ts` (side-effect), para o módulo carregar o CSS.
+- [x] Apagar esses blocos de `layout-tokens.css`.
+- [x] Criar `ClassicPreview` com o JSX do ramo classic de `VitrinePreview`, mesmas classes do module da prévia. Se as classes forem do `VitrinePreview.module.css`, o preview do classic importa esse module (o admin pode ser importado pelo layout? Não: o layout não importa o admin). Copiar as classes usadas pelo herói para `classic/preview.module.css`, com os mesmos valores, e apontar o JSX para elas. Não deixar o layout importar arquivo de `components/admin/`.
+- [x] Registrar `Preview: ClassicPreview` em `classicLayout`.
+- [x] Não adicionar `CatalogPage`, `ProductDetail`, `CartPage`, `AboutPage`.
 
 ### Fora desta fase do fecho
 
@@ -1414,9 +1414,9 @@ Tokens e refinamentos classic saem de `layout-tokens.css` para a pasta do classi
 
 ### Pronto quando
 
-- [ ] Vitrine classic (home, catálogo, PDP, sobre, carrinho) igual ao antes.
+- [x] Vitrine classic (home, catálogo, PDP, sobre, carrinho) igual ao antes.
 - [ ] Prévia do admin no layout classic com o mesmo herói, marcador “Topo” e cartões falsos.
-- [ ] Critério de pronto comum.
+- [x] Critério de pronto comum.
 
 ### Split
 
