@@ -152,37 +152,6 @@ export function VitrinePreview({
             />
           ) : null}
 
-          {layout === "split" ? (
-            <section
-              className={[
-                styles.splitHero,
-                viewport === "mobile" ? styles.splitHeroStack : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-            >
-              <div className={styles.splitCopy}>
-                <Marker
-                  label="Topo"
-                  step={slotIndex("hero") || 1}
-                  empty={!heroSrc}
-                />
-                <strong>{storeName || "Minha loja"}</strong>
-                <span className={styles.ctaChip}>
-                  {hero?.ctaTexto?.trim() || "Ver coleção"}
-                </span>
-              </div>
-              <div className={styles.splitVisual}>
-                {heroSrc ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={heroSrc} alt="" className={styles.coverImg} />
-                ) : (
-                  <Placeholder label="Imagem do topo" />
-                )}
-              </div>
-            </section>
-          ) : null}
-
           {layout === "gallery" ? (
             <section className={styles.galleryHero}>
               {heroes.length > 0 && bannerSrc(heroes[0]) ? (

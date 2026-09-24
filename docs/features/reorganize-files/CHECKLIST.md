@@ -1437,18 +1437,18 @@ Tokens e refinamentos split em `layout-tokens.css` (cabeçalho do catálogo com 
 
 ### Como
 
-- [ ] Mover verbatim o bloco `[data-layout="split"]` de variáveis e os refinamentos `[data-layout="split"] .catalog-page…`, `.product-detail…`, `.sobre-page…`.
-- [ ] Importar `./split.css` em `split/index.ts`.
-- [ ] `SplitPreview` com o JSX atual do ramo split, classes copiadas para `split/preview.module.css` se preciso, sem importar o admin.
-- [ ] `Preview: SplitPreview` no objeto do módulo.
-- [ ] Superfícies opcionais ausentes.
-- [ ] `FootMark.tsx` permanece. Não extrair nada dele para o kit.
+- [x] Mover verbatim o bloco `[data-layout="split"]` de variáveis e os refinamentos `[data-layout="split"] .catalog-page…`, `.product-detail…`, `.sobre-page…`.
+- [x] Importar `./split.css` em `split/index.ts`.
+- [x] `SplitPreview` com o JSX atual do ramo split, classes copiadas para `split/preview.module.css` se preciso, sem importar o admin.
+- [x] `Preview: SplitPreview` no objeto do módulo.
+- [x] Superfícies opcionais ausentes.
+- [x] `FootMark.tsx` permanece. Não extrair nada dele para o kit.
 
 ### Pronto quando
 
-- [ ] Vitrine split igual ao antes, inclusive catálogo com o cabeçalho em borda e o PDP com título display.
-- [ ] Prévia split no desktop (lado a lado) e no celular (empilhado).
-- [ ] Critério de pronto comum.
+- [x] Vitrine split igual ao antes, inclusive catálogo com o cabeçalho em borda e o PDP com título display.
+- [x] Prévia split no desktop (lado a lado) e no celular (empilhado).
+- [x] Critério de pronto comum.
 
 ### Gallery
 
