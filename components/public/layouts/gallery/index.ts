@@ -1,7 +1,9 @@
+import "./gallery.css";
 import { GalleryFooter } from "./GalleryFooter";
 import { GalleryHeader } from "./GalleryHeader";
 import { GalleryHome } from "./GalleryHome";
 import { GalleryNotFound } from "./GalleryNotFound";
+import { GalleryPreview } from "./GalleryPreview";
 import type { SiteLayoutModule } from "../contract/types";
 
 export { GalleryCarousel } from "./GalleryCarousel";
@@ -13,4 +15,5 @@ export const galleryLayout: SiteLayoutModule = {
   Footer: GalleryFooter,
   Home: GalleryHome,
   NotFound: GalleryNotFound,
+  Preview: GalleryPreview,
 };

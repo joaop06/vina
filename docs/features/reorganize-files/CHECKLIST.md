@@ -1469,19 +1469,19 @@ Tokens gallery, refinamentos de carrinho que usam `[data-layout="gallery"]` e a 
 
 ### Como
 
-- [ ] Mover para `gallery.css` o bloco de variáveis `[data-layout="gallery"]`, os refinamentos de `.cart-page` com esse prefixo, e todas as regras `body[data-layout="gallery"]` (ou `[data-layout="gallery"]` que ainda estejam em `globals.css`). Verbatim.
-- [ ] Importar `./gallery.css` em `gallery/index.ts`.
-- [ ] `GalleryPreview` com o JSX do ramo gallery, inclusive dots. A nota de “faixa e promoção ficam guardadas” permanece visível: ou no `Preview`, ou no painel quando `getBannerSlotsForLayout` não tem faixa/promo. O texto não muda.
-- [ ] `Preview: GalleryPreview`.
-- [ ] Superfícies opcionais ausentes. A pele de catálogo/PDP/sobre continua sendo CSS sobre as classes do kit, não um componente novo.
-- [ ] Apagar `globals.css` se não restar regra, e o import na raiz. Apagar de `layout-tokens.css` o que foi movido.
+- [x] Mover para `gallery.css` o bloco de variáveis `[data-layout="gallery"]`, os refinamentos de `.cart-page` com esse prefixo, e todas as regras `body[data-layout="gallery"]` (ou `[data-layout="gallery"]` que ainda estejam em `globals.css`). Verbatim.
+- [x] Importar `./gallery.css` em `gallery/index.ts`.
+- [x] `GalleryPreview` com o JSX do ramo gallery, inclusive dots. A nota de “faixa e promoção ficam guardadas” permanece visível: ou no `Preview`, ou no painel quando `getBannerSlotsForLayout` não tem faixa/promo. O texto não muda.
+- [x] `Preview: GalleryPreview`.
+- [x] Superfícies opcionais ausentes. A pele de catálogo/PDP/sobre continua sendo CSS sobre as classes do kit, não um componente novo.
+- [x] Apagar `globals.css` se não restar regra, e o import na raiz. Apagar de `layout-tokens.css` o que foi movido.
 
 ### Pronto quando
 
-- [ ] Catálogo, PDP, sobre e carrinho com `data-layout="gallery"` iguais ao antes (título, cartão, filtros, CTA).
-- [ ] Home gallery com o carrossel de sempre (`GalleryCarousel` intocado).
-- [ ] Prévia com carrossel, dots e a nota de faixa/promo.
-- [ ] Critério de pronto comum.
+- [x] Catálogo, PDP, sobre e carrinho com `data-layout="gallery"` iguais ao antes (título, cartão, filtros, CTA).
+- [x] Home gallery com o carrossel de sempre (`GalleryCarousel` intocado).
+- [x] Prévia com carrossel, dots e a nota de faixa/promo.
+- [x] Critério de pronto comum.
 
 ### Ateliê
 

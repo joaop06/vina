@@ -82,6 +82,9 @@ export function VitrinePreview({
 
   const slotIndex = (posicao: BannerPosicao) =>
     slots.findIndex((s) => s.posicao === posicao) + 1;
+  const showsFaixaPromo = slots.some(
+    (slot) => slot.posicao === "faixa" || slot.posicao === "promo",
+  );
 
   const Preview = getLayout(layout).Preview;
   const previewHeroes = heroes.map((slide) => ({
@@ -152,50 +155,13 @@ export function VitrinePreview({
             />
           ) : null}
 
-          {layout === "gallery" ? (
-            <section className={styles.galleryHero}>
-              {heroes.length > 0 && bannerSrc(heroes[0]) ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={bannerSrc(heroes[0])!}
-                  alt=""
-                  className={styles.coverImg}
-                />
-              ) : (
-                <div className={styles.classicGradient} />
-              )}
-              <div className={styles.classicScrim} />
-              <div className={styles.classicCopy}>
-                <Marker
-                  label="Carrossel"
-                  step={1}
-                  empty={heroes.length === 0}
-                />
-                <strong>{storeName || "Minha loja"}</strong>
-                <span className={styles.ctaChip}>
-                  {heroes[0]?.ctaTexto?.trim() || "Ver coleção"}
-                </span>
-                {heroes.length > 1 ? (
-                  <div className={styles.dots} aria-hidden>
-                    {heroes.slice(0, 6).map((slide, i) => (
-                      <span
-                        key={slide.id}
-                        className={`${styles.dot}${i === 0 ? ` ${styles.dotActive}` : ""}`}
-                      />
-                    ))}
-                  </div>
-                ) : null}
-              </div>
-            </section>
-          ) : null}
-
           <div className={styles.products}>
             <div className={styles.productCard} />
             <div className={styles.productCard} />
             <div className={styles.productCard} />
           </div>
 
-          {layout !== "gallery" ? (
+          {showsFaixaPromo ? (
             <>
               <section className={styles.faixa}>
                 <Marker

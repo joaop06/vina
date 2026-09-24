@@ -3,34 +3,3 @@
   Choosing classic | split | gallery in admin applies these across the whole storefront.
   :root holds classic defaults as fallback when data-layout is absent.
 */
-
-[data-layout="gallery"] {
-  --vn-layout-pdp-cta-radius: 0;
-  --vn-layout-pdp-cta-font-size: 0.75rem;
-  --vn-layout-pdp-cta-tracking: 0.1em;
-  --vn-layout-pdp-cta-transform: uppercase;
-  --vn-scrollbar-size: 5px;
-  --vn-scrollbar-radius: 999px;
-  --vn-scrollbar-track: transparent;
-  --vn-scrollbar-thumb: color-mix(in srgb, var(--vn-primary) 28%, transparent);
-  --vn-scrollbar-thumb-hover: color-mix(in srgb, var(--vn-primary) 50%, transparent);
-}
-
-[data-layout="gallery"] .cart-page__title {
-  font-family: var(--vn-font-display);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-weight: 400;
-}
-
-[data-layout="gallery"] .cart-page__empty-state {
-  border-radius: 0;
-  background: var(--vn-surface);
-}
-
-[data-layout="gallery"] .cart-page__empty-title {
-  font-family: var(--vn-font-display);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  font-weight: 400;
-}
