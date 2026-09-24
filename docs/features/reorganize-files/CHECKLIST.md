@@ -1315,18 +1315,18 @@ O config estende `next/core-web-vitals` e `next/typescript` e não restringe cam
 
 ### Como
 
-- [ ] Override para `components/public/layouts/classic/**`, `split/**`, `gallery/**`, `atelie/**` (não incluir `registry.tsx` nem `contract/**`):
+- [x] Override para `components/public/layouts/classic/**`, `split/**`, `gallery/**`, `atelie/**` (não incluir `registry.tsx` nem `contract/**`):
   - proibir `@/src/foundation/data` e `@/src/foundation/data/**`
   - proibir `@/src/services` e `@/src/services/**`
   - proibir `@/src/lib` e `@/src/lib/**`
   - proibir os outros três layouts, por alias (`@/components/public/layouts/split/**` dentro de classic, e o análogo) e por relativo (`../split`, `../split/**`, `../gallery`, `../gallery/**`, `../atelie`, `../atelie/**`, `../classic`, `../classic/**` — cada pasta proíbe os outros três, não a si mesma)
   - proibir `fs`, `node:fs`, `node:fs/promises`
-- [ ] Override para `components/public/kit/**`: proibir `@/components/public/layouts/classic/**`, `split/**`, `gallery/**`, `atelie/**` e os relativos equivalentes para essas pastas. Permitir `@/components/public/layouts` (barrel do contrato) só se o kit realmente precisar de um tipo; se não precisar, proibir também o barrel e manter o kit dependente só de schemas e behaviors.
-- [ ] Override para `components/admin/**`: proibir `@/components/public/layouts/classic/**`, `split/**`, `gallery/**` e `atelie/**`. Permitir `@/components/public/layouts`, `layouts/options`, `layouts/banner-slots`, `layouts/types`, `layouts/registry`, `layouts/contract/**`. É assim que o painel chega em `getLayout(id).Preview` no fecho, sem importar o arquivo interno.
-- [ ] Override para `src/services/**`: proibir `@/components/**` e relativos que saiam para `components/`.
-- [ ] Override global para `src/**` e `app/**` e `components/**`: proibir `@/src/lib` e `@/src/lib/**`, com mensagem de que o destino é `src/foundation`.
-- [ ] `layouts/registry.tsx` permanece o único arquivo que importa os quatro módulos. Não aplicar nele a proibição de layouts irmãos.
-- [ ] Rodar `npm run lint` e corrigir violações reais. Se uma violação for import que a tabela permite, ajustar o glob do override, não o código para “fugir” da regra com import dinâmico.
+- [x] Override para `components/public/kit/**`: proibir `@/components/public/layouts/classic/**`, `split/**`, `gallery/**`, `atelie/**` e os relativos equivalentes para essas pastas. Permitir `@/components/public/layouts` (barrel do contrato) só se o kit realmente precisar de um tipo; se não precisar, proibir também o barrel e manter o kit dependente só de schemas e behaviors.
+- [x] Override para `components/admin/**`: proibir `@/components/public/layouts/classic/**`, `split/**`, `gallery/**` e `atelie/**`. Permitir `@/components/public/layouts`, `layouts/options`, `layouts/banner-slots`, `layouts/types`, `layouts/registry`, `layouts/contract/**`. É assim que o painel chega em `getLayout(id).Preview` no fecho, sem importar o arquivo interno.
+- [x] Override para `src/services/**`: proibir `@/components/**` e relativos que saiam para `components/`.
+- [x] Override global para `src/**` e `app/**` e `components/**`: proibir `@/src/lib` e `@/src/lib/**`, com mensagem de que o destino é `src/foundation`.
+- [x] `layouts/registry.tsx` permanece o único arquivo que importa os quatro módulos. Não aplicar nele a proibição de layouts irmãos.
+- [x] Rodar `npm run lint` e corrigir violações reais. Se uma violação for import que a tabela permite, ajustar o glob do override, não o código para “fugir” da regra com import dinâmico.
 
 ### Fora desta fase
 
@@ -1335,9 +1335,9 @@ O config estende `next/core-web-vitals` e `next/typescript` e não restringe cam
 
 ### Pronto quando
 
-- [ ] `npm run lint` verde.
-- [ ] Um import proposital de `@/src/services` dentro de `layouts/classic/` (feito e revertido localmente, sem commit) faz o lint falhar.
-- [ ] Critério de pronto comum.
+- [x] `npm run lint` verde.
+- [x] Um import proposital de `@/src/services` dentro de `layouts/classic/` (feito e revertido localmente, sem commit) faz o lint falhar.
+- [x] Critério de pronto comum.
 
 ---
 

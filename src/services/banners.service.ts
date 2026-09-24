@@ -5,15 +5,15 @@ import { buildMutationFiles } from "@/src/foundation/data/commit-mutation";
 import { AppError } from "@/src/foundation/http/errors";
 import { CACHE_TAGS } from "@/src/foundation/cache/cache-tags";
 import { revalidateStorefront } from "@/src/foundation/admin/revalidate-storefront";
-import { getSlotDef } from "@/components/public/layouts/contract/banner-slots";
 import {
   BANNER_POSICAO_LABELS,
   bannerSchema,
+  getSlotDef,
   type Banner,
   type BannerPosicao,
   type bannerCreateSchema,
   type bannerUpdateSchema,
-} from "@/src/schemas/banner";
+} from "@/src/schemas";
 import { getSiteConfig } from "@/src/services/site-config.service";
 import {
   prepareImageBinary,

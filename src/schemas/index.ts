@@ -2,6 +2,7 @@ export * from "./common";
 export * from "./product";
 export * from "./category";
 export * from "./banner";
+export * from "./layout-banner-slots";
 export * from "./site-config";
 export * from "./client";
 export * from "./order";
