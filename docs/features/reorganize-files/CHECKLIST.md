@@ -1415,7 +1415,7 @@ Tokens e refinamentos classic saem de `layout-tokens.css` para a pasta do classi
 ### Pronto quando
 
 - [x] Vitrine classic (home, catálogo, PDP, sobre, carrinho) igual ao antes.
-- [ ] Prévia do admin no layout classic com o mesmo herói, marcador “Topo” e cartões falsos.
+- [x] Prévia do admin no layout classic com o mesmo herói, marcador “Topo” e cartões falsos.
 - [x] Critério de pronto comum.
 
 ### Split
@@ -1523,8 +1523,8 @@ Header decomposto em `layouts/atelie/header/` (marca, nav, menu, sacola, Cormora
 - [x] `app/globals.css` apagado se não restar regra. `app/layout.tsx` importa só `styles/reset.css` e `styles/theme-bridge.css`, além das fontes.
 - [x] `VitrinePreview` não contém `layout === "classic"` nem split, gallery ou ateliê.
 - [x] Os quatro módulos expõem `Preview`. Nenhum expõe `CatalogPage`, `ProductDetail`, `CartPage` ou `AboutPage`.
-- [ ] Prévia do admin: classic, split (desktop e mobile), gallery (dots e nota), ateliê (sem herói).
-- [ ] Vitrine nos quatro layouts: home, catálogo, PDP, carrinho e sobre, sem diff visual em relação ao início do fecho.
+- [x] Prévia do admin: classic, split (desktop e mobile), gallery (dots e nota), ateliê (sem herói).
+- [x] Vitrine nos quatro layouts: home, catálogo, PDP, carrinho e sobre, sem diff visual em relação ao início do fecho.
 - [x] `npm test`, `npm run lint`, `npx tsc --noEmit`.
 
 ---
